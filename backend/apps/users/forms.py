@@ -9,9 +9,9 @@ class UserCreationForm(forms.ModelForm):
     A form for creating new users.
     Includes all the required fields, plus a repeated password
     """
-    password1 = forms.CharField(label='Password', widget=forms.PasswordInput)
+    password1 = forms.CharField(label='Пароль', widget=forms.PasswordInput)
     password2 = forms.CharField(
-        label='Password confirmation',
+        label='Подтверждение пароля',
         widget=forms.PasswordInput)
 
     class Meta:
@@ -23,7 +23,7 @@ class UserCreationForm(forms.ModelForm):
         password1 = self.cleaned_data.get("password1")
         password2 = self.cleaned_data.get("password2")
         if password1 and password2 and password1 != password2:
-            raise forms.ValidationError("Passwords don't match")
+            raise forms.ValidationError("Пароли не совпадают!")
         return password2
 
     def save(self, commit=True):
@@ -41,9 +41,9 @@ class UserChangeForm(forms.ModelForm):
     the user, but replaces the password field with admin's
     password hash display field.
     """
-    help_text = """Raw passwords are not stored, so there is no way to see this user's password,
-                   but you can change the password using <a href="../password/">this form</a>."""
-    password = ReadOnlyPasswordHashField(label='Password', help_text=help_text)
+    help_text = """Необработанные пароли не сохраняются, поэтому нет возможности увидеть пароль этого пользователя,
+                   но вы можете изменить пароль, используя <a href="../password/">эту форму</a>."""
+    password = ReadOnlyPasswordHashField(label='Пароль', help_text=help_text)
 
     class Meta:
         model = User

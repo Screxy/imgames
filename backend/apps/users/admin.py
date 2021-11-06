@@ -15,10 +15,10 @@ class UserAdmin(BaseUserAdmin):
     # that reference specific fields on auth.User.
     list_display = ['full_name', 'email']
     fieldsets = [
-        ['Auth', {'fields': ['email', 'password']}],
-        ['Personal info', {'fields': ['last_name', 'first_name', 'avatar']}],
-        ['Settings', {'fields': ['groups', 'is_admin', 'is_active', 'is_staff', 'is_superuser']}],
-        ['Important dates', {'fields': ['last_login', 'registered_at']}],
+        ['Данные авторизации', {'fields': ['email', 'password']}],
+        ['Личная информация', {'fields': ['last_name', 'first_name', 'avatar']}],
+        ['Настройки', {'fields': ['groups', 'is_admin', 'is_active', 'is_staff', 'is_superuser']}],
+        ['Важные отметки времени', {'fields': ['last_login', 'registered_at']}],
     ]
     # add_fieldsets is not a standard ModelAdmin attribute. UserAdmin
     # overrides get_fieldsets to use this attribute when creating a user.

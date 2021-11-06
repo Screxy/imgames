@@ -52,24 +52,24 @@ class User(AbstractBaseUser, PermissionsMixin):
         unique=True,
         max_length=255)
     first_name = models.CharField(
-        verbose_name='First name',
+        verbose_name='Имя',
         max_length=30,
-        default='first')
+        default='Имя')
     last_name = models.CharField(
-        verbose_name='Last name',
+        verbose_name='Фамилия',
         max_length=30,
-        default='last')
-    avatar = models.ImageField(verbose_name='Avatar', blank=True)
+        default='Фамилия')
+    avatar = models.ImageField(verbose_name='Аватар', blank=True)
     token = models.UUIDField(
-        verbose_name='Token',
+        verbose_name='Токен',
         default=uuid4,
         editable=False)
 
-    is_admin = models.BooleanField(verbose_name='Admin', default=False)
-    is_active = models.BooleanField(verbose_name='Active', default=True)
-    is_staff = models.BooleanField(verbose_name='Staff', default=False)
+    is_admin = models.BooleanField(verbose_name='Администратор', default=False)
+    is_active = models.BooleanField(verbose_name='Активирован', default=True)
+    is_staff = models.BooleanField(verbose_name='Работник компании', default=False)
     registered_at = models.DateTimeField(
-        verbose_name='Registered at',
+        verbose_name='Зарегистрирован',
         auto_now_add=timezone.now)
 
     # Fields settings
@@ -79,18 +79,18 @@ class User(AbstractBaseUser, PermissionsMixin):
     objects = UserManager()
 
     class Meta:
-        verbose_name = 'User'
-        verbose_name_plural = 'Users'
+        verbose_name = 'сущность `Пользователь`'
+        verbose_name_plural = 'Пользователи'
 
     @property
     def full_name(self):
         return f'{self.first_name} {self.last_name}'
-    full_name.fget.short_description = 'Full name'
+    full_name.fget.short_description = 'Имя и фамилия'
 
     @property
     def short_name(self):
         return f'{self.last_name} {self.first_name[0]}.'
-    short_name.fget.short_description = 'Short name'
+    short_name.fget.short_description = 'Имя'
 
     def get_full_name(self):
         return self.full_name
