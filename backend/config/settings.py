@@ -45,6 +45,11 @@ sentry_sdk.init(
 
 # APP CONFIGURATION
 # ------------------------------------------------------------------------------
+ADMIN_THEME = [
+    'admin_interface',
+    'colorfield',
+]
+
 DJANGO_APPS = [
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -55,9 +60,7 @@ DJANGO_APPS = [
 ]
 
 THIRD_PARTY_APPS = [
-
     'graphene_django',
-
     'django_extensions',
 ]
 
@@ -66,7 +69,11 @@ LOCAL_APPS = [
 ]
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
-INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
+INSTALLED_APPS = ADMIN_THEME + DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
+
+# Для фреймов админпанели
+X_FRAME_OPTIONS = 'SAMEORIGIN'
+SILENCED_SYSTEM_CHECKS = ['security.W019']
 
 # MIDDLEWARE CONFIGURATION
 # ------------------------------------------------------------------------------
@@ -255,3 +262,5 @@ GRAPHQL_JWT = {
     'JWT_AUTH_HEADER': 'authorization',
     'JWT_AUTH_HEADER_PREFIX': 'Bearer',
 }
+
+DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
