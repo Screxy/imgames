@@ -28,3 +28,9 @@
 Если всё работает отлично, вам необходимо создать суперпользователя для админпанели с помощью следующей команды:
 
 `docker-compose run backend python manage.py createsuperuser`
+
+## Деплой
+
+Для production вам необходимо заполнить файл `.env` и использовать файл `docker-compose-prod.yml`
+
+`docker-compose -f docker-compose-prod.yml up --build -d`
