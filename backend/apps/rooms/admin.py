@@ -1,5 +1,11 @@
 from django.contrib import admin
-from .models import Winner, Turn, Month, Round, Room
+from .models import Winner, Turn, Month, Round, Room, RoomParticipant
+
+
+@admin.register(RoomParticipant)
+class RoomParticipantAdmin(admin.ModelAdmin):
+    list_display = ('id', 'user', 'room')
+    list_display_links = ('id', 'user')
 
 
 @admin.register(Winner)

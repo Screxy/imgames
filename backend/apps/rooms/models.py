@@ -37,7 +37,23 @@ def calculate_month_key(fk):
         return 1
 
 
+class RoomParticipant(models.Model):
+    """Участник комнаты"""
+    room = models.ForeignKey(
+        "Room", verbose_name="Комната", on_delete=models.CASCADE)
+    user = models.ForeignKey(
+        User, verbose_name="Пользователь", on_delete=models.CASCADE)
+
+    class Meta:
+        verbose_name = "Участник комнаты"
+        verbose_name_plural = "Участники комнаты"
+
+    def __str__(self):
+        return "Участник #"+str(self.id)
+
+
 class CardChoice(models.Model):
+    """Выбор карточек"""
     card = models.ForeignKey(
         Card, verbose_name="Карточка", on_delete=models.CASCADE)
     turn = models.ForeignKey(
