@@ -1,6 +1,7 @@
 from django.db import models
 from apps.users.models import User
 from organizations.models import Organization
+from apps.flows.models import Card
 
 PLACE_SELECTION = [
     ('1', 'I место'),
@@ -34,6 +35,20 @@ def calculate_month_key(fk):
         return present_keys[0]+1
     else:
         return 1
+
+
+class CardChoice(models.Model):
+    card = models.ForeignKey(
+        Card, verbose_name="Карточка", on_delete=models.CASCADE)
+    turn = models.ForeignKey(
+        "Turn", verbose_name="Ход", on_delete=models.CASCADE)
+
+    class Meta:
+        verbose_name = "Выбор карточки"
+        verbose_name_plural = "Выборы карточек"
+
+    def __str__(self):
+        return self.name
 
 
 class Winner(models.Model):
