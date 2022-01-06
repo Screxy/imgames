@@ -127,6 +127,9 @@ class Round(models.Model):
     current_month = models.ForeignKey(
         Month, related_name="current_month", verbose_name="Текущий месяц", on_delete=models.CASCADE, null=True, blank=True)
     key = models.PositiveIntegerField("Порядковый номер раунда в комнате")
+    is_active = models.BooleanField("Начался ли", default=False)
+    created_at = models.DateTimeField("Создан в", auto_now_add=True)
+    updated_at = models.DateTimeField("Обновлён в", auto_now=True)
 
     class Meta:
         verbose_name = 'Раунд'

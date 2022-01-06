@@ -12,7 +12,7 @@ from apps.users.models import User
 
 
 class UserType(DjangoObjectType):
-    """ User type object """
+    """ Тип объекта User """
 
     class Meta:
         model = User
@@ -45,7 +45,7 @@ class Query(object):
 
 
 class Register(graphene.Mutation):
-    """ Mutation to register a user """
+    """ Мутация для регистрации нового пользователя """
     success = graphene.Boolean()
     errors = graphene.List(graphene.String)
 
@@ -60,7 +60,7 @@ class Register(graphene.Mutation):
             errors = ['emailAlreadyExists']
             return Register(success=False, errors=errors)
 
-        # create user
+        # создаём пользователя
         user = User.objects.create(
             email=email,
             last_name=last_name,
@@ -72,7 +72,7 @@ class Register(graphene.Mutation):
 
 
 class Logout(graphene.Mutation):
-    """ Mutation to logout a user """
+    """ Мутация чтобы разлогинить пользователя """
     success = graphene.Boolean()
 
     def mutate(self, info):
@@ -81,7 +81,7 @@ class Logout(graphene.Mutation):
 
 
 class ResetPassword(graphene.Mutation):
-    """ Mutation for requesting a password reset email """
+    """ Мутация для запроса сброса пароля по email """
     success = graphene.Boolean()
 
     class Arguments:
@@ -108,7 +108,7 @@ class ResetPassword(graphene.Mutation):
 
 
 class ResetPasswordConfirm(graphene.Mutation):
-    """ Mutation for requesting a password reset email """
+    """ Мутация для обновления пароля через ссылку в письме """
     success = graphene.Boolean()
     errors = graphene.List(graphene.String)
 

@@ -22,12 +22,14 @@ class TurnAdmin(admin.ModelAdmin):
 @admin.register(Month)
 class MonthAdmin(admin.ModelAdmin):
     list_display = ('__str__', 'round', 'counter')
+    readonly_fields = ('key',)
 
 
 @admin.register(Round)
 class RoundAdmin(admin.ModelAdmin):
-    list_display = ('__str__', 'room', 'current_month')
-    readonly_fields = ('key',)
+    list_display = ('__str__', 'room', 'current_month',
+                    'is_active', 'created_at')
+    readonly_fields = ('key', 'created_at', 'updated_at')
     search_fields = ('room__organization__prefix',)
 
 
