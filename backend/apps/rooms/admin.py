@@ -21,7 +21,7 @@ class TurnAdmin(admin.ModelAdmin):
 
 @admin.register(Month)
 class MonthAdmin(admin.ModelAdmin):
-    list_display = ('__str__', 'round', 'counter')
+    list_display = ('__str__', 'round')
     readonly_fields = ('key',)
 
 

@@ -103,7 +103,7 @@ class Month(models.Model):
     """Месяц"""
     round = models.ForeignKey(
         "Round", verbose_name="Раунд", on_delete=models.CASCADE)
-    counter = models.IntegerField("Номер месяца", default=1)
+    # counter = models.IntegerField("Номер месяца", default=1)
     key = models.PositiveIntegerField("Порядковый номер месяца в раунде")
 
     class Meta:
