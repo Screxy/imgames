@@ -14,7 +14,7 @@ class UserManager(BaseUserManager):
             is_superuser,
             **extra_fields):
         """
-        Creates and saves a User with the given username, email and password.
+        Создаёт и сохраняет Пользователя с данными логином, email и паролем.
         """
         user = self.model(email=self.normalize_email(email),
                           is_active=True,
@@ -73,7 +73,7 @@ class User(AbstractBaseUser, PermissionsMixin):
         verbose_name='Зарегистрирован',
         auto_now_add=timezone.now)
 
-    # Fields settings
+    # Настройки полей
     EMAIL_FIELD = 'email'
     USERNAME_FIELD = 'email'
 

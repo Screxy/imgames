@@ -10,18 +10,21 @@ class UserAdmin(BaseUserAdmin):
     form = UserChangeForm
     add_form = UserCreationForm
 
-    # The fields to be used in displaying the User model.
-    # These override the definitions on the base UserAdmin
-    # that reference specific fields on auth.User.
+    # Поля, которые используются при отображении модели пользователя.
+    # Они переопределяют определения в базовом UserAdmin
+    # которые ссылаются на определенные поля в auth.User.
     list_display = ['full_name', 'email']
     fieldsets = [
         ['Данные авторизации', {'fields': ['email', 'password']}],
-        ['Личная информация', {'fields': ['last_name', 'first_name', 'avatar']}],
-        ['Настройки', {'fields': ['groups', 'is_admin', 'is_active', 'is_staff', 'is_superuser']}],
-        ['Важные отметки времени', {'fields': ['last_login', 'registered_at']}],
+        ['Личная информация', {'fields': [
+            'last_name', 'first_name', 'avatar']}],
+        ['Настройки', {'fields': ['groups', 'is_admin',
+                                  'is_active', 'is_staff', 'is_superuser']}],
+        ['Важные отметки времени', {
+            'fields': ['last_login', 'registered_at']}],
     ]
-    # add_fieldsets is not a standard ModelAdmin attribute. UserAdmin
-    # overrides get_fieldsets to use this attribute when creating a user.
+    # add_fieldsets не является стандартным атрибутом ModelAdmin. UserAdmin
+    # переопределяет get_fieldsets для использования этого атрибута при создании пользователя.
     add_fieldsets = [[None, {'classes': ['wide'], 'fields': [
         'email', 'first_name', 'last_name', 'password1', 'password2']}], ]
     search_fields = ['email']
@@ -29,7 +32,7 @@ class UserAdmin(BaseUserAdmin):
     readonly_fields = ['last_login', 'registered_at']
 
 
-# Now register the new UserAdmin...
+# Регистрируем новый UserAdmin
 admin.site.register(User, UserAdmin)
-# Unregister the Group model from admin.
+# Отключаем модель Group для админпанели.
 admin.site.unregister(Group)
