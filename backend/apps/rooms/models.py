@@ -150,10 +150,11 @@ class Room(models.Model):
         Organization, verbose_name="В организации", on_delete=models.CASCADE)
     room_owner = models.ForeignKey(
         User, verbose_name="Создатель комнаты", on_delete=models.CASCADE)
-    number_of_turns = models.IntegerField("Количество шагов")
+    number_of_turns = models.PositiveIntegerField("Количество шагов")
     current_round = models.ForeignKey(
         "Round", related_name="current_round", verbose_name="Текущий раунд", on_delete=models.CASCADE, null=True, blank=True)
     key = models.PositiveIntegerField("Порядковый номер комнаты в организации")
+    money_per_month = models.PositiveIntegerField("Бюджет на месяц")
 
     class Meta:
         verbose_name = "Комната"

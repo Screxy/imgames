@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Flow, Card, Parameter, ParameterChange
+from .models import Flow, Card, Channel, Stage, ParameterChange
 
 
 @admin.register(Flow)
@@ -14,14 +14,20 @@ class CardAdmin(admin.ModelAdmin):
     list_display_links = ('id', 'header')
 
 
-@admin.register(Parameter)
-class ParameterAdmin(admin.ModelAdmin):
+@admin.register(Channel)
+class ChannelAdmin(admin.ModelAdmin):
     list_display = ('id', 'name', 'default_value', 'flow')
+    list_display_links = ('id', 'name')
+
+
+@admin.register(Stage)
+class StageAdmin(admin.ModelAdmin):
+    list_display = ('id', 'name', 'conversion', 'flow')
     list_display_links = ('id', 'name')
 
 
 @admin.register(ParameterChange)
 class ParameterChangeAdmin(admin.ModelAdmin):
-    list_display = ('id', 'parameter', 'math_operator',
+    list_display = ('id', 'channel', 'type', 'math_operator',
                     'value', 'month_of_application', 'card')
-    list_display_links = ('id', 'parameter')
+    list_display_links = ('id', 'channel')

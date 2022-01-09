@@ -17,15 +17,16 @@ class CreateRoom(graphene.Mutation):
         subdomain = graphene.String(required=True)
         user_id = graphene.ID(required=True)
         number_of_turns = graphene.Int(required=True)
+        money_per_month = graphene.Int(required=True)
 
-    def mutate(self, info, subdomain, user_id, number_of_turns):
+    def mutate(self, info, subdomain, user_id, number_of_turns, money_per_month):
         try:
             organization = Organization.objects.get(subdomain=subdomain)
             user = User.objects.get(pk=user_id)
 
             # Создаём новый объект комнаты
             room = Room.objects.create(
-                organization=organization, room_owner=user, number_of_turns=number_of_turns)
+                organization=organization, room_owner=user, number_of_turns=number_of_turns, money_per_month=money_per_month)
             code = str(room)
 
             # Создаём новый раунд в комнате
