@@ -3,6 +3,7 @@
     <h1>Главная</h1>
     <LogOutButton></LogOutButton>
     {{ isAuthenticated }}
+    {{ path }}
   </div>
 </template>
 
@@ -23,6 +24,9 @@ export default {
   computed: {
     isAuthenticated() {
       return this.$store.state.isAuthenticated;
+    },
+    path() {
+      return window.location.host;
     },
   },
 };
