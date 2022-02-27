@@ -1,16 +1,20 @@
 <template>
   <div class="container">
-    <h1>ImGames 2.0 - платформа для геймификации</h1>
-    <router-link :to="authPath">AUTH</router-link>
+    <h1>Главная</h1>
+    <LogOutButton></LogOutButton>
     {{ isAuthenticated }}
   </div>
 </template>
 
 <script>
 import { AUTH_PATH } from '@/pathVariables.js';
+import LogOutButton from '@/components/auth/LogOutButton.vue';
 
 export default {
   name: 'FirstComponent',
+  components: {
+    LogOutButton,
+  },
   data() {
     return {
       authPath: AUTH_PATH,
