@@ -264,6 +264,8 @@ GRAPHQL_JWT = {
     'JWT_EXPIRATION_DELTA': timedelta(days=30),
     'JWT_AUTH_HEADER': 'authorization',
     'JWT_AUTH_HEADER_PREFIX': 'Bearer',
+    'JWT_VERIFY_EXPIRATION': True,
+    'JWT_VERIFY': True,
 }
 
 DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'

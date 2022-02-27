@@ -25,6 +25,14 @@ Sentry.init({
   logError: process.env.NODE_ENV === 'development',
 });
 
+// Title для каждой страницы
+const DEFAULT_TITLE = 'ImGames';
+router.afterEach((to, from) => {
+  Vue.nextTick(() => {
+    document.title = to.meta.title || DEFAULT_TITLE;
+  });
+});
+
 // Документация: https://github.com/vchaptsev/vue-yandex-metrika
 Vue.use(VueYandexMetrika, {
   id: process.env.VUE_APP_YANDEX_METRIKA,

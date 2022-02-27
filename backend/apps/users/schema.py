@@ -9,6 +9,7 @@ from django.core.mail import send_mail
 from django.template.loader import render_to_string
 
 from apps.users.models import User
+from graphql_jwt.decorators import login_required
 
 
 class UserType(DjangoObjectType):
@@ -31,6 +32,7 @@ class Query(object):
     profile = graphene.Field(UserType)
 
     @staticmethod
+    @login_required
     def resolve_user(cls, info, **kwargs):
         return User.objects.get(id=kwargs.get('id'))
 
@@ -135,5 +137,6 @@ class Mutation(object):
     refresh_token = graphql_jwt.Refresh.Field()
     register = Register.Field()
     logout = Logout.Field()
+    delete_token_cookie = graphql_jwt.DeleteJSONWebTokenCookie.Field()
     reset_password = ResetPassword.Field()
     reset_password_confirm = ResetPasswordConfirm.Field()

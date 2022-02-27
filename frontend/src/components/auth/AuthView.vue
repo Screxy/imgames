@@ -19,9 +19,10 @@
 </template>
 
 <script>
+import { MAIN_PATH } from '@/pathVariables.js';
 import TextInput from '@/components/ui/TextInput.vue';
 import SubmitButton from '@/components/ui/SubmitButton.vue';
-import LogIn from '@/graphql/mutations/login.gql';
+import login from '@/graphql/mutations/login.gql';
 
 export default {
   name: 'AuthView',
@@ -34,19 +35,23 @@ export default {
   },
   methods: {
     tryLogIn() {
+      this.$store.commit('START_LOADING');
       this.$apollo
         .mutate({
-          mutation: LogIn,
+          mutation: login,
           variables: {
             email: this.email,
             password: this.password,
           },
         })
         .then((data) => {
-          console.log(data);
+          this.$router.push(MAIN_PATH);
         })
         .catch((error) => {
           console.error(error);
+        })
+        .finally(() => {
+          this.$store.commit('STOP_LOADING');
         });
     },
   },
