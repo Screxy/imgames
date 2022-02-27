@@ -266,6 +266,7 @@ GRAPHQL_JWT = {
     'JWT_AUTH_HEADER_PREFIX': 'Bearer',
     'JWT_VERIFY_EXPIRATION': True,
     'JWT_VERIFY': True,
+    'JWT_COOKIE_DOMAIN': env.str('DOMAIN_HOST'),
     # TODO:
     # HTTPS -
     'JWT_COOKIE_SECURE': True,
