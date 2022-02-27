@@ -45,7 +45,11 @@ export default {
           },
         })
         .then((data) => {
-          this.$router.push(MAIN_PATH);
+          this.$store.state.isAuthenticated = true;
+          this.$store.state.gotVerifiedAuth = true;
+          this.$router.push(MAIN_PATH).catch((err) => {
+            console.log(err);
+          });
         })
         .catch((error) => {
           console.error(error);

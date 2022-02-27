@@ -10,7 +10,7 @@ import { MAIN_PATH, AUTH_PATH } from '@/pathVariables.js';
 
 import verifyToken from '@/graphql/mutations/verifyToken.gql';
 
-function verifyAuth() {
+function verifyAuth(to, from) {
   store.commit('START_LOADING');
   let provider = createProvider();
   return new Promise(function (resolve, reject) {
@@ -20,9 +20,7 @@ function verifyAuth() {
         store.state.isAuthenticated = true;
       })
       .catch((error) => {
-        if (this.$route.path != '/auth') {
-          this.$router.push('/auth');
-        }
+        store.state.isAuthenticated = false;
       })
       .finally(() => {
         store.state.gotVerifiedAuth = true;
@@ -33,25 +31,33 @@ function verifyAuth() {
 }
 
 const ifAuthenticated = async (to, from, next) => {
-  if (!store.state.gotVerifiedAuth) {
-    await verifyAuth();
+  try {
+    if (!store.state.gotVerifiedAuth) {
+      await verifyAuth(to, from);
+    }
+    if (store.state.isAuthenticated) {
+      next();
+      return;
+    }
+    next(AUTH_PATH);
+  } catch (error) {
+    console.log('ERROE TEST: ', error);
   }
-  if (store.state.isAuthenticated) {
-    next();
-    return;
-  }
-  next(AUTH_PATH);
 };
 
 const ifNotAuthenticated = async (to, from, next) => {
-  if (!store.state.gotVerifiedAuth) {
-    await verifyAuth();
+  try {
+    if (!store.state.gotVerifiedAuth) {
+      await verifyAuth(to, from);
+    }
+    if (!store.state.isAuthenticated) {
+      next();
+      return;
+    }
+    next(MAIN_PATH);
+  } catch (error) {
+    console.log('ERROE TEST: ', error);
   }
-  if (!store.state.isAuthenticated) {
-    next();
-    return;
-  }
-  next(MAIN_PATH);
 };
 
 const routes = [

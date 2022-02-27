@@ -18,21 +18,19 @@ export default {
     },
   },
   mounted() {
-    this.$apollo
-      .mutate({ mutation: verifyToken })
-      .then(() => {
-        this.$store.state.isAuthenticated = true;
-      })
-      .catch((error) => {
-        console.log('Error: ' + error);
-        console.log(this.$route.path);
-        if (this.$route.path != '/auth') {
-          this.$router.push('/auth');
-        }
-      })
-      .finally(() => {
-        this.$store.state.gotVerifiedAuth = true;
-      });
+    // this.$apollo
+    //   .mutate({ mutation: verifyToken })
+    //   .then(() => {
+    //     this.$store.state.isAuthenticated = true;
+    //   })
+    //   .catch((error) => {
+    //     if (this.$route.path != '/auth') {
+    //       this.$router.push('/auth');
+    //     }
+    //   })
+    //   .finally(() => {
+    //     this.$store.state.gotVerifiedAuth = true;
+    //   });
   },
 };
 </script>
