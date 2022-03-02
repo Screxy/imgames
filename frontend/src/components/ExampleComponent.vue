@@ -2,8 +2,13 @@
   <div class="container">
     <h1>Главная</h1>
     <LogOutButton></LogOutButton>
-    {{ isAuthenticated }}
-    {{ path }}
+    Auth: {{ isAuthenticated }}<br />
+    Host:{{ path }}<br />
+    Locale:🌐 {{ $i18n.locale }} - {{ $t('message') }}<br />
+    <select v-model="$i18n.locale">
+      <option value="en">English</option>
+      <option value="ru">Русский</option>
+    </select>
   </div>
 </template>
 
