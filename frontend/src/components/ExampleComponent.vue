@@ -5,21 +5,20 @@
     Auth: {{ isAuthenticated }}<br />
     Host:{{ path }}<br />
     Locale:🌐 {{ $i18n.locale }} - {{ $t('message') }}<br />
-    <select v-model="$i18n.locale">
-      <option value="en">English</option>
-      <option value="ru">Русский</option>
-    </select>
+    <LocaleSwitcher></LocaleSwitcher>
   </div>
 </template>
 
 <script>
 import { AUTH_PATH } from '@/pathVariables.js';
 import LogOutButton from '@/components/auth/LogOutButton.vue';
+import LocaleSwitcher from '@/components/locale/LocaleSwitcher.vue';
 
 export default {
   name: 'FirstComponent',
   components: {
     LogOutButton,
+    LocaleSwitcher,
   },
   data() {
     return {

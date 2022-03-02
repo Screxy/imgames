@@ -1,7 +1,18 @@
 import Vue from 'vue';
 import VueI18n from 'vue-i18n';
+import getBrowserLocale from '@/util/i18n/get-browser-locale';
+import { supportedLocalesInclude } from '@/util/i18n/supported-locales';
 
 Vue.use(VueI18n);
+
+function getStartingLocale() {
+  const browserLocale = getBrowserLocale({ countryCodeOnly: true });
+  if (supportedLocalesInclude(browserLocale)) {
+    return browserLocale;
+  } else {
+    return process.env.VUE_APP_I18N_LOCALE || 'ru';
+  }
+}
 
 function loadLocaleMessages() {
   const locales = require.context(
@@ -21,7 +32,7 @@ function loadLocaleMessages() {
 }
 
 export default new VueI18n({
-  locale: process.env.VUE_APP_I18N_LOCALE || 'ru',
+  locale: getStartingLocale(),
   fallbackLocale: process.env.VUE_APP_I18N_FALLBACK_LOCALE || 'en',
   messages: loadLocaleMessages(),
 });
