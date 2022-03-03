@@ -1,0 +1,28 @@
+name: Deploy
+
+on:
+  # Триггеры только по ветке stage
+  push:
+    branches: [ stage ]
+  pull_request:
+    branches: [ stage ]
+
+  # Разрешает выгрузку вручную с вкладки Actions
+  workflow_dispatch:
+
+# Запуск рабочего процесса состоит из одного или нескольких заданий, которые могут выполняться последовательно или параллельно
+jobs:
+  deploy:
+    # Тип образа, на котором будет выполняться задание
+    runs-on: ubuntu-latest
+
+    # Шаги представляют собой последовательность задач, которые будут выполняться как часть задания.
+    steps:
+      - name: log into VPS and trigger deploy script
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST }} # используем секретные данные из вкладки Secrets
+          username: ${{ secrets.USERNAME }}
+          password: ${{ secrets.PASSWORD }}
+          port: ${{ secrets.PORT }}
+          script: sh deploy.sh
