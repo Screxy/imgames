@@ -6,6 +6,7 @@
     Host:{{ path }}<br />
     Locale:🌐 {{ $i18n.locale }} - {{ $t('message') }}<br />
     <LocaleSwitcher></LocaleSwitcher>
+    Проверка изменений
   </div>
 </template>
 
