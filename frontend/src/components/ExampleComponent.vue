@@ -2,19 +2,23 @@
   <div class="container">
     <h1>Главная</h1>
     <LogOutButton></LogOutButton>
-    {{ isAuthenticated }}
-    {{ path }}
+    Auth: {{ isAuthenticated }}<br />
+    Host:{{ path }}<br />
+    Locale:🌐 {{ $i18n.locale }} - {{ $t('message') }}<br />
+    <LocaleSwitcher></LocaleSwitcher>
   </div>
 </template>
 
 <script>
 import { AUTH_PATH } from '@/pathVariables.js';
 import LogOutButton from '@/components/auth/LogOutButton.vue';
+import LocaleSwitcher from '@/components/locale/LocaleSwitcher.vue';
 
 export default {
   name: 'FirstComponent',
   components: {
     LogOutButton,
+    LocaleSwitcher,
   },
   data() {
     return {

@@ -18,4 +18,14 @@ module.exports = {
       ignored: '/app/node_modules/',
     },
   },
+  pluginOptions: {
+    i18n: {
+      locale: 'ru',
+      fallbackLocale: 'en',
+      localeDir: 'locales',
+      enableInSFC: false,
+      includeLocales: false,
+      enableBridge: true,
+    },
+  },
 };
