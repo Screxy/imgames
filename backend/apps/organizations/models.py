@@ -18,7 +18,7 @@ class OrganizationSettings(models.Model):
 
 # Организация
 class Organization(models.Model):
-    organization_owner_id = models.ForeignKey(
+    organization_owner = models.ForeignKey(
         "users.User", verbose_name="Владелец организации", on_delete=models.CASCADE)
     name = models.CharField("Название пространства", max_length=255)
     subdomain = models.CharField("Поддомен", max_length=50)

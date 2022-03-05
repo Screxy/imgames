@@ -1,5 +1,6 @@
 import graphene
 from graphene_django.debug import DjangoDebug
+from organizations.mutations import CreateOrganization
 
 
 class Query(graphene.ObjectType):
@@ -8,4 +9,4 @@ class Query(graphene.ObjectType):
 
 
 class Mutation(graphene.ObjectType):
-    pass
+    create_organization = CreateOrganization.Field()
