@@ -22,13 +22,13 @@ function verifyAuth(to, from) {
     provider.defaultClient
       .mutate({ mutation: verifyToken })
       .then(() => {
-        store.state.isAuthenticated = true;
+        store.commit('SET_IS_AUTHENTICATED', true);
       })
       .catch((error) => {
-        store.state.isAuthenticated = false;
+        store.commit('SET_IS_AUTHENTICATED', false);
       })
       .finally(() => {
-        store.state.gotVerifiedAuth = true;
+        store.commit('SET_GOT_VERIFIED_AUTH', true);
         store.commit('STOP_LOADING');
         resolve();
       });
@@ -44,12 +44,11 @@ const ifAuthenticated = async (to, from, next) => {
       next();
       return;
     }
-    console.log('window.location.href', store.state.isAuthenticated);
     next(AUTH_PATH);
     // window.location.href = 'http://localhost:8000' + AUTH_PATH;
     // next('http://localhost:8000/auth');
   } catch (error) {
-    console.log('ERROE TEST: ', error);
+    console.log('ERROR TEST: ', error);
   }
 };
 
@@ -64,7 +63,7 @@ const ifNotAuthenticated = async (to, from, next) => {
     }
     next(MAIN_PATH);
   } catch (error) {
-    console.log('ERROE TEST: ', error);
+    console.log('ERROR TEST: ', error);
   }
 };
 

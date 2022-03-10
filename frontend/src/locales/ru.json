@@ -1,3 +1,6 @@
 {
-  "message": "Привет, i18n!"
+  "message": "Привет, i18n!",
+  "buttons": {
+    "create": "Создать"
+  }
 }

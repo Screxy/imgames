@@ -18,7 +18,7 @@ export default {
           .mutate({ mutation: logout })
           .then(() => {
             clearInterval(logOutInterval);
-            this.$store.state.isAuthenticated = false;
+            this.$store.commit('SET_IS_AUTHENTICATED', false);
             this.$router.push(AUTH_PATH);
             this.$store.commit('STOP_LOADING');
           })

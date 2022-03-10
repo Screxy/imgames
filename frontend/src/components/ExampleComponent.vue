@@ -6,6 +6,7 @@
     Host:{{ path }}<br />
     Locale:🌐 {{ $i18n.locale }} - {{ $t('message') }}<br />
     <LocaleSwitcher></LocaleSwitcher>
+    <router-link to="/new">Создать организацию</router-link>
   </div>
 </template>
 

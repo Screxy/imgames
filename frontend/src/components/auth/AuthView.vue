@@ -45,8 +45,8 @@ export default {
           },
         })
         .then((data) => {
-          this.$store.state.isAuthenticated = true;
-          this.$store.state.gotVerifiedAuth = true;
+          this.$store.commit('SET_IS_AUTHENTICATED', true);
+          this.$store.commit('SET_GOT_VERIFIED_AUTH', true);
           this.$router.push(MAIN_PATH).catch((err) => {
             console.log(err);
           });

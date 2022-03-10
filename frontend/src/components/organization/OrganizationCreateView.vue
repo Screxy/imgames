@@ -2,6 +2,7 @@
   <div>
     <h1>Создание организации</h1>
     <OrganizationCreateForm></OrganizationCreateForm>
+    <router-link to="/">Назад</router-link>
   </div>
 </template>
 

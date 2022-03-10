@@ -3,6 +3,7 @@
     :type="type"
     :placeholder="placeholder"
     :autocomplete="autocomplete"
+    :disabled="disabled"
     v-model="inputModel"
     @input="sendInput"
   />
@@ -28,6 +29,10 @@ export default {
     type: {
       type: String,
       default: 'text',
+    },
+    disabled: {
+      type: Boolean,
+      default: false,
     },
   },
   methods: {

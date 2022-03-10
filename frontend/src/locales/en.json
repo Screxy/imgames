@@ -1,3 +1,6 @@
 {
-  "message": "Hello, i18n!"
+  "message": "Hello, i18n!",
+  "buttons": {
+    "create": "Create"
+  }
 }
