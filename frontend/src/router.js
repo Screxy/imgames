@@ -45,8 +45,6 @@ const ifAuthenticated = async (to, from, next) => {
       return;
     }
     next(AUTH_PATH);
-    // window.location.href = 'http://localhost:8000' + AUTH_PATH;
-    // next('http://localhost:8000/auth');
   } catch (error) {
     console.log('ERROR TEST: ', error);
   }

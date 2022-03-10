@@ -20,6 +20,7 @@
     <SubmitButton :disabled="formLoading" @click="createNewOrganization">
       {{ $t('buttons.create') }}
     </SubmitButton>
+    <p>{{ test_data }}</p>
   </form>
 </template>
 
@@ -42,6 +43,7 @@ export default {
         prefix: '',
       },
       formLoading: false,
+      test_data: {},
     };
   },
   methods: {
@@ -55,10 +57,22 @@ export default {
           variables: this.newOrganization,
         })
         .then((data) => {
-          console.log('data', data);
-          let test_element = document.createElement('p');
-          test_element.innerHTML = '' + JSON.stringify(data);
-          this.$refs.organizationCreateForm.appendChild(test_element);
+          data = data.data;
+          this.test_data = data;
+          if (
+            data.createOrganization.errors == null ||
+            data.createOrganization.errors == undefined
+          ) {
+            if (
+              data.createOrganization.organization.subdomain != null &&
+              data.createOrganization.organization.subdomain != undefined
+            ) {
+              console.log(
+                'subdomain',
+                data.createOrganization.organization.subdomain
+              );
+            }
+          }
         })
         .catch((error) => {
           console.error(error);
