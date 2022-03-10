@@ -7,6 +7,9 @@ class OrganizationSettings(models.Model):
         "Organization", verbose_name="Организация", on_delete=models.CASCADE, unique=True)
     number_of_turns_default = models.PositiveIntegerField(
         "Количество шагов в комнате по умолчанию", default=3)
+    # TODO:
+    # - number_of_turns_max = Максимальное количество шагов в комнате
+    # - number_participants_max = Максимальное количество участников в комнате
 
     class Meta:
         verbose_name = "Настройки организации"

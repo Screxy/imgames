@@ -4,9 +4,14 @@ import { createProvider } from '@/apollo';
 
 import ExampleComponent from '@/components/ExampleComponent.vue';
 import AuthView from '@/components/auth/AuthView.vue';
+import OrganizationCreateView from '@/components/organization/OrganizationCreateView.vue';
 
 import store from '@/store.js';
-import { MAIN_PATH, AUTH_PATH } from '@/pathVariables.js';
+import {
+  MAIN_PATH,
+  AUTH_PATH,
+  NEW_ORGANIZATION_PATH,
+} from '@/pathVariables.js';
 
 import verifyToken from '@/graphql/mutations/verifyToken.gql';
 
@@ -75,6 +80,12 @@ const routes = [
     component: AuthView,
     beforeEnter: ifNotAuthenticated,
     meta: { title: 'Войти - ImGames' },
+  },
+  {
+    path: NEW_ORGANIZATION_PATH,
+    component: OrganizationCreateView,
+    beforeEnter: ifAuthenticated,
+    meta: { title: 'Создать пространство - ImGames' },
   },
 ];
 

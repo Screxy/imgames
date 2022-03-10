@@ -21,7 +21,8 @@ class CreateOrganization(graphene.Mutation):
             user = info.context.user
             check_organization = Organization.objects.filter(
                 subdomain=subdomain).count()
-            print(check_organization)
+            
+            # Если поддомен уникален
             if check_organization == 0:
                 organization = Organization(
                     name=name, prefix=prefix, subdomain=subdomain, organization_owner=user)

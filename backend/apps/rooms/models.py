@@ -49,7 +49,7 @@ class RoomParticipant(models.Model):
         verbose_name_plural = "Участники комнаты"
 
     def __str__(self):
-        return "Участник #"+str(self.id)
+        return f"Участник #{str(self.id)}"
 
 
 class CardChoice(models.Model):
@@ -81,7 +81,7 @@ class Winner(models.Model):
         verbose_name_plural = "Призёры"
 
     def __str__(self):
-        return "Победитель #"+str(self.id)
+        return f"Победитель #{str(self.id)}"
 
 
 class Turn(models.Model):
@@ -96,7 +96,7 @@ class Turn(models.Model):
         verbose_name_plural = "Ходы"
 
     def __str__(self):
-        return "Ход #"+str(self.month.key)
+        return f"Ход #{str(self.month.key)}"
 
 
 class Month(models.Model):
@@ -111,7 +111,13 @@ class Month(models.Model):
         unique_together = ("key", "round")
 
     def __str__(self):
-        return "Месяц #"+str(self.key)+" ("+str(self.round.room)+".R"+str(self.round.key)+".M"+str(self.key)+")"
+        return (
+            f"Месяц #{str(self.key)} ({str(self.round.room)}.R"
+            + str(self.round.key)
+            + ".M"
+            + str(self.key)
+            + ")"
+        )
 
     def save(self, *args, **kwargs):
         key = calculate_month_key(self.round)
@@ -136,7 +142,7 @@ class Round(models.Model):
         unique_together = ("key", "room")
 
     def __str__(self):
-        return "Раунд #"+str(self.key)+" ("+str(self.room)+".R"+str(self.key)+")"
+        return f"Раунд #{str(self.key)} ({str(self.room)}.R{str(self.key)})"
 
     def save(self, *args, **kwargs):
         key = calculate_round_key(self.room)
@@ -162,7 +168,7 @@ class Room(models.Model):
         unique_together = ("key", "organization")
 
     def __str__(self):
-        return str(self.organization.prefix)+"-"+str(self.key)
+        return f'{str(self.organization.prefix)}-{str(self.key)}'
 
     def save(self, *args, **kwargs):
         key = calculate_room_key(self.organization)
