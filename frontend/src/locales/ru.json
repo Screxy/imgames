@@ -10,6 +10,9 @@
     "subdomain": "Поддомен",
     "name": "Имя"
   },
+  "room": {
+    "createNewRoom": "Создать комнату"
+  },
   "headers": {
     "main": "Главная",
     "newOrganization": "Создать новую организацию",

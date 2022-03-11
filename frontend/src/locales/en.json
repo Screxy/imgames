@@ -10,6 +10,9 @@
     "subdomain": "Subdomain",
     "name": "Name"
   },
+  "room": {
+    "createNewRoom": "Create new room"
+  },
   "headers": {
     "main": "Main",
     "newOrganization": "Create new organization",
