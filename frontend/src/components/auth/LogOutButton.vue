@@ -1,6 +1,6 @@
 <template>
   <div>
-    <button type="button" @click="logOut">Выйти</button>
+    <button type="button" @click="logOut">{{ $t('buttons.logOut') }}</button>
   </div>
 </template>
 

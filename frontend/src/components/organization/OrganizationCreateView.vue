@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1>Создание организации</h1>
+    <h1>{{ $t('headers.newOrganization') }}</h1>
     <OrganizationCreateForm></OrganizationCreateForm>
     <router-link to="/">Назад</router-link>
   </div>

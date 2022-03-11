@@ -1,6 +1,17 @@
 {
   "message": "Привет, i18n!",
   "buttons": {
-    "create": "Создать"
+    "create": "Создать",
+    "logOut": "Выйти"
+  },
+  "organization": {
+    "prefix": "Префикс",
+    "subdomain": "Поддомен",
+    "name": "Имя"
+  },
+  "headers": {
+    "main": "Главная",
+    "newOrganization": "Создать новую организацию",
+    "organizationList": "Ваши организации"
   }
 }

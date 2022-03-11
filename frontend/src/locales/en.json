@@ -1,6 +1,17 @@
 {
   "message": "Hello, i18n!",
   "buttons": {
-    "create": "Create"
+    "create": "Create",
+    "logOut": "Log out"
+  },
+  "organization": {
+    "prefix": "Prefix",
+    "subdomain": "Subdomain",
+    "name": "Name"
+  },
+  "headers": {
+    "main": "Main",
+    "newOrganization": "Create new organization",
+    "organizationList": "Your organizations"
   }
 }

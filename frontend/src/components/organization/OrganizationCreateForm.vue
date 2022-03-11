@@ -1,19 +1,19 @@
 <template>
   <form @submit.prevent ref="organizationCreateForm">
     <TextInput
-      :placeholder="'Название'"
+      :placeholder="$t('organization.name')"
       :disabled="formLoading"
       @input="
         newOrganization != undefined ? (newOrganization.name = $event) : ''
       "
     ></TextInput>
     <TextInput
-      :placeholder="'Поддомен'"
+      :placeholder="$t('organization.subdomain')"
       :disabled="formLoading"
       @input="newOrganization.subdomain = $event"
     ></TextInput>
     <TextInput
-      :placeholder="'Префикс'"
+      :placeholder="$t('organization.prefix')"
       :disabled="formLoading"
       @input="newOrganization.prefix = $event"
     ></TextInput>

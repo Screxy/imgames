@@ -1,12 +1,15 @@
 <template>
   <div class="container">
-    <h1>Главная</h1>
+    <h1>{{ $t('headers.main') }}</h1>
     <LogOutButton></LogOutButton>
     Auth: {{ isAuthenticated }}<br />
     Host:{{ path }}<br />
     Locale:🌐 {{ $i18n.locale }} - {{ $t('message') }}<br />
     <LocaleSwitcher></LocaleSwitcher>
     <router-link to="/new">Создать организацию</router-link>
+    <div>
+      <OrganizationList></OrganizationList>
+    </div>
   </div>
 </template>
 
@@ -14,12 +17,14 @@
 import { AUTH_PATH } from '@/pathVariables.js';
 import LogOutButton from '@/components/auth/LogOutButton.vue';
 import LocaleSwitcher from '@/components/locale/LocaleSwitcher.vue';
+import OrganizationList from '@/components/organization/OrganizationList.vue';
 
 export default {
   name: 'FirstComponent',
   components: {
     LogOutButton,
     LocaleSwitcher,
+    OrganizationList,
   },
   data() {
     return {
