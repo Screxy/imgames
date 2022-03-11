@@ -5,6 +5,7 @@
     "logOut": "Log out"
   },
   "organization": {
+    "organization": "Organization",
     "prefix": "Prefix",
     "subdomain": "Subdomain",
     "name": "Name"

@@ -5,6 +5,7 @@
     "logOut": "Выйти"
   },
   "organization": {
+    "organization": "Организация",
     "prefix": "Префикс",
     "subdomain": "Поддомен",
     "name": "Имя"

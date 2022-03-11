@@ -3,7 +3,7 @@
     <h2>{{ $t('headers.organizationList') }}</h2>
     <div v-for="organization in organizationsByUser" :key="organization.id">
       <a :href="'http://' + organization.subdomain + '.' + getDomainName">
-        Организация "{{ organization.name }}"
+        {{ $t('organization.organization') }} "{{ organization.name }}"
       </a>
       [{{ organization.prefix }}]
     </div>
