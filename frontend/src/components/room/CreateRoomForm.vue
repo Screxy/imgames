@@ -28,6 +28,7 @@ import SubmitButton from '@/components/ui/SubmitButton.vue';
 import defaultRoomSettings from '@/graphql/queries/rooms/defaultRoomSettings.gql';
 import createRoom from '@/graphql/mutations/rooms/createRoom.gql';
 import roomsInOrganization from '@/graphql/queries/rooms/roomsInOrganization.gql';
+import { ROOMS_ROOT_PATH } from '@/pathVariables';
 
 export default {
   name: 'CreateRoomForm',
@@ -89,7 +90,11 @@ export default {
             });
           },
         })
-        .then((data) => {})
+        .then((data) => {
+          this.$router.push(
+            ROOMS_ROOT_PATH + '/' + data.data.createRoom.room.code.toUpperCase()
+          );
+        })
         .catch();
     },
   },

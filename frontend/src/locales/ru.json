@@ -2,7 +2,8 @@
   "message": "Привет, i18n!",
   "buttons": {
     "create": "Создать",
-    "logOut": "Выйти"
+    "logOut": "Выйти",
+    "toMainPage": "На главную"
   },
   "organization": {
     "organization": "Организация",
@@ -15,7 +16,8 @@
     "moneyPerMonth": "Деньги за месяц",
     "numberOfTurns": "Количество месяцев",
     "roomsList": "Список комнат",
-    "room": "Комната"
+    "room": "Комната",
+    "goToRoom": "Перейти в комнату"
   },
   "headers": {
     "main": "Главная",

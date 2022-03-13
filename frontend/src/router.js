@@ -5,12 +5,14 @@ import { createProvider } from '@/apollo';
 import ExampleComponent from '@/components/ExampleComponent.vue';
 import AuthView from '@/components/auth/AuthView.vue';
 import OrganizationCreateView from '@/components/organization/OrganizationCreateView.vue';
+import RoomPlayground from '@/components/room/RoomPlayground.vue';
 
 import store from '@/store.js';
 import {
   MAIN_PATH,
   AUTH_PATH,
   NEW_ORGANIZATION_PATH,
+  ROOMS_ROOT_PATH,
 } from '@/pathVariables.js';
 
 import verifyToken from '@/graphql/mutations/verifyToken.gql';
@@ -83,6 +85,12 @@ const routes = [
     component: OrganizationCreateView,
     beforeEnter: ifAuthenticated,
     meta: { title: 'Создать пространство - ImGames' },
+  },
+  {
+    path: ROOMS_ROOT_PATH + '/:roomCode',
+    component: RoomPlayground,
+    beforeEnter: ifAuthenticated,
+    meta: { title: 'Игровая комната' },
   },
 ];
 

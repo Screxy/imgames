@@ -1,5 +1,10 @@
 <template>
-  <div>{{ $t('room.room') }} {{ room.code }}</div>
+  <div>
+    {{ $t('room.room') }} {{ room.code }}
+    <router-link :to="'/r/' + room.code.toUpperCase()">{{
+      $t('room.goToRoom')
+    }}</router-link>
+  </div>
 </template>
 
 <script>

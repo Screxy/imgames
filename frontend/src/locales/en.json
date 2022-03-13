@@ -2,7 +2,8 @@
   "message": "Hello, i18n!",
   "buttons": {
     "create": "Create",
-    "logOut": "Log out"
+    "logOut": "Log out",
+    "toMainPage": "To the main"
   },
   "organization": {
     "organization": "Organization",
@@ -15,7 +16,8 @@
     "moneyPerMonth": "Money per month",
     "numberOfTurns": "Number of months",
     "roomsList": "Rooms list",
-    "room": "Room"
+    "room": "Room",
+    "goToRoom": "Jump into the room"
   },
   "headers": {
     "main": "Main",
