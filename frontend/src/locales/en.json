@@ -11,7 +11,11 @@
     "name": "Name"
   },
   "room": {
-    "createNewRoom": "Create new room"
+    "createNewRoom": "Create new room",
+    "moneyPerMonth": "Money per month",
+    "numberOfTurns": "Number of months",
+    "roomsList": "Rooms list",
+    "room": "Room"
   },
   "headers": {
     "main": "Main",

@@ -6,14 +6,17 @@ class OrganizationSettings(models.Model):
     organization = models.OneToOneField(
         "Organization", verbose_name="Организация", on_delete=models.CASCADE, unique=True)
     number_of_turns_default = models.PositiveIntegerField(
-        "Количество шагов в комнате по умолчанию", default=3)
-    # TODO:
-    # - number_of_turns_max = Максимальное количество шагов в комнате
-    # - number_participants_max = Максимальное количество участников в комнате
+        "Количество месяцев в комнате по умолчанию", default=3)
+    number_of_turns_max = models.PositiveIntegerField(
+        "Максимальное количество месяцев в комнате по умолчанию", default=12)
+    number_participants_max = models.PositiveIntegerField(
+        "Максимальное количество участников в комнате по умолчанию", default=20)
+    money_per_month_default = models.PositiveIntegerField(
+        "Количество денег в месяц в комнате по умолчанию", default=10000)
 
     class Meta:
-        verbose_name = "Настройки организации"
-        verbose_name_plural = "Настройки организаций"
+        verbose_name = "[DEV] Настройки организации"
+        verbose_name_plural = "[DEV] Настройки организаций"
 
     def __str__(self):
         return "Настройки организации '"+str(self.organization.name)+"'"

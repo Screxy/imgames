@@ -34,6 +34,16 @@ export default {
       type: Boolean,
       default: false,
     },
+    predefined: {
+      type: undefined,
+      default: '',
+    },
+  },
+  watch: {
+    predefined(newValue) {
+      this.inputModel = newValue;
+      this.sendInput();
+    },
   },
   methods: {
     sendInput() {

@@ -4,6 +4,7 @@
     <LogOutButton></LogOutButton>
     Auth: {{ isAuthenticated }}<br />
     Host:{{ path }}<br />
+    Subdomain:{{ subdomain }}<br />
     Locale:🌐 {{ $i18n.locale }} - {{ $t('message') }}<br />
     <LocaleSwitcher></LocaleSwitcher>
     <router-link to="/new">
@@ -16,6 +17,10 @@
     <div>
       <CreateRoomView></CreateRoomView>
     </div>
+    <hr />
+    <div>
+      <RoomList></RoomList>
+    </div>
   </div>
 </template>
 
@@ -25,6 +30,7 @@ import LogOutButton from '@/components/auth/LogOutButton.vue';
 import LocaleSwitcher from '@/components/locale/LocaleSwitcher.vue';
 import OrganizationList from '@/components/organization/OrganizationList.vue';
 import CreateRoomView from '@/components/room/CreateRoomView.vue';
+import RoomList from '@/components/room/RoomList.vue';
 
 export default {
   name: 'FirstComponent',
@@ -33,6 +39,7 @@ export default {
     LocaleSwitcher,
     OrganizationList,
     CreateRoomView,
+    RoomList,
   },
   data() {
     return {
@@ -45,6 +52,9 @@ export default {
     },
     path() {
       return window.location.host;
+    },
+    subdomain() {
+      return this.$store.state.subdomain;
     },
   },
 };

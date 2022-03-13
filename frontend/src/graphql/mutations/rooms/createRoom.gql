@@ -1,0 +1,16 @@
+mutation ($moneyPerMonth: Int!, $numberOfTurns: Int!, $subdomain: String!) {
+  createRoom(
+    moneyPerMonth: $moneyPerMonth
+    numberOfTurns: $numberOfTurns
+    subdomain: $subdomain
+  ) {
+    room {
+      id
+      code
+      __typename
+    }
+    success
+    errors
+    __typename
+  }
+}

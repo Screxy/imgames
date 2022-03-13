@@ -1,4 +1,6 @@
+import graphene
 from .models import RoomParticipant, CardChoice, Winner, Turn, Month, Round, Room
+from organizations.models import Organization
 from graphene_django.types import DjangoObjectType
 
 
@@ -39,6 +41,12 @@ class RoundType(DjangoObjectType):
 
 
 class RoomType(DjangoObjectType):
+    code = graphene.String()
+
+    def resolve_code(self, info):
+        organization = self.organization
+        return f'{organization.prefix}-{str(self.key)}'
+
     class Meta:
         model = Room
         fields = "__all__"

@@ -1,5 +1,5 @@
 import graphene
-from .models import Organization
+from .models import Organization, OrganizationSettings
 from .types import OrganizationType
 from graphql_jwt.decorators import login_required
 
@@ -21,12 +21,13 @@ class CreateOrganization(graphene.Mutation):
             user = info.context.user
             check_organization = Organization.objects.filter(
                 subdomain=subdomain).count()
-            
+
             # Если поддомен уникален
             if check_organization == 0:
                 organization = Organization(
-                    name=name, prefix=prefix, subdomain=subdomain, organization_owner=user)
+                    name=name, prefix=prefix.upper(), subdomain=subdomain, organization_owner=user)
                 organization.save()
+                OrganizationSettings.objects.create(organization=organization)
                 return CreateOrganization(success=True, organization=organization)
             else:
                 raise ValueError('Subdomain exists!')

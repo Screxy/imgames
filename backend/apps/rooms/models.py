@@ -168,7 +168,7 @@ class Room(models.Model):
         unique_together = ("key", "organization")
 
     def __str__(self):
-        return f'{str(self.organization.prefix)}-{str(self.key)}'
+        return f'{str(self.organization.prefix)}-{str(self.key)}'.upper()
 
     def save(self, *args, **kwargs):
         key = calculate_room_key(self.organization)

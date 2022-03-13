@@ -2,12 +2,12 @@ import graphene
 from apps.rooms.models import Room, Round, Month
 from organizations.models import Organization
 from apps.users.models import User
-from apps.rooms.types import RoundType
+from apps.rooms.types import RoundType, RoomType
 
 
 class CreateRoom(graphene.Mutation):
     """ Мутация для создания комнаты (+ раунда и необходимого количества месяцев) в пространстве организации """
-    room_id = graphene.ID()
+    room = graphene.Field(RoomType)
     success = graphene.Boolean()
     errors = graphene.List(graphene.String)
     code = graphene.String()
@@ -15,14 +15,13 @@ class CreateRoom(graphene.Mutation):
 
     class Arguments:
         subdomain = graphene.String(required=True)
-        user_id = graphene.ID(required=True)
         number_of_turns = graphene.Int(required=True)
         money_per_month = graphene.Int(required=True)
 
-    def mutate(self, info, subdomain, user_id, number_of_turns, money_per_month):
+    def mutate(self, info, subdomain, number_of_turns, money_per_month):
         try:
             organization = Organization.objects.get(subdomain=subdomain)
-            user = User.objects.get(pk=user_id)
+            user = info.context.user
 
             # Создаём новый объект комнаты
             room = Room.objects.create(
@@ -36,6 +35,6 @@ class CreateRoom(graphene.Mutation):
             for _ in range(room.number_of_turns):
                 Month.objects.create(round=round)
 
-            return CreateRoom(success=True, room_id=room.id, code=code, round=round)
+            return CreateRoom(success=True, room=room, code=code, round=round)
         except Exception as e:
             return CreateRoom(success=False, errors=[str(e)])

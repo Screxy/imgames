@@ -11,7 +11,11 @@
     "name": "Имя"
   },
   "room": {
-    "createNewRoom": "Создать комнату"
+    "createNewRoom": "Создать комнату",
+    "moneyPerMonth": "Деньги за месяц",
+    "numberOfTurns": "Количество месяцев",
+    "roomsList": "Список комнат",
+    "room": "Комната"
   },
   "headers": {
     "main": "Главная",
