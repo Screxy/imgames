@@ -17,7 +17,13 @@
     "numberOfTurns": "Количество месяцев",
     "roomsList": "Список комнат",
     "room": "Комната",
-    "goToRoom": "Перейти в комнату"
+    "goToRoom": "Перейти в комнату",
+    "round": "Раунд",
+    "player": {
+      "playersList": "Список игроков",
+      "player": "Игрок",
+      "roomOwner": "Владелец комнаты"
+    }
   },
   "headers": {
     "main": "Главная",

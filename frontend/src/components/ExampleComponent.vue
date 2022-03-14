@@ -30,7 +30,7 @@ import LogOutButton from '@/components/auth/LogOutButton.vue';
 import LocaleSwitcher from '@/components/locale/LocaleSwitcher.vue';
 import OrganizationList from '@/components/organization/OrganizationList.vue';
 import CreateRoomView from '@/components/room/CreateRoomView.vue';
-import RoomList from '@/components/room/RoomList.vue';
+import RoomList from '@/components/room/RoomsList.vue';
 
 export default {
   name: 'FirstComponent',

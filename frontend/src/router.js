@@ -5,7 +5,7 @@ import { createProvider } from '@/apollo';
 import ExampleComponent from '@/components/ExampleComponent.vue';
 import AuthView from '@/components/auth/AuthView.vue';
 import OrganizationCreateView from '@/components/organization/OrganizationCreateView.vue';
-import RoomPlayground from '@/components/room/RoomPlayground.vue';
+import RoomPlayground from '@/components/room/playground/RoomPlayground.vue';
 
 import store from '@/store.js';
 import {

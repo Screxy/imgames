@@ -17,7 +17,13 @@
     "numberOfTurns": "Number of months",
     "roomsList": "Rooms list",
     "room": "Room",
-    "goToRoom": "Jump into the room"
+    "goToRoom": "Jump into the room",
+    "round": "Round",
+    "player": {
+      "playersList": "List of players",
+      "player": "Player",
+      "roomOwner": "Room owner"
+    }
   },
   "headers": {
     "main": "Main",

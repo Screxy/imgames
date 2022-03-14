@@ -1,0 +1,30 @@
+query ($code: String!) {
+  roomByCode(code: $code) {
+    id
+    code
+    numberOfTurns
+    currentRound {
+      id
+      key
+      isActive
+      __typename
+    }
+    roomOwner {
+      id
+      lastName
+      firstName
+      __typename
+    }
+    roomparticipantSet {
+      id
+      user {
+        id
+        lastName
+        firstName
+        __typename
+      }
+      __typename
+    }
+    __typename
+  }
+}

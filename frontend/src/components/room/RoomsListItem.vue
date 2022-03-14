@@ -9,7 +9,7 @@
 
 <script>
 export default {
-  name: 'RoomListItem',
+  name: 'RoomsListItem',
   props: {
     room: {
       type: Object,

@@ -10,7 +10,7 @@
 </template>
 
 <script>
-import RoomsListItem from '@/components/room/RoomListItem.vue';
+import RoomsListItem from '@/components/room/RoomsListItem.vue';
 import roomsInOrganization from '@/graphql/queries/rooms/roomsInOrganization.gql';
 
 export default {
