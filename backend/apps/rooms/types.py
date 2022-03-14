@@ -45,7 +45,7 @@ class RoomType(DjangoObjectType):
 
     def resolve_code(self, info):
         organization = self.organization
-        return f'{organization.prefix}-{str(self.key)}'
+        return f'{organization.prefix}-{str(self.key)}'.upper()
 
     class Meta:
         model = Room

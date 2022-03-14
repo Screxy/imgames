@@ -1,5 +1,5 @@
 import graphene
-from apps.rooms.models import Room, Round, Month
+from apps.rooms.models import Room, Round, Month, RoomParticipant
 from organizations.models import Organization
 from apps.users.models import User
 from apps.rooms.types import RoundType, RoomType
@@ -30,10 +30,15 @@ class CreateRoom(graphene.Mutation):
 
             # Создаём новый раунд в комнате
             round = Round.objects.create(room=room)
+            room.current_round = round
+            room.save()
 
             # Создаём необходимое количество месяцев
             for _ in range(room.number_of_turns):
                 Month.objects.create(round=round)
+
+            # Добавляем пользователя как участника
+            RoomParticipant.objects.create(room=room, user=user)
 
             return CreateRoom(success=True, room=room, code=code, round=round)
         except Exception as e:
