@@ -16,6 +16,13 @@
         defaultRoomSettings != undefined ? (newRoom.numberOfTurns = $event) : ''
       "
     ></TextInput>
+    <DropdownSelector
+      :options="[
+        { value: 'Test', label: 'Test' },
+        { value: 'Test2', label: 'Test2' },
+      ]"
+      :predefined="'Test'"
+    ></DropdownSelector>
     <SubmitButton :disabled="formLoading" @click="createNewRoom">
       {{ $t('buttons.create') }}
     </SubmitButton>
@@ -29,12 +36,14 @@ import defaultRoomSettings from '@/graphql/queries/rooms/defaultRoomSettings.gql
 import createRoom from '@/graphql/mutations/rooms/createRoom.gql';
 import roomsInOrganization from '@/graphql/queries/rooms/roomsInOrganization.gql';
 import { ROOMS_ROOT_PATH } from '@/pathVariables';
+import DropdownSelector from '@/components/ui/DropdownSelector.vue';
 
 export default {
   name: 'CreateRoomForm',
   components: {
     TextInput,
     SubmitButton,
+    DropdownSelector,
   },
   apollo: {
     defaultRoomSettings: {

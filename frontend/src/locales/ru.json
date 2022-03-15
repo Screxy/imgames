@@ -23,6 +23,9 @@
       "playersList": "Список игроков",
       "player": "Игрок",
       "roomOwner": "Владелец комнаты"
+    },
+    "gameboard": {
+      "gameboard": "Игровая доска"
     }
   },
   "headers": {

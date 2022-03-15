@@ -23,6 +23,9 @@
       "playersList": "List of players",
       "player": "Player",
       "roomOwner": "Room owner"
+    },
+    "gameboard": {
+      "gameboard": "Game board"
     }
   },
   "headers": {
