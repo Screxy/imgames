@@ -29,5 +29,6 @@
     "main": "Main",
     "newOrganization": "Create new organization",
     "organizationList": "Your organizations"
-  }
+  },
+  "version": "Version"
 }

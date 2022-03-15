@@ -1,5 +1,7 @@
 <template lang="html">
   <div>
+    <p>{{ $t('version') }} {{ packageVersion }}</p>
+    <hr />
     <Spinner v-if="isLoading"></Spinner>
     <router-view />
   </div>
@@ -8,6 +10,7 @@
 <script>
 import verifyToken from '@/graphql/mutations/verifyToken.gql';
 import Spinner from '@/components/ui/Spinner.vue';
+import { version } from '../package.json';
 
 export default {
   name: 'App',
@@ -15,6 +18,9 @@ export default {
   computed: {
     isLoading() {
       return this.$store.state.isLoading;
+    },
+    packageVersion() {
+      return version;
     },
   },
   mounted() {

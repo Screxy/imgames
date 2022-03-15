@@ -30,6 +30,7 @@ const store = new Vuex.Store({
     isLoading: false,
     gotVerifiedAuth: false,
     subdomain: getSubdomain(window.location.host),
+    packageVersion: process.env.PACKAGE_VERSION || '0',
   },
   mutations: {
     START_LOADING(state) {

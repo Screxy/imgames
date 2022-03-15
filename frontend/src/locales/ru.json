@@ -29,5 +29,6 @@
     "main": "Главная",
     "newOrganization": "Создать новую организацию",
     "organizationList": "Ваши организации"
-  }
+  },
+  "version": "Версия"
 }

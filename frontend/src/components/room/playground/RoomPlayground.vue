@@ -3,7 +3,12 @@
     <h1>{{ $t('room.room') }} {{ roomCode }}</h1>
     <h2>{{ $t('room.round') }} R{{ currentRoundKey }}</h2>
     <hr />
-    <PlayersList :players="players" :room="roomByCode"></PlayersList>
+    <PlayersList
+      :players="players"
+      :room="roomByCode"
+      v-if="players != undefined && roomByCode != undefined"
+    >
+    </PlayersList>
     <hr />
     <!-- {{ roomByCode }} <br /> -->
     <router-link :to="mainPath">{{ $t('buttons.toMainPage') }}</router-link>

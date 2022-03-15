@@ -24,7 +24,7 @@ export default {
       required: true,
     },
     room: {
-      type: Array,
+      type: Object,
       required: true,
     },
   },
@@ -32,7 +32,7 @@ export default {
     roomOwnerId() {
       if (this.room.roomOwner != undefined) {
         if (this.room.roomOwner.id != undefined) {
-          return this.room.roomOwner.id;
+          return +this.room.roomOwner.id;
         }
       }
       return {};
