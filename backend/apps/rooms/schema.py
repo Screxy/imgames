@@ -17,7 +17,7 @@ class Query(graphene.ObjectType):
     def resolve_rooms_in_organization(root, info, subdomain):
         try:
             organization = Organization.objects.get(subdomain=subdomain)
-            return Room.objects.filter(organization=organization)
+            return Room.objects.filter(organization=organization).order_by('-key')
         except Exception as e:
             return None
 

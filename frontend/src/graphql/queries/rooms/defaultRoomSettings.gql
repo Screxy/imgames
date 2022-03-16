@@ -4,5 +4,10 @@ query ($subdomain: String!) {
     numberOfTurnsMax
     numberParticipantsMax
     moneyPerMonthDefault
+    flowsInOrganization {
+      id
+      title
+      __typename
+    }
   }
 }

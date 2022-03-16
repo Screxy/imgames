@@ -17,11 +17,9 @@
       "
     ></TextInput>
     <DropdownSelector
-      :options="[
-        { value: 'Test', label: 'Test' },
-        { value: 'Test2', label: 'Test2' },
-      ]"
-      :predefined="'Test'"
+      :options="flowsArray"
+      :predefined="predefinedFlow"
+      @input="newRoom != undefined ? (newRoom.flowId = $event) : ''"
     ></DropdownSelector>
     <SubmitButton :disabled="formLoading" @click="createNewRoom">
       {{ $t('buttons.create') }}
@@ -50,7 +48,6 @@ export default {
       query: defaultRoomSettings,
       variables() {
         return {
-          // TODO: add subdomain variables
           subdomain: this.subdomain,
         };
       },
@@ -66,6 +63,7 @@ export default {
       newRoom: {
         moneyPerMonth: '',
         numberOfTurns: '',
+        flowId: 0,
       },
       defaultRoomSettings: {},
     };
@@ -74,8 +72,27 @@ export default {
     subdomain() {
       return this.$store.state.subdomain;
     },
+    flowsArray() {
+      if (this.defaultRoomSettings != undefined) {
+        if (this.defaultRoomSettings.flowsInOrganization != undefined) {
+          return this.defaultRoomSettings.flowsInOrganization.map((el) => {
+            return { value: el.id, label: el.title };
+          });
+        }
+      }
+      return [];
+    },
+    predefinedFlow() {
+      if (this.defaultRoomSettings != undefined) {
+        if (this.defaultRoomSettings.flowsInOrganization != undefined) {
+          return this.defaultRoomSettings.flowsInOrganization[0].id;
+        }
+      }
+      return 0;
+    },
   },
   methods: {
+    // TODO: add flow selection into mutation
     createNewRoom() {
       this.newRoom.subdomain = this.subdomain;
       this.$apollo

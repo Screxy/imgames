@@ -25,6 +25,11 @@ query ($code: String!) {
       }
       __typename
     }
+    flow {
+      id
+      title
+      __typename
+    }
     __typename
   }
 }

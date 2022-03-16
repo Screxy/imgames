@@ -1,7 +1,10 @@
 <template>
   <div>
     <h1>{{ $t('room.room') }} {{ roomCode }}</h1>
-    <h2>{{ $t('room.round') }} R{{ currentRoundKey }}</h2>
+    <h2>
+      {{ $t('room.round') }} R{{ currentRoundKey }} /
+      {{ $t('room.mechanics') }} "{{ flow }}"
+    </h2>
     <hr />
     <PlayersList
       :players="players"
@@ -12,7 +15,7 @@
     <hr />
     <GameBoard></GameBoard>
     <hr />
-    <!-- {{ roomByCode }} <br /> -->
+    {{ roomByCode }} <br />
     <router-link :to="mainPath">{{ $t('buttons.toMainPage') }}</router-link>
   </div>
 </template>
@@ -40,6 +43,14 @@ export default {
       if (this.roomByCode != undefined) {
         if (this.roomByCode.currentRound != undefined) {
           return this.roomByCode.currentRound.key;
+        }
+      }
+      return '-';
+    },
+    flow() {
+      if (this.roomByCode != undefined) {
+        if (this.roomByCode.flow != undefined) {
+          return this.roomByCode.flow.title;
         }
       }
       return '-';

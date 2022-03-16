@@ -1,7 +1,7 @@
 from django.db import models
 from apps.users.models import User
 from organizations.models import Organization
-from apps.flows.models import Card
+from apps.flows.models import Card, Flow
 
 PLACE_SELECTION = [
     ('1', 'I место'),
@@ -13,9 +13,12 @@ PLACE_SELECTION = [
 def calculate_room_key(fk):
     present_keys = Room.objects.filter(organization=fk).order_by(
         '-key').values_list('key', flat=True)
+    print('PR KEY:', present_keys)
     if present_keys:
+        print('PR KEY[0]+1:', present_keys[0]+1)
         return present_keys[0]+1
     else:
+        print('PR KEY[0]+1:', 1)
         return 1
 
 
@@ -161,6 +164,8 @@ class Room(models.Model):
         "Round", related_name="current_round", verbose_name="Текущий раунд", on_delete=models.CASCADE, null=True, blank=True)
     key = models.PositiveIntegerField("Порядковый номер комнаты в организации")
     money_per_month = models.PositiveIntegerField("Бюджет на месяц")
+    flow = models.ForeignKey(
+        Flow, related_name="flow", verbose_name="Механика комнаты", on_delete=models.CASCADE)
 
     class Meta:
         verbose_name = "Комната"
@@ -172,5 +177,6 @@ class Room(models.Model):
 
     def save(self, *args, **kwargs):
         key = calculate_room_key(self.organization)
-        self.key = key
+        if self.key is None:
+            self.key = key
         super(Room, self).save(*args, **kwargs)

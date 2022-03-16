@@ -26,7 +26,8 @@
     },
     "gameboard": {
       "gameboard": "Игровая доска"
-    }
+    },
+    "mechanics": "Механика"
   },
   "headers": {
     "main": "Главная",

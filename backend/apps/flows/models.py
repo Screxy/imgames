@@ -4,7 +4,7 @@ from django.core.validators import MaxValueValidator, MinValueValidator
 
 MATH_OPERATOR_SELECTION = [
     ('+', '[+] Сложение'),
-    ('-', '[-] Вычиатение'),
+    ('-', '[-] Вычитание'),
     ('*', '[*] Умножение'),
     ('/', '[/] Деление'),
 ]
@@ -38,7 +38,7 @@ class ParameterChange(models.Model):
         verbose_name_plural = "Изменения параметров"
 
     def __str__(self):
-        return "Изменение параметра #"+str(self.id)
+        return f"Изменение параметра #{str(self.id)}"
 
 
 class Stage(models.Model):
@@ -71,7 +71,7 @@ class StageInSequence(models.Model):
         verbose_name_plural = "Места в последовательности этапов"
 
     def __str__(self):
-        return "(#"+str(self.id)+")"
+        return f"(#{str(self.id)})"
 
 
 class Channel(models.Model):
@@ -118,4 +118,4 @@ class Flow(models.Model):
         verbose_name_plural = "Механики"
 
     def __str__(self):
-        return self.title+" - "+str(self.organization)+" (#"+str(self.pk)+")"
+        return f'{self.title} - {str(self.organization)} (#{str(self.pk)})'
