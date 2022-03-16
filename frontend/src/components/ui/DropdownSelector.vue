@@ -1,5 +1,10 @@
 <template>
-  <select :disabled="disabled" v-model="inputModel" @input="sendInput">
+  <select
+    :disabled="disabled"
+    v-model="inputModel"
+    @input="sendInput"
+    @change="sendInput"
+  >
     <option
       :value="option.value"
       :key="index"

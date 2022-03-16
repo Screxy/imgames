@@ -5,7 +5,7 @@
       :disabled="formLoading"
       :type="'number'"
       :predefined="defaultRoomSettings.moneyPerMonthDefault"
-      @input="newRoom != undefined ? (newRoom.moneyPerMonth = $event) : ''"
+      @input="newRoom != undefined ? (newRoom.moneyPerMonth = +$event) : ''"
     ></TextInput>
     <TextInput
       :placeholder="$t('room.numberOfTurns')"
@@ -13,13 +13,15 @@
       :predefined="defaultRoomSettings.numberOfTurnsDefault"
       :type="'number'"
       @input="
-        defaultRoomSettings != undefined ? (newRoom.numberOfTurns = $event) : ''
+        defaultRoomSettings != undefined
+          ? (newRoom.numberOfTurns = +$event)
+          : ''
       "
     ></TextInput>
     <DropdownSelector
       :options="flowsArray"
       :predefined="predefinedFlow"
-      @input="newRoom != undefined ? (newRoom.flowId = $event) : ''"
+      @input="newRoom != undefined ? (newRoom.flowId = +$event) : ''"
     ></DropdownSelector>
     <SubmitButton :disabled="formLoading" @click="createNewRoom">
       {{ $t('buttons.create') }}
