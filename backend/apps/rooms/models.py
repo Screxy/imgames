@@ -13,12 +13,9 @@ PLACE_SELECTION = [
 def calculate_room_key(fk):
     present_keys = Room.objects.filter(organization=fk).order_by(
         '-key').values_list('key', flat=True)
-    print('PR KEY:', present_keys)
     if present_keys:
-        print('PR KEY[0]+1:', present_keys[0]+1)
         return present_keys[0]+1
     else:
-        print('PR KEY[0]+1:', 1)
         return 1
 
 

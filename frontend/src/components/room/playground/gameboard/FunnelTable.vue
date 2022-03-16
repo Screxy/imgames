@@ -7,7 +7,7 @@
     </thead>
     <tbody>
       <tr>
-        <td>Тело</td>
+        <td>Тело {{ channelsByCode }}</td>
       </tr>
     </tbody>
     <tfoot>
@@ -19,8 +19,25 @@
 </template>
 
 <script>
+import channelsByCode from '@/graphql/queries/gameboard/channelsByCode.gql';
+
 export default {
   name: 'FunnelTable',
+  apollo: {
+    channelsByCode: {
+      query: channelsByCode,
+      variables() {
+        return {
+          code: this.roomCode,
+        };
+      },
+    },
+  },
+  computed: {
+    roomCode() {
+      return this.$route.params.roomCode;
+    },
+  },
 };
 </script>
 

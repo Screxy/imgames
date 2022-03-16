@@ -53,8 +53,8 @@ class Stage(models.Model):
         ])
 
     class Meta:
-        verbose_name = "Этап"
-        verbose_name_plural = "Этапы"
+        verbose_name = "Этап воронки"
+        verbose_name_plural = "Этапы воронки"
 
     def __str__(self):
         return "'"+self.name+"'"+" (#"+str(self.id)+")"
@@ -83,8 +83,8 @@ class Channel(models.Model):
         "Начальное значение", decimal_places=2, max_digits=10)
 
     class Meta:
-        verbose_name = "Параметр"
-        verbose_name_plural = "Параметры"
+        verbose_name = "Параметр / Канал"
+        verbose_name_plural = "Параметры / Каналы"
 
     def __str__(self):
         return "'"+self.name+"'"+" (#"+str(self.id)+")"
