@@ -25,7 +25,10 @@
       "roomOwner": "Room owner"
     },
     "gameboard": {
-      "gameboard": "Game board"
+      "gameboard": "Game board",
+      "channelsTitle": "Channels",
+      "trafficTitle": "Traffic",
+      "total": "Total"
     },
     "mechanics": "Flow"
   },

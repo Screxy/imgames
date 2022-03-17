@@ -25,7 +25,10 @@
       "roomOwner": "Владелец комнаты"
     },
     "gameboard": {
-      "gameboard": "Игровая доска"
+      "gameboard": "Игровая доска",
+      "channelsTitle": "Каналы",
+      "trafficTitle": "Трафик",
+      "total": "Итого"
     },
     "mechanics": "Механика"
   },
