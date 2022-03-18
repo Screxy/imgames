@@ -7,6 +7,19 @@
       <TableHeadCell
         :textContent="$t('room.gameboard.trafficTitle')"
       ></TableHeadCell>
+      <template v-for="(stage, index) in sortedStages">
+        <TableHeadCell
+          :textContent="stage.name"
+          :key="stage.id + '.1'"
+        ></TableHeadCell>
+        <TableHeadCell
+          :textContent="
+            $t('room.gameboard.stageConversion') + '  ' + stage.name
+          "
+          :key="stage.id + '.2'"
+          v-if="index != stages.length - 1"
+        ></TableHeadCell>
+      </template>
       <!-- TODO: add double column v-for -->
       <TableHeadCell :textContent="$t('room.gameboard.total')"></TableHeadCell>
     </tr>
@@ -20,6 +33,21 @@ export default {
   name: 'TableHead',
   components: {
     TableHeadCell,
+  },
+  props: {
+    stages: {
+      type: Array,
+    },
+  },
+  computed: {
+    sortedStages() {
+      if (Array.isArray(this.stages)) {
+        return this.stages.sort(
+          (a, b) => a.stageinsequence.place - b.stageinsequence.place
+        );
+      }
+      return [];
+    },
   },
 };
 </script>

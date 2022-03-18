@@ -1,6 +1,6 @@
 <template>
   <table border="1" cellspacing="0">
-    <TableHead></TableHead>
+    <TableHead :stages="stagesByCode"></TableHead>
     <TableBody :channels="channelsByCode"></TableBody>
     <TableFooter></TableFooter>
   </table>
@@ -8,6 +8,7 @@
 
 <script>
 import channelsByCode from '@/graphql/queries/gameboard/channelsByCode.gql';
+import stagesByCode from '@/graphql/queries/gameboard/stagesByCode.gql';
 
 import TableBody from '@/components/room/playground/gameboard/TableBody.vue';
 import TableFooter from '@/components/room/playground/gameboard/TableFooter.vue';
@@ -23,6 +24,14 @@ export default {
   apollo: {
     channelsByCode: {
       query: channelsByCode,
+      variables() {
+        return {
+          code: this.roomCode,
+        };
+      },
+    },
+    stagesByCode: {
+      query: stagesByCode,
       variables() {
         return {
           code: this.roomCode,

@@ -28,7 +28,8 @@
       "gameboard": "Game board",
       "channelsTitle": "Channels",
       "trafficTitle": "Traffic",
-      "total": "Total"
+      "total": "Total",
+      "stageConversion": "Conversion of stage"
     },
     "mechanics": "Flow"
   },

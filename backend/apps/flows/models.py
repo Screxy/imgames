@@ -41,6 +41,20 @@ class ParameterChange(models.Model):
         return f"Изменение параметра #{str(self.id)}"
 
 
+class StageInSequence(models.Model):
+    """Место в последовательности этапов"""
+    stage = models.OneToOneField(
+        "Stage", verbose_name="Изменяемый этап", on_delete=models.CASCADE)
+    place = models.PositiveIntegerField("Место")
+
+    class Meta:
+        verbose_name = "Место в последовательности этапов"
+        verbose_name_plural = "Места в последовательности этапов"
+
+    def __str__(self):
+        return f"(#{str(self.id)})"
+
+
 class Stage(models.Model):
     """Этап"""
     flow = models.ForeignKey("Flow", verbose_name="Принадлежность к механике",
@@ -59,19 +73,24 @@ class Stage(models.Model):
     def __str__(self):
         return "'"+self.name+"'"+" (#"+str(self.id)+")"
 
-
-class StageInSequence(models.Model):
-    """Место в последовательности этапов"""
-    stage = models.OneToOneField(
-        "Stage", verbose_name="Изменяемый этап", on_delete=models.CASCADE)
-    place = models.PositiveIntegerField("Место")
-
-    class Meta:
-        verbose_name = "Место в последовательности этапов"
-        verbose_name_plural = "Места в последовательности этапов"
-
-    def __str__(self):
-        return f"(#{str(self.id)})"
+    def save(self, *args, **kwargs):
+        stages_in_flow = Stage.objects.filter(flow=self.flow)
+        print('stages_in_flow', stages_in_flow)
+        new_place = 1
+        if len(stages_in_flow) != 0:
+            new_place = 2
+            for stage in stages_in_flow:
+                stage_in_sequence = StageInSequence.objects.filter(
+                    stage=stage).first()
+                print('stage_in_sequence', stage_in_sequence)
+                if stage_in_sequence is not None:
+                    print('stage_in_sequence is not None')
+                    if stage_in_sequence.place >= new_place:
+                        new_place = stage_in_sequence.place+1
+                        print('stage_in_sequence.place+1', new_place)
+        super(Stage, self).save(*args, **kwargs)
+        StageInSequence.objects.get_or_create(
+            stage=self, place=new_place)
 
 
 class Channel(models.Model):

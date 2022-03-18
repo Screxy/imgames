@@ -28,7 +28,8 @@
       "gameboard": "Игровая доска",
       "channelsTitle": "Каналы",
       "trafficTitle": "Трафик",
-      "total": "Итого"
+      "total": "Итого",
+      "stageConversion": "Конверсия этапа"
     },
     "mechanics": "Механика"
   },
