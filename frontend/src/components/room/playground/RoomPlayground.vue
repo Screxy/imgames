@@ -2,8 +2,10 @@
   <div>
     <h1>{{ $t('room.room') }} {{ roomCode }}</h1>
     <h2>
-      {{ $t('room.round') }} R{{ currentRoundKey }} /
-      {{ $t('room.mechanics') }} "{{ flow }}"
+      {{ $t('room.mechanics') }} "{{ flow }}" / {{ $t('room.round') }} R{{
+        currentRoundKey
+      }}
+      / {{ $t('room.month') }} M{{ currentMonthKey }}
     </h2>
     <hr />
     <PlayersList
@@ -43,6 +45,16 @@ export default {
       if (this.roomByCode != undefined) {
         if (this.roomByCode.currentRound != undefined) {
           return this.roomByCode.currentRound.key;
+        }
+      }
+      return '-';
+    },
+    currentMonthKey() {
+      if (this.roomByCode != undefined) {
+        if (this.roomByCode.currentRound != undefined) {
+          if (this.roomByCode.currentRound.currentMonth != undefined) {
+            return this.roomByCode.currentRound.currentMonth.key;
+          }
         }
       }
       return '-';

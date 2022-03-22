@@ -1,8 +1,8 @@
 <template>
   <table border="1" cellspacing="0">
     <TableHead :stages="stagesByCode"></TableHead>
-    <TableBody :channels="channelsByCode"></TableBody>
-    <TableFooter></TableFooter>
+    <TableBody :stages="stagesByCode" :channels="channelsByCode"></TableBody>
+    <TableFooter :stages="stagesByCode"></TableFooter>
   </table>
 </template>
 

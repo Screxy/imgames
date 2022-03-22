@@ -7,6 +7,10 @@ query ($code: String!) {
       id
       key
       isActive
+      currentMonth {
+        id
+        key
+      }
       __typename
     }
     roomOwner {

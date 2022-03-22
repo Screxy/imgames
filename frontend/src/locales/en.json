@@ -31,7 +31,8 @@
       "total": "Total",
       "stageConversion": "Conversion of stage"
     },
-    "mechanics": "Flow"
+    "mechanics": "Flow",
+    "month": "Month"
   },
   "headers": {
     "main": "Main",

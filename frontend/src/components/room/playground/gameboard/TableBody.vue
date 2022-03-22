@@ -4,6 +4,7 @@
       v-for="channel in channels"
       :key="channel.id"
       :channel="channel"
+      :stages="stages"
     ></TableBodyRow>
   </tbody>
 </template>
@@ -18,6 +19,9 @@ export default {
   },
   props: {
     channels: {
+      type: Array,
+    },
+    stages: {
       type: Array,
     },
   },

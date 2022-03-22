@@ -31,7 +31,8 @@
       "total": "Итого",
       "stageConversion": "Конверсия этапа"
     },
-    "mechanics": "Механика"
+    "mechanics": "Механика",
+    "month": "Месяц"
   },
   "headers": {
     "main": "Главная",

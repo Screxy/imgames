@@ -34,7 +34,7 @@ def calculate_month_key(fk):
     if present_keys:
         return present_keys[0]+1
     else:
-        return 1
+        return 0
 
 
 class RoomParticipant(models.Model):
@@ -120,8 +120,9 @@ class Month(models.Model):
         )
 
     def save(self, *args, **kwargs):
-        key = calculate_month_key(self.round)
-        self.key = key
+        if self.key is None:
+            key = calculate_month_key(self.round)
+            self.key = key
         super(Month, self).save(*args, **kwargs)
 
 
@@ -145,8 +146,9 @@ class Round(models.Model):
         return f"Раунд #{str(self.key)} ({str(self.room)}.R{str(self.key)})"
 
     def save(self, *args, **kwargs):
-        key = calculate_round_key(self.room)
-        self.key = key
+        if self.key is None:
+            key = calculate_round_key(self.room)
+            self.key = key
         super(Round, self).save(*args, **kwargs)
 
 
@@ -173,7 +175,7 @@ class Room(models.Model):
         return f'{str(self.organization.prefix)}-{str(self.key)}'.upper()
 
     def save(self, *args, **kwargs):
-        key = calculate_room_key(self.organization)
         if self.key is None:
+            key = calculate_room_key(self.organization)
             self.key = key
         super(Room, self).save(*args, **kwargs)

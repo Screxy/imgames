@@ -39,8 +39,16 @@ class CreateRoom(graphene.Mutation):
             room.save()
 
             # Создаём необходимое количество месяцев
-            for _ in range(room.number_of_turns):
-                Month.objects.create(round=round)
+            first_month = None
+            for _ in range(room.number_of_turns+1):
+                print(_)
+                if first_month is not None:
+                    Month.objects.create(round=round)
+                else:
+                    first_month = Month.objects.create(round=round)
+
+            round.current_month = first_month
+            round.save()
 
             # Добавляем пользователя как участника
             RoomParticipant.objects.create(room=room, user=user)
