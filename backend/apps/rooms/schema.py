@@ -13,7 +13,6 @@ class Query(graphene.ObjectType):
         RoomType, code=graphene.String(), description='Информация о комнате по коду комнаты')
     rooms_in_organization = graphene.List(
         RoomType, subdomain=graphene.String(), description='Список комнат в организации')
-    # TODO: user_playground_current_by_code
 
     def resolve_rooms_in_organization(root, info, subdomain):
         try:
