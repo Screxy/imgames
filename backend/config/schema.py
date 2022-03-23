@@ -3,9 +3,10 @@ import apps.users.schema
 import apps.rooms.schema
 import apps.organizations.schema
 import apps.flows.schema
+import apps.computed.schema
 
 
-class Query(apps.users.schema.Query, apps.rooms.schema.Query, apps.organizations.schema.Query, apps.flows.schema.Query, graphene.ObjectType):
+class Query(apps.users.schema.Query, apps.rooms.schema.Query, apps.organizations.schema.Query, apps.flows.schema.Query, apps.computed.schema.Query, graphene.ObjectType):
     pass
 
 

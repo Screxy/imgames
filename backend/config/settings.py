@@ -69,6 +69,7 @@ LOCAL_APPS = [
     'apps.organizations',
     'apps.flows',
     'apps.rooms',
+    'apps.computed'
 ]
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps

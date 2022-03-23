@@ -1,4 +1,3 @@
-from pydoc import describe
 import graphene
 from graphene_django.debug import DjangoDebug
 from apps.flows.types import ChannelType, StageType
