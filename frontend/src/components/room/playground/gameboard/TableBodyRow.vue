@@ -1,16 +1,19 @@
 <template>
   <tr>
     <ChannelTitleCell :title="channel.name"></ChannelTitleCell>
-    <CardinalNumberCell :value="+channel.defaultValue"></CardinalNumberCell>
+    <CardinalNumberCell :value="+data[0]"></CardinalNumberCell>
     <template v-for="(stage, index) in stages">
-      <PercentCell :key="stage.id + '.1'" :value="0"></PercentCell>
+      <PercentCell
+        :key="stage.id + '.1'"
+        :value="+data[1 + index * 2]"
+      ></PercentCell>
       <CardinalNumberCell
         :key="stage.id + '.2'"
-        :value="0"
+        :value="+data[2 + index * 2]"
         v-if="index != stages.length - 1"
       ></CardinalNumberCell>
     </template>
-    <CardinalNumberCell :value="0"></CardinalNumberCell>
+    <CardinalNumberCell :value="+data[data.length - 1]"></CardinalNumberCell>
   </tr>
 </template>
 
@@ -31,6 +34,9 @@ export default {
       type: Object,
     },
     stages: {
+      type: Array,
+    },
+    data: {
       type: Array,
     },
   },

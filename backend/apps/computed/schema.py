@@ -34,11 +34,7 @@ class Query(graphene.ObjectType):
                 # Находим данные о этапах воронки по умолчанию
                 stages = Stage.objects.filter(flow=flow)
 
-                print(stages)
-                print(channels)
-
                 answer_array = []
-
                 total_data = [Decimal(0)]
                 for i in range(len(stages)):
                     total_data += [Decimal(0), Decimal(0)]
@@ -57,8 +53,10 @@ class Query(graphene.ObjectType):
                         channel_next = channel_next * stage.conversion
 
                         #
-                        total_data[1+2*i] += Decimal(0)
-                        total_data[2+2*i] += Decimal(channel_next)
+                        total_data[1+(2*i)
+                                   ] = '{0:.2f}'.format(Decimal(total_data[1+(2*i)])+Decimal(0))
+                        total_data[2+(2*i)] = '{0:.2f}'.format(
+                            Decimal(channel_next)+Decimal(total_data[2+(2*i)]))
 
                         # Форматируем данные для ответа
                         data += ['{0:.2f}'.format(stage.conversion),

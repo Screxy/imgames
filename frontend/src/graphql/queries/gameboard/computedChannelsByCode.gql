@@ -1,0 +1,10 @@
+query ($code: String!) {
+  computedChannelsByCode(code: $code) {
+    channel {
+      id
+      name
+    }
+    data
+    isTotal
+  }
+}

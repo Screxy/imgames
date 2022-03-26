@@ -36,6 +36,15 @@ class RoundAdmin(admin.ModelAdmin):
 @admin.register(Room)
 class RoomAdmin(admin.ModelAdmin):
     list_display = ('__str__', 'organization', 'room_owner',
-                    'number_of_turns', 'current_round')
+                    'number_of_turns', 'current_round', 'current_month')
     list_filter = ('organization',)
     readonly_fields = ('key',)
+
+    def current_month(self, obj):
+        current_round = obj.current_round
+        if (current_round is not None) and (
+            current_round.current_month is not None
+        ):
+            return current_round.current_month
+        return "-"
+    current_month.short_description = "Текущий месяц"

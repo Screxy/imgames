@@ -4,16 +4,20 @@
       <td>
         <i>{{ $t('room.gameboard.total') }}</i>
       </td>
-      <CardinalNumberCell :value="0"></CardinalNumberCell>
+      <CardinalNumberCell :value="+data[0]"></CardinalNumberCell>
       <template v-for="(stage, index) in stages">
-        <PercentCell :key="stage.id + '.1'" :value="0"></PercentCell>
+        <PercentCell
+          :key="stage.id + '.1'"
+          :value="+data[1 + 2 * index]"
+          :isHide="true"
+        ></PercentCell>
         <CardinalNumberCell
           :key="stage.id + '.2'"
-          :value="0"
+          :value="+data[2 + 2 * index]"
           v-if="index != stages.length - 1"
         ></CardinalNumberCell>
       </template>
-      <CardinalNumberCell :value="0"></CardinalNumberCell>
+      <CardinalNumberCell :value="+data[data.length - 1]"></CardinalNumberCell>
     </tr>
   </tfoot>
 </template>
@@ -31,6 +35,10 @@ export default {
   props: {
     stages: {
       type: Array,
+    },
+    data: {
+      type: Array,
+      required: true,
     },
   },
 };

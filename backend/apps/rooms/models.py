@@ -112,11 +112,10 @@ class Month(models.Model):
 
     def __str__(self):
         return (
-            f"Месяц #{str(self.key)} ({str(self.round.room)}.R"
+            f"{str(self.round.room)}.R"
             + str(self.round.key)
             + ".M"
             + str(self.key)
-            + ")"
         )
 
     def save(self, *args, **kwargs):
@@ -143,7 +142,7 @@ class Round(models.Model):
         unique_together = ("key", "room")
 
     def __str__(self):
-        return f"Раунд #{str(self.key)} ({str(self.room)}.R{str(self.key)})"
+        return f"{str(self.room)}.R{str(self.key)}"
 
     def save(self, *args, **kwargs):
         if self.key is None:
