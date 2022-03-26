@@ -1,9 +1,10 @@
+from decimal import Decimal
 import graphene
 from graphene_django.debug import DjangoDebug
 from .types import ComputedGameDataType
 from organizations.models import Organization
 from apps.rooms.models import Room
-from apps.flows.models import Channel
+from apps.flows.models import Channel, Stage
 
 
 class Query(graphene.ObjectType):
@@ -15,19 +16,67 @@ class Query(graphene.ObjectType):
         try:
             code_array = str(code).split('-')
             if len(code_array) > 1:
+                user = info.context.user
                 organization = Organization.objects.get(
                     prefix__iexact=code_array[0])
                 room = Room.objects.get(
                     key=code_array[1], organization=organization)
 
-                # TODO:
-                # - Какой месяц в комнате текущий?
-                # - Находим по текущему месяцу текущий шаг
-                # -
-                return [ComputedGameDataType(data=[5, 6], channel=Channel.objects.first()), ComputedGameDataType(data=[5, 6], channel=Channel.objects.first()), ]
+                # Находим текущий месяц
+                current_month = room.current_round.current_month
+
+                # Находим текущий механику комнаты
+                flow = room.flow
+
+                # Находим данные о каналах по умолчанию
+                channels = Channel.objects.filter(flow=flow)
+
+                # Находим данные о этапах воронки по умолчанию
+                stages = Stage.objects.filter(flow=flow)
+
+                print(stages)
+                print(channels)
+
+                answer_array = []
+
+                total_data = [Decimal(0)]
+                for i in range(len(stages)):
+                    total_data += [Decimal(0), Decimal(0)]
+
+                for channel in channels:
+
+                    # Находим входное значение канала
+                    channel_start_value = channel.default_value
+                    data = [channel_start_value]
+                    total_data[0] += channel_start_value
+                    # Вычисляем значение для каждого этапа воронки
+                    channel_next = channel_start_value
+                    for i, stage in enumerate(stages, start=0):
+
+                        # Высчитываем значение после конверсии
+                        channel_next = channel_next * stage.conversion
+
+                        #
+                        total_data[1+2*i] += Decimal(0)
+                        total_data[2+2*i] += Decimal(channel_next)
+
+                        # Форматируем данные для ответа
+                        data += ['{0:.2f}'.format(stage.conversion),
+                                 '{0:.2f}'.format(channel_next)]
+
+                    # Добавляем данные в массив возвращаемых значений
+                    answer_array += [ComputedGameDataType(
+                        data=data, channel=channel, is_total=False)]
+
+                # Добавляем значение ИТОГО
+                answer_array += [ComputedGameDataType(
+                    data=total_data, channel=None, is_total=True)]
+
+                return answer_array
             else:
                 raise Exception('Error code')
         except Exception as e:
+            print(e)
             return None
 
 
