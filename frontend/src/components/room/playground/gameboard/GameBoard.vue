@@ -1,12 +1,12 @@
 <template>
   <div>
-    <h3>{{ $t('room.gameboard.gameboard') }}</h3>
+    <h3>{{ $t('room.gameBoard.gameBoard') }}</h3>
     <FunnelTable></FunnelTable>
   </div>
 </template>
 
 <script>
-import FunnelTable from '@/components/room/playground/gameboard/FunnelTable.vue';
+import FunnelTable from '@/components/room/playground/gameBoard/FunnelTable.vue';
 
 export default {
   name: 'GameBoard',

@@ -2,7 +2,7 @@
   <tfoot>
     <tr>
       <td>
-        <i>{{ $t('room.gameboard.total') }}</i>
+        <i>{{ $t('room.gameBoard.total') }}</i>
       </td>
       <CardinalNumberCell :value="+data[0]"></CardinalNumberCell>
       <template v-for="(stage, index) in stages">
@@ -23,8 +23,8 @@
 </template>
 
 <script>
-import CardinalNumberCell from '@/components/room/playground/gameboard/CardinalNumberCell.vue';
-import PercentCell from '@/components/room/playground/gameboard/PercentCell.vue';
+import CardinalNumberCell from '@/components/room/playground/gameBoard/CardinalNumberCell.vue';
+import PercentCell from '@/components/room/playground/gameBoard/PercentCell.vue';
 
 export default {
   name: 'TableFooter',

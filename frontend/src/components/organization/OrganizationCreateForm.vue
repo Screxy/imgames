@@ -50,7 +50,6 @@ export default {
     async createNewOrganization() {
       this.$store.commit('START_LOADING');
       this.formLoading = true;
-      console.log('newOrganization', this.newOrganization);
       this.$apollo
         .mutate({
           mutation: createOrganization,

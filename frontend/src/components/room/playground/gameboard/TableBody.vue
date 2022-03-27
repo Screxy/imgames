@@ -11,7 +11,7 @@
 </template>
 
 <script>
-import TableBodyRow from '@/components/room/playground/gameboard/TableBodyRow.vue';
+import TableBodyRow from '@/components/room/playground/gameBoard/TableBodyRow.vue';
 
 export default {
   name: 'TableBody',
@@ -31,15 +31,10 @@ export default {
   },
   methods: {
     rowData(channelId) {
-      console.log(channelId);
-      console.log(this.data);
       let dataObject = this.data.find((el) => {
-        console.log(el.channel.id, channelId, el.channel.id == channelId);
         return +el.channel.id == +channelId;
       });
-      console.log(dataObject);
       if (dataObject != undefined) {
-        console.log(dataObject.data);
         return dataObject.data;
       }
       return {};

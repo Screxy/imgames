@@ -17,6 +17,8 @@
     <hr />
     <GameBoard></GameBoard>
     <hr />
+    <CardsList></CardsList>
+    <hr />
     {{ roomByCode }} <br />
     <router-link :to="mainPath">{{ $t('buttons.toMainPage') }}</router-link>
   </div>
@@ -26,13 +28,15 @@
 import { MAIN_PATH } from '@/pathVariables';
 import roomByCode from '@/graphql/queries/rooms/roomByCode.gql';
 import PlayersList from '@/components/room/playground/PlayersList.vue';
-import GameBoard from '@/components/room/playground/gameboard/GameBoard.vue';
+import GameBoard from '@/components/room/playground/gameBoard/GameBoard.vue';
+import CardsList from '@/components/room/playground/cardsList/CardsList.vue';
 
 export default {
   name: 'RoomPlayground',
   components: {
     PlayersList,
     GameBoard,
+    CardsList,
   },
   data() {
     return { mainPath: MAIN_PATH };

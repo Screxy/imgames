@@ -11,13 +11,13 @@
 </template>
 
 <script>
-import channelsByCode from '@/graphql/queries/gameboard/channelsByCode.gql';
-import stagesByCode from '@/graphql/queries/gameboard/stagesByCode.gql';
-import computedChannelsByCode from '@/graphql/queries/gameboard/computedChannelsByCode.gql';
+import channelsByCode from '@/graphql/queries/gameBoard/channelsByCode.gql';
+import stagesByCode from '@/graphql/queries/gameBoard/stagesByCode.gql';
+import computedChannelsByCode from '@/graphql/queries/gameBoard/computedChannelsByCode.gql';
 
-import TableBody from '@/components/room/playground/gameboard/TableBody.vue';
-import TableFooter from '@/components/room/playground/gameboard/TableFooter.vue';
-import TableHead from '@/components/room/playground/gameboard/TableHead.vue';
+import TableBody from '@/components/room/playground/gameBoard/TableBody.vue';
+import TableFooter from '@/components/room/playground/gameBoard/TableFooter.vue';
+import TableHead from '@/components/room/playground/gameBoard/TableHead.vue';
 
 export default {
   name: 'FunnelTable',

@@ -18,9 +18,9 @@
 </template>
 
 <script>
-import ChannelTitleCell from '@/components/room/playground/gameboard/ChannelTitleCell.vue';
-import CardinalNumberCell from '@/components/room/playground/gameboard/CardinalNumberCell.vue';
-import PercentCell from '@/components/room/playground/gameboard/PercentCell.vue';
+import ChannelTitleCell from '@/components/room/playground/gameBoard/ChannelTitleCell.vue';
+import CardinalNumberCell from '@/components/room/playground/gameBoard/CardinalNumberCell.vue';
+import PercentCell from '@/components/room/playground/gameBoard/PercentCell.vue';
 
 export default {
   name: 'TableBodyRow',

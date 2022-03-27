@@ -24,15 +24,22 @@
       "player": "Игрок",
       "roomOwner": "Владелец комнаты"
     },
-    "gameboard": {
-      "gameboard": "Игровая доска",
+    "gameBoard": {
+      "gameBoard": "Игровая доска",
       "channelsTitle": "Каналы",
       "trafficTitle": "Трафик",
       "total": "Итого",
       "stageConversion": "Конверсия этапа"
     },
     "mechanics": "Механика",
-    "month": "Месяц"
+    "month": "Месяц",
+    "card": {
+      "cardsList": "Список карточек",
+      "chooseCard": "Выбрать",
+      "selectedCard": "Выбранная карточка",
+      "deselectCard": "Отменить выбор",
+      "send": "Отправить"
+    }
   },
   "headers": {
     "main": "Главная",

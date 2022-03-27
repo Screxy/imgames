@@ -24,15 +24,22 @@
       "player": "Player",
       "roomOwner": "Room owner"
     },
-    "gameboard": {
-      "gameboard": "Game board",
+    "gameBoard": {
+      "gameBoard": "Game board",
       "channelsTitle": "Channels",
       "trafficTitle": "Traffic",
       "total": "Total",
       "stageConversion": "Conversion of stage"
     },
     "mechanics": "Flow",
-    "month": "Month"
+    "month": "Month",
+    "card": {
+      "cardsList": "List of cards",
+      "chooseCard": "Select",
+      "selectedCard": "Selected card",
+      "deselectCard": "Deselect",
+      "send": "Send"
+    }
   },
   "headers": {
     "main": "Main",

@@ -2,14 +2,14 @@
   <thead>
     <tr>
       <TableHeadCell
-        :textContent="$t('room.gameboard.channelsTitle')"
+        :textContent="$t('room.gameBoard.channelsTitle')"
       ></TableHeadCell>
       <TableHeadCell
-        :textContent="$t('room.gameboard.trafficTitle')"
+        :textContent="$t('room.gameBoard.trafficTitle')"
       ></TableHeadCell>
       <template v-for="(stage, index) in sortedStages">
         <TableHeadCell
-          :textContent="$t('room.gameboard.stageConversion') + ' ' + stage.name"
+          :textContent="$t('room.gameBoard.stageConversion') + ' ' + stage.name"
           :key="stage.id + '.1'"
         ></TableHeadCell>
         <TableHeadCell
@@ -19,13 +19,13 @@
         ></TableHeadCell>
       </template>
       <!-- TODO: add double column v-for -->
-      <TableHeadCell :textContent="$t('room.gameboard.total')"></TableHeadCell>
+      <TableHeadCell :textContent="$t('room.gameBoard.total')"></TableHeadCell>
     </tr>
   </thead>
 </template>
 
 <script>
-import TableHeadCell from '@/components/room/playground/gameboard/TableHeadCell.vue';
+import TableHeadCell from '@/components/room/playground/gameBoard/TableHeadCell.vue';
 
 export default {
   name: 'TableHead',
