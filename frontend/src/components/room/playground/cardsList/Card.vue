@@ -4,10 +4,13 @@
     <h4>{{ data.header }}</h4>
     <p>{{ data.shortDescription }}</p>
     <p>{{ data.cost }}₽</p>
-    <SubmitButton @click="emitSelection()" v-if="!selected">{{
-      $t('room.card.chooseCard')
-    }}</SubmitButton>
-    <SubmitButton @click="emitDeselect()" v-else>{{
+    <SubmitButton
+      :disabled="canNotChoose()"
+      @click="emitSelection()"
+      v-if="!selected"
+      >{{ $t('room.card.chooseCard') }}</SubmitButton
+    >
+    <SubmitButton :disabled="canNotChoose()" @click="emitDeselect()" v-else>{{
       $t('room.card.deselectCard')
     }}</SubmitButton>
   </div>
@@ -30,6 +33,10 @@ export default {
       type: Boolean,
       default: false,
     },
+    disabled: {
+      type: Boolean,
+      default: false,
+    },
   },
   methods: {
     emitSelection() {
@@ -37,6 +44,9 @@ export default {
     },
     emitDeselect() {
       this.$emit('deselect', this.data.id);
+    },
+    canNotChoose() {
+      return this.disabled;
     },
   },
 };

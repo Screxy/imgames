@@ -1,14 +1,16 @@
 <template>
   <div>
     <h3>{{ $t('room.card.cardsList') }}</h3>
-    <SubmitButton @click="sendCardChoice">{{
-      $t('room.card.send')
-    }}</SubmitButton>
+    <WriteTurnPanel
+      :disabled="!canDoStepNowByCode"
+      :selectedCardsId="selectedCardsId"
+    ></WriteTurnPanel>
     <Card
       v-for="card in cardsByCode"
       :key="card.id"
       :data="card"
       :selected="isSelected(card.id)"
+      :disabled="!canDoStepNowByCode"
       @select="addChoice($event)"
       @deselect="removeChoice($event)"
     ></Card>
@@ -17,18 +19,27 @@
 
 <script>
 import cardsByCode from '@/graphql/queries/gameBoard/cardsByCode.gql';
+import canDoStepNowByCode from '@/graphql/queries/gameBoard/canDoStepNowByCode.gql';
 import Card from '@/components/room/playground/cardsList/Card.vue';
-import SubmitButton from '@/components/ui/SubmitButton.vue';
+import WriteTurnPanel from '@/components/room/playground/cardsList/WriteTurnPanel.vue';
 
 export default {
   name: 'CardsList',
   components: {
     Card,
-    SubmitButton,
+    WriteTurnPanel,
   },
   apollo: {
     cardsByCode: {
       query: cardsByCode,
+      variables() {
+        return {
+          code: this.roomCode,
+        };
+      },
+    },
+    canDoStepNowByCode: {
+      query: canDoStepNowByCode,
       variables() {
         return {
           code: this.roomCode,
@@ -61,9 +72,6 @@ export default {
     },
     isSelected(cardId) {
       return +this.selectedCardsId.findIndex((el) => +el == +cardId) !== -1;
-    },
-    sendCardChoice() {
-      console.log('Отправляем массив: ', this.selectedCardsId);
     },
   },
 };

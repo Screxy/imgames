@@ -1,8 +1,8 @@
 import graphene
 from graphene_django.debug import DjangoDebug
-from .mutations import CreateRoom
+from .mutations import CreateRoom, WriteTurn
 from .types import RoomType
-from .models import Room
+from .models import Room, Turn
 from organizations.models import Organization
 
 
@@ -13,6 +13,26 @@ class Query(graphene.ObjectType):
         RoomType, code=graphene.String(), description='Информация о комнате по коду комнаты')
     rooms_in_organization = graphene.List(
         RoomType, subdomain=graphene.String(), description='Список комнат в организации')
+    can_do_step_now_by_code = graphene.Boolean(code=graphene.String())
+
+    def resolve_can_do_step_now_by_code(root, info, code):
+        try:
+            code_array = str(code).split('-')
+            if len(code_array) > 1:
+                user = info.context.user
+                organization = Organization.objects.get(
+                    prefix__iexact=code_array[0])
+                room = Room.objects.get(
+                    key=code_array[1], organization=organization)
+                current_round = room.current_round
+                current_month = current_round.current_month
+                turn = Turn.objects.filter(
+                    month=current_month, user=user).count()
+                return turn == 0
+            else:
+                raise Exception('Error code')
+        except Exception as e:
+            return None
 
     def resolve_rooms_in_organization(root, info, subdomain):
         try:
@@ -38,3 +58,4 @@ class Query(graphene.ObjectType):
 
 class Mutation(graphene.ObjectType):
     create_room = CreateRoom.Field()
+    write_turn = WriteTurn.Field()

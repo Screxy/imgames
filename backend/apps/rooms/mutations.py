@@ -1,9 +1,9 @@
 import graphene
-from apps.rooms.models import Room, Round, Month, RoomParticipant
+from apps.rooms.models import Room, Round, Month, RoomParticipant, Turn, CardChoice
 from organizations.models import Organization
-from apps.flows.models import Flow
+from apps.flows.models import Flow, Card
 from apps.users.models import User
-from apps.rooms.types import RoundType, RoomType
+from apps.rooms.types import RoundType, RoomType, TurnType
 
 
 class CreateRoom(graphene.Mutation):
@@ -56,3 +56,47 @@ class CreateRoom(graphene.Mutation):
             return CreateRoom(success=True, room=room, code=code, round=round)
         except Exception as e:
             return CreateRoom(success=False, errors=[str(e)])
+
+
+class WriteTurn(graphene.Mutation):
+    """ Мутация для создания комнаты (+ раунда и необходимого количества месяцев) в пространстве организации """
+    success = graphene.Boolean()
+    errors = graphene.List(graphene.String)
+    turn = graphene.Field(TurnType)
+
+    class Arguments:
+        code = graphene.String(required=True)
+        cards_id = graphene.List(graphene.ID, required=True)
+
+    def mutate(self, info, code, cards_id):
+        try:
+            code_array = str(code).split('-')
+            if len(code_array) > 1:
+                user = info.context.user
+                organization = Organization.objects.get(
+                    prefix__iexact=code_array[0])
+                room = Room.objects.get(
+                    key=code_array[1], organization=organization)
+                current_round = room.current_round
+                current_month = current_round.current_month
+
+                # Если шаг существует, возвращаем ошибку
+                turn = Turn.objects.filter(
+                    month=current_month, user=user).count()
+                if turn != 0:
+                    raise Exception('Turn exists!')
+
+                # Если не сущестовал такой ход, тогда создаём
+                turn = Turn.objects.create(
+                    month=current_month, user=user)
+
+                # Для каждой карточки фиксируем выбор
+                for card_id in cards_id:
+                    card = Card.objects.get(pk=card_id)
+                    CardChoice.objects.create(card=card, turn=turn)
+
+                # Возвращаем результат
+                return WriteTurn(turn=turn, success=True)
+            return WriteTurn(success=False, errors=['Error code!'])
+        except Exception as e:
+            return WriteTurn(success=False, errors=[str(e)])
