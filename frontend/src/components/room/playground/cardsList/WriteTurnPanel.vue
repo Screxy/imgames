@@ -1,6 +1,6 @@
 <template>
   <div>
-    <SubmitButton @click="sendCardChoice" :disabled="isDisabled()">{{
+    <SubmitButton @click="sendCardChoice" :disabled="isDisabled">{{
       $t('room.card.send')
     }}</SubmitButton>
   </div>
@@ -30,14 +30,39 @@ export default {
       isLoading: false,
     };
   },
-  methods: {
-    isDisabled() {
-      return this.disabled || isLoading;
+  computed: {
+    roomCode() {
+      return this.$route.params.roomCode;
     },
+    isDisabled() {
+      return this.disabled || this.isLoading;
+    },
+  },
+  methods: {
     sendCardChoice() {
       console.log('Отправляем массив: ', this.selectedCardsId);
+      this.isLoading = true;
       // TODO: add mutation support
-      // this.$apollo.mutate();
+      this.$apollo
+        .mutate({
+          mutation: writeTurn,
+          variables: {
+            code: this.roomCode,
+            cardsId: this.selectedCardsId,
+          },
+          update: (store, { data: { writeTurn } }) => {
+            console.log('DATA FOR CACHE', writeTurn);
+          },
+        })
+        .then(() => {})
+        .catch((e) => {
+          console.log(e);
+          //
+          // EMIT CLEAN CHOICE
+        })
+        .finally(() => {
+          this.isLoading = false;
+        });
     },
   },
 };
