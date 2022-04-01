@@ -1,5 +1,5 @@
 from django.contrib import admin
-from organizations.models import Organization, OrganizationSettings
+from apps.organizations.models import Organization, OrganizationSettings
 
 
 class OrganizationSettingsInline(admin.StackedInline):

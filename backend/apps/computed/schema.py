@@ -2,7 +2,7 @@ from decimal import Decimal
 import graphene
 from graphene_django.debug import DjangoDebug
 from .types import ComputedGameDataType
-from organizations.models import Organization
+from apps.organizations.models import Organization
 from apps.rooms.models import Room
 from apps.flows.models import Channel, Stage
 

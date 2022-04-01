@@ -1,4 +1,4 @@
-from .models import Flow, Card, Channel, StageInSequence, Stage, ParameterChange
+from apps.flows.models import Flow, Card, Channel, StageInSequence, Stage, ParameterChange
 from graphene_django.types import DjangoObjectType
 
 

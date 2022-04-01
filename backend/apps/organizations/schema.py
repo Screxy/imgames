@@ -1,8 +1,8 @@
 import graphene
 from graphene_django.debug import DjangoDebug
-from organizations.mutations import CreateOrganization
-from organizations.types import OrganizationType, OrganizationSettingsType
-from organizations.models import Organization, OrganizationSettings
+from apps.organizations.mutations import CreateOrganization
+from apps.organizations.types import OrganizationType, OrganizationSettingsType
+from apps.organizations.models import Organization, OrganizationSettings
 
 
 class Query(graphene.ObjectType):

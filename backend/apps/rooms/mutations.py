@@ -1,9 +1,10 @@
 import graphene
-from apps.rooms.models import Room, Round, Month, RoomParticipant, Turn, CardChoice
-from organizations.models import Organization
+from .models import Room, Round, Month, Turn, CardChoice, RoomParticipant
+
+from apps.organizations.models import Organization
 from apps.flows.models import Flow, Card
 from apps.users.models import User
-from apps.rooms.types import RoundType, RoomType, TurnType
+from .types import RoundType, RoomType, TurnType
 
 
 class CreateRoom(graphene.Mutation):

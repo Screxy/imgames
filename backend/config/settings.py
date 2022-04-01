@@ -62,6 +62,8 @@ DJANGO_APPS = [
 THIRD_PARTY_APPS = [
     'graphene_django',
     'django_extensions',
+    'channels',
+    'graphene_subscriptions'
 ]
 
 LOCAL_APPS = [
@@ -253,6 +255,7 @@ GRAPHENE = {
     'MIDDLEWARE': [
         'graphql_jwt.middleware.JSONWebTokenMiddleware',
     ],
+    'SUBSCRIPTION_PATH': '/ws/graphql'
 }
 
 if DEBUG:
@@ -276,3 +279,14 @@ GRAPHQL_JWT = {
 }
 
 DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
+
+ASGI_APPLICATION = 'config.asgi.application'
+
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [("redis", 6379)],
+        }
+    }
+}

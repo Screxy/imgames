@@ -46,6 +46,7 @@ graphene==2.1.8
 graphene-django
 raven
 django-admin-interface
-
-
-
+channels
+channels-redis
+daphne
+graphene_subscriptions

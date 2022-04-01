@@ -3,7 +3,7 @@ from graphene_django.debug import DjangoDebug
 from apps.flows.types import ChannelType, StageType
 from apps.flows.types import CardType
 from apps.flows.models import Channel, Stage, Card, Flow
-from organizations.models import Organization
+from apps.organizations.models import Organization
 from apps.rooms.models import Room
 
 

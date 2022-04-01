@@ -1,6 +1,6 @@
 import graphene
-from .models import RoomParticipant, CardChoice, Winner, Turn, Month, Round, Room
-from organizations.models import Organization
+from apps.rooms.models import CardChoice, Winner, Turn, Month, Round, Room, RoomParticipant
+from apps.organizations.models import Organization
 from graphene_django.types import DjangoObjectType
 
 

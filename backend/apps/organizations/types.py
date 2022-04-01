@@ -1,5 +1,5 @@
 import graphene
-from organizations.models import Organization, OrganizationSettings
+from apps.organizations.models import Organization, OrganizationSettings
 from apps.flows.types import FlowType
 from apps.flows.models import Flow
 from graphene_django.types import DjangoObjectType

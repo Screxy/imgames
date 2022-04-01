@@ -14,4 +14,9 @@ class Mutation(apps.users.schema.Mutation, apps.rooms.schema.Mutation, apps.orga
     pass
 
 
-schema = graphene.Schema(query=Query, mutation=Mutation)
+class Subscription(apps.rooms.schema.Subscription):
+    pass
+
+
+schema = graphene.Schema(query=Query, mutation=Mutation,
+                         subscription=Subscription)

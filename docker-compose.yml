@@ -1,7 +1,8 @@
 version: '3.3'
 
 volumes:
-    imgames_data: {}
+  imgames_data: {}
+  redis_data: {}
 
 services:
   backend:
@@ -31,19 +32,17 @@ services:
       - imgames_data:/var/lib/postgresql/data
     env_file: .env
 
-
   mailhog:
     image: mailhog/mailhog
     ports:
-      - "8025:8025"
+      - '8025:8025'
     logging:
       driver: none
-
 
   nginx:
     image: nginx:alpine
     ports:
-      - "8000:80"
+      - '8000:80'
     depends_on:
       - backend
     volumes:
@@ -52,3 +51,28 @@ services:
       - ./nginx/dev.conf:/etc/nginx/nginx.conf:ro
     logging:
       driver: none
+
+  # Брокер сообщений Redis
+  redis:
+    restart: always
+    image: redis:alpine
+    # env_file: .env
+    volumes:
+      - redis_data:/var/lib/redis
+
+  # Бэкенд Django ASGI
+  backend_asgi:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile.asgi
+    depends_on:
+      - postgres
+      - redis
+    volumes:
+      - ./backend:/app
+    command: /start_asgi.sh
+    entrypoint: /entrypoint.sh
+    restart: on-failure
+    env_file: .env
+    links:
+      - redis

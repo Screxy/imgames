@@ -1,9 +1,10 @@
 import graphene
 from graphene_django.debug import DjangoDebug
-from .mutations import CreateRoom, WriteTurn
-from .types import RoomType
-from .models import Room, Turn
-from organizations.models import Organization
+from apps.rooms.mutations import CreateRoom, WriteTurn
+from apps.rooms.types import RoomType
+from apps.rooms.models import Room, Turn
+from apps.organizations.models import Organization
+from graphene_subscriptions.events import CREATED, UPDATED, DELETED
 
 
 class Query(graphene.ObjectType):
@@ -59,3 +60,15 @@ class Query(graphene.ObjectType):
 class Mutation(graphene.ObjectType):
     create_room = CreateRoom.Field()
     write_turn = WriteTurn.Field()
+
+
+class Subscription(graphene.ObjectType):
+    room_updated = graphene.Field(RoomType, code=graphene.String())
+
+    def resolve_chat_updated(root, info, id):
+        return root.filter(
+            lambda event:
+                event.operation == UPDATED and
+                isinstance(event.instance, RoomType) and
+                event.instance.pk == int(id)
+        ).map(lambda event: event.instance)

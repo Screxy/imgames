@@ -1,11 +1,5 @@
 from django.contrib import admin
-from .models import Winner, Turn, Month, Round, Room, RoomParticipant
-
-
-@admin.register(RoomParticipant)
-class RoomParticipantAdmin(admin.ModelAdmin):
-    list_display = ('id', 'user', 'room')
-    list_display_links = ('id', 'user')
+from apps.rooms.models import Winner, Turn, Month, Round, Room, RoomParticipant
 
 
 @admin.register(Winner)
@@ -48,3 +42,9 @@ class RoomAdmin(admin.ModelAdmin):
             return current_round.current_month
         return "-"
     current_month.short_description = "Текущий месяц"
+
+
+@admin.register(RoomParticipant)
+class RoomParticipantAdmin(admin.ModelAdmin):
+    list_display = ('id', 'user', 'room')
+    list_display_links = ('id', 'user')
