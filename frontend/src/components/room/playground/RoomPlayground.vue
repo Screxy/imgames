@@ -27,6 +27,7 @@
 <script>
 import { MAIN_PATH } from '@/pathVariables';
 import roomByCode from '@/graphql/queries/rooms/roomByCode.gql';
+import roomUpdated from '@/graphql/subscriptions/rooms/roomUpdated.gql';
 import PlayersList from '@/components/room/playground/PlayersList.vue';
 import GameBoard from '@/components/room/playground/gameBoard/GameBoard.vue';
 import CardsList from '@/components/room/playground/cardsList/CardsList.vue';
@@ -87,6 +88,17 @@ export default {
         return {
           code: this.roomCode,
         };
+      },
+      subscribeToMore: {
+        document: roomUpdated,
+        variables() {
+          return {
+            code: this.roomCode,
+          };
+        },
+        updateQuery: (previousResult, { subscriptionData }) => {
+          return { roomByCode: subscriptionData.data.roomUpdated };
+        },
       },
     },
   },
