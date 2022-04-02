@@ -255,7 +255,7 @@ GRAPHENE = {
     'MIDDLEWARE': [
         'graphql_jwt.middleware.JSONWebTokenMiddleware',
     ],
-    'SUBSCRIPTION_PATH': '/ws/graphql'
+    'SUBSCRIPTION_PATH': '/ws/subscriptions/'
 }
 
 if DEBUG:

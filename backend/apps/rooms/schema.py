@@ -65,10 +65,22 @@ class Mutation(graphene.ObjectType):
 class Subscription(graphene.ObjectType):
     room_updated = graphene.Field(RoomType, code=graphene.String())
 
-    def resolve_chat_updated(root, info, id):
-        return root.filter(
-            lambda event:
-                event.operation == UPDATED and
-                isinstance(event.instance, RoomType) and
-                event.instance.pk == int(id)
-        ).map(lambda event: event.instance)
+    def resolve_chat_updated(root, info, code):
+        try:
+            code_array = str(code).split('-')
+            if len(code_array) > 1:
+                user = info.context.user
+                organization = Organization.objects.get(
+                    prefix__iexact=code_array[0])
+                room = Room.objects.get(
+                    key=code_array[1], organization=organization)
+                return root.filter(
+                    lambda event:
+                        event.operation == UPDATED and
+                        isinstance(event.instance, RoomType) and
+                        event.instance.pk == int(room.id)
+                ).map(lambda event: event.instance)
+            else:
+                raise Exception('Error code')
+        except Exception as e:
+            return None
