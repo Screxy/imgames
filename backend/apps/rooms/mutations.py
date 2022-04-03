@@ -5,6 +5,7 @@ from apps.organizations.models import Organization
 from apps.flows.models import Flow, Card
 from apps.users.models import User
 from .types import RoundType, RoomType, TurnType
+from apps.rooms.tasks import change_month_in_room
 
 
 class CreateRoom(graphene.Mutation):
@@ -95,6 +96,17 @@ class WriteTurn(graphene.Mutation):
                 for card_id in cards_id:
                     card = Card.objects.get(pk=card_id)
                     CardChoice.objects.create(card=card, turn=turn)
+
+                # Проверяем, если все сделали ход
+                turns_count = Turn.objects.filter(
+                    month=current_month).count()
+                participants_count = RoomParticipant.objects.filter(
+                    room=room).count()
+                print(turns_count)
+                print(participants_count)
+                if turns_count >= participants_count:
+                    task = change_month_in_room.delay(room.id)
+                    print(task.id)
 
                 # Возвращаем результат
                 return WriteTurn(turn=turn, success=True)

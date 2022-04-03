@@ -50,3 +50,6 @@ channels
 channels-redis
 daphne
 graphene_subscriptions
+celery
+pytest
+pytest-django

@@ -69,3 +69,14 @@ services:
       - postgres
     volumes:
       - /tmp/backups/:/backups/
+
+  # Celery Worker
+  celery:
+    build: ./project
+    command: celery worker --app=core --loglevel=info
+    volumes:
+      - ./backend:/app
+    env_file: .env
+    depends_on:
+      - backend
+      - redis

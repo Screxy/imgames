@@ -74,7 +74,6 @@ class Subscription(graphene.ObjectType):
                     prefix__iexact=code_array[0])
                 room = Room.objects.get(
                     key=code_array[1], organization=organization)
-                print(room)
                 return root.filter(
                     lambda event:
                     event.operation == UPDATED and

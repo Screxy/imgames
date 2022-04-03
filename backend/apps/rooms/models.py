@@ -116,7 +116,7 @@ class CardChoice(models.Model):
         verbose_name_plural = "Выборы карточек"
 
     def __str__(self):
-        return self.name
+        return str(self.id)
 
 
 class Winner(models.Model):
