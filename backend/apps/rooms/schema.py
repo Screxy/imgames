@@ -1,6 +1,6 @@
 import graphene
 from graphene_django.debug import DjangoDebug
-from apps.rooms.mutations import CreateRoom, WriteTurn
+from apps.rooms.mutations import CreateRoom, WriteTurn, StartRound
 from apps.rooms.types import RoomType, RoundType
 from apps.rooms.models import Room, Turn, Round
 from apps.organizations.models import Organization
@@ -18,6 +18,8 @@ class Query(graphene.ObjectType):
     can_do_step_now_by_code = graphene.Boolean(code=graphene.String())
     current_round_by_code = graphene.Field(
         RoundType, code=graphene.String(), description='Информация о текущем раунде по коду комнаты')
+    is_room_owner = graphene.Boolean(
+        code=graphene.String(), description='Является ли владельцем комнаты')
 
     def resolve_can_do_step_now_by_code(root, info, code):
         try:
@@ -71,25 +73,30 @@ class Query(graphene.ObjectType):
         except Exception as e:
             return None
 
+    def resolve_is_room_owner(self, info, code):
+        try:
+            code_array = str(code).split('-')
+            if len(code_array) > 1:
+                user = info.context.user
+                organization = Organization.objects.get(
+                    prefix__iexact=code_array[0])
+                room = Room.objects.get(
+                    key=code_array[1], organization=organization)
+                return user == room.room_owner
+        except Exception as e:
+            return None
+
 
 class Mutation(graphene.ObjectType):
     create_room = CreateRoom.Field()
     write_turn = WriteTurn.Field()
+    start_round = StartRound.Field()
 
 
 def filter_room_events(event, room):
     try:
         if (event.operation == UPDATED):
             return (isinstance(event.instance, Room) and event.instance.pk == int(room.id))
-        # elif event.operation == MONTH_EVENT:
-        #     if (isinstance(event.instance, Room)):
-        #         if (event.instance.id == int(room.id)):
-        #             return True
-        #     elif int(event.instance['id']) == int(room.id):
-        #         event.instance = room
-        #         return True
-        #     else:
-        #         return False
         else:
             return False
     except Exception as e:

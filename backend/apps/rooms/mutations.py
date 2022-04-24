@@ -109,3 +109,31 @@ class WriteTurn(graphene.Mutation):
             return WriteTurn(success=False, errors=['Error code!'])
         except Exception as e:
             return WriteTurn(success=False, errors=[str(e)])
+
+
+class StartRound(graphene.Mutation):
+    """ Мутация для старта раунда комнаты в пространстве организации """
+    success = graphene.Boolean()
+    errors = graphene.List(graphene.String)
+
+    class Arguments:
+        code = graphene.String(required=True)
+
+    def mutate(self, info, code):
+        try:
+            code_array = str(code).split('-')
+            if len(code_array) > 1:
+                user = info.context.user
+                organization = Organization.objects.get(
+                    prefix__iexact=code_array[0])
+                room = Room.objects.get(
+                    key=code_array[1], organization=organization)
+                if room.room_owner == user:
+                    current_round = room.current_round
+                    if current_round.is_active:
+                        raise Exception('Already started!')
+                    current_round.is_active = True
+                    current_round.save()
+                return StartRound(success=True)
+        except Exception as e:
+            return StartRound(success=False, errors=[str(e)])

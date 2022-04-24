@@ -1,13 +1,26 @@
 <template>
   <div>
     <h1>{{ $t('room.room') }} {{ roomCode }}</h1>
-    <h2>
-      {{ $t('room.mechanics') }} "{{ flow }}" / {{ $t('room.round') }} R{{
-        currentRoundKey
-      }}
-      / {{ $t('room.month') }} M{{ currentMonthKey }}
-    </h2>
-    <hr />
+    <WaitingScreen
+      v-if="!roomIsActive"
+      :roomCode="roomCode"
+      :roomOwner="roomOwner"
+    ></WaitingScreen>
+    <template v-else>
+      <h2>
+        {{ $t('room.mechanics') }} "{{ flow }}" / {{ $t('room.round') }} R{{
+          currentRoundKey
+        }}
+        / {{ $t('room.month') }} M{{ currentMonthKey }}
+      </h2>
+      <hr />
+
+      <GameBoard></GameBoard>
+      <hr />
+      <CardsList></CardsList>
+      <hr />
+      {{ roomByCode }} <br />
+    </template>
     <PlayersList
       :players="players"
       :room="roomByCode"
@@ -15,11 +28,6 @@
     >
     </PlayersList>
     <hr />
-    <GameBoard></GameBoard>
-    <hr />
-    <CardsList></CardsList>
-    <hr />
-    {{ roomByCode }} <br />
     <router-link :to="mainPath">{{ $t('buttons.toMainPage') }}</router-link>
   </div>
 </template>
@@ -33,6 +41,7 @@ import currentRoundUpdated from '@/graphql/subscriptions/rooms/currentRoundUpdat
 import PlayersList from '@/components/room/playground/PlayersList.vue';
 import GameBoard from '@/components/room/playground/gameBoard/GameBoard.vue';
 import CardsList from '@/components/room/playground/cardsList/CardsList.vue';
+import WaitingScreen from '@/components/room/playground/WaitingScreen.vue';
 
 export default {
   name: 'RoomPlayground',
@@ -40,6 +49,7 @@ export default {
     PlayersList,
     GameBoard,
     CardsList,
+    WaitingScreen,
   },
   data() {
     return { mainPath: MAIN_PATH };
@@ -47,6 +57,14 @@ export default {
   computed: {
     roomCode() {
       return this.$route.params.roomCode;
+    },
+    roomOwner() {
+      if (this.roomByCode != undefined) {
+        if (this.roomByCode.roomOwner != undefined) {
+          return this.roomByCode.roomOwner;
+        }
+      }
+      return {};
     },
     currentRoundKey() {
       if (this.currentRoundByCode != undefined) {
@@ -77,6 +95,12 @@ export default {
         }
       }
       return [];
+    },
+    roomIsActive() {
+      if (this.currentRoundByCode != undefined) {
+        return this.currentRoundByCode.isActive;
+      }
+      return '-';
     },
   },
   apollo: {

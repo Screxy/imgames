@@ -57,7 +57,7 @@ export default {
         .then(() => {})
         .catch((e) => {
           console.log(e);
-          //
+          // TODO:
           // EMIT CLEAN CHOICE
         })
         .finally(() => {

@@ -39,7 +39,10 @@
       "selectedCard": "Selected card",
       "deselectCard": "Deselect",
       "send": "Send"
-    }
+    },
+    "waitingHeader": "Waiting for players to join...",
+    "waitingTextForOwner": "When all invited players enter the room, you can start the game",
+    "startRoundButton": "Start round"
   },
   "headers": {
     "main": "Main",
