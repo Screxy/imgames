@@ -1,0 +1,13 @@
+query ($code: String!) {
+  currentRoundByCode(code: $code) {
+    id
+    key
+    isActive
+    currentMonth {
+      id
+      key
+      __typename
+    }
+    __typename
+  }
+}

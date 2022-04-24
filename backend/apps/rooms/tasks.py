@@ -2,6 +2,11 @@ from hashlib import new
 from celery import shared_task
 from apps.organizations.models import Organization
 from apps.rooms.models import Room, Month
+from graphene_subscriptions.events import SubscriptionEvent
+from django.forms.models import model_to_dict
+import json
+
+MONTH_EVENT = 'month_event'
 
 
 @shared_task
@@ -32,7 +37,17 @@ def change_month_in_room(room_id):
         current_round.current_month = new_month[0]
         current_round.save()
 
-        # TODO: send update on subscription
+        # Отправляем всем событие на обновление состояния комнаты
+        # TODO: проверить, что корректно обновляется раунд
+        room.current_round = current_round
+        month_event = SubscriptionEvent(
+            operation=MONTH_EVENT,
+            instance=model_to_dict(room))
+        print("--> EVENT")
+        month_event.send()
+
+        # TODO: send update on
         return new_month[0].key
     except Exception as e:
+        print(e)
         return None

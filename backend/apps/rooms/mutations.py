@@ -3,8 +3,7 @@ from .models import Room, Round, Month, Turn, CardChoice, RoomParticipant
 
 from apps.organizations.models import Organization
 from apps.flows.models import Flow, Card
-from apps.users.models import User
-from .types import RoundType, RoomType, TurnType
+from apps.rooms.types import RoundType, RoomType, TurnType
 from apps.rooms.tasks import change_month_in_room
 
 
@@ -102,11 +101,8 @@ class WriteTurn(graphene.Mutation):
                     month=current_month).count()
                 participants_count = RoomParticipant.objects.filter(
                     room=room).count()
-                print(turns_count)
-                print(participants_count)
                 if turns_count >= participants_count:
                     task = change_month_in_room.delay(room.id)
-                    print(task.id)
 
                 # Возвращаем результат
                 return WriteTurn(turn=turn, success=True)

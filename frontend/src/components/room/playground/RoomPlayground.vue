@@ -27,7 +27,9 @@
 <script>
 import { MAIN_PATH } from '@/pathVariables';
 import roomByCode from '@/graphql/queries/rooms/roomByCode.gql';
+import currentRoundByCode from '@/graphql/queries/rooms/currentRoundByCode.gql';
 import roomUpdated from '@/graphql/subscriptions/rooms/roomUpdated.gql';
+import currentRoundUpdated from '@/graphql/subscriptions/rooms/currentRoundUpdated.gql';
 import PlayersList from '@/components/room/playground/PlayersList.vue';
 import GameBoard from '@/components/room/playground/gameBoard/GameBoard.vue';
 import CardsList from '@/components/room/playground/cardsList/CardsList.vue';
@@ -47,19 +49,15 @@ export default {
       return this.$route.params.roomCode;
     },
     currentRoundKey() {
-      if (this.roomByCode != undefined) {
-        if (this.roomByCode.currentRound != undefined) {
-          return this.roomByCode.currentRound.key;
-        }
+      if (this.currentRoundByCode != undefined) {
+        return this.currentRoundByCode.key;
       }
       return '-';
     },
     currentMonthKey() {
-      if (this.roomByCode != undefined) {
-        if (this.roomByCode.currentRound != undefined) {
-          if (this.roomByCode.currentRound.currentMonth != undefined) {
-            return this.roomByCode.currentRound.currentMonth.key;
-          }
+      if (this.currentRoundByCode != undefined) {
+        if (this.currentRoundByCode.currentMonth != undefined) {
+          return this.currentRoundByCode.currentMonth.key;
         }
       }
       return '-';
@@ -97,7 +95,38 @@ export default {
           };
         },
         updateQuery: (previousResult, { subscriptionData }) => {
+          console.log(
+            'previousResult',
+            JSON.stringify(previousResult.roomByCode.currentRound.currentMonth)
+          );
+          console.log(
+            'subscriptionData',
+            JSON.stringify(
+              subscriptionData.data.roomUpdated.currentRound.currentMonth
+            )
+          );
           return { roomByCode: subscriptionData.data.roomUpdated };
+        },
+      },
+    },
+    currentRoundByCode: {
+      query: currentRoundByCode,
+      variables() {
+        return {
+          code: this.roomCode,
+        };
+      },
+      subscribeToMore: {
+        document: currentRoundUpdated,
+        variables() {
+          return {
+            code: this.roomCode,
+          };
+        },
+        updateQuery: (previousResult, { subscriptionData }) => {
+          return {
+            currentRoundByCode: subscriptionData.data.currentRoundUpdated,
+          };
         },
       },
     },

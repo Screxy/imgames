@@ -1,0 +1,13 @@
+subscription ($code: String!) {
+  currentRoundUpdated(code: $code) {
+    id
+    key
+    currentMonth {
+      id
+      key
+      __typename
+    }
+    isActive
+    __typename
+  }
+}
