@@ -8,6 +8,7 @@ subscription ($code: String!) {
       __typename
     }
     isActive
+    isFinished
     __typename
   }
 }

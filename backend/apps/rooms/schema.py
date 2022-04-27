@@ -1,6 +1,6 @@
 import graphene
 from graphene_django.debug import DjangoDebug
-from apps.rooms.mutations import CreateRoom, WriteTurn, StartRound
+from apps.rooms.mutations import CreateRoom, WriteTurn, StartRound, ReStartRound
 from apps.rooms.types import RoomType, RoundType
 from apps.rooms.models import Room, Turn, Round
 from apps.organizations.models import Organization
@@ -91,6 +91,7 @@ class Mutation(graphene.ObjectType):
     create_room = CreateRoom.Field()
     write_turn = WriteTurn.Field()
     start_round = StartRound.Field()
+    re_start_round = ReStartRound.Field()
 
 
 def filter_room_events(event, room):
@@ -127,10 +128,7 @@ class Subscription(graphene.ObjectType):
                     prefix__iexact=code_array[0])
                 room = Room.objects.get(
                     key=code_array[1], organization=organization)
-                print(room.current_round.current_month)
-                print(room.current_round.current_month.key)
                 return self.filter(lambda event: filter_room_events(event, room)).map(lambda event: event.instance)
-
             else:
                 raise Exception('Error code')
         except Exception as e:

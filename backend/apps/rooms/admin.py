@@ -27,12 +27,18 @@ class RoundAdmin(admin.ModelAdmin):
     search_fields = ('room__organization__prefix',)
 
 
+class RoundAdminInline(admin.TabularInline):
+    model = Round
+    extra = 0
+
+
 @admin.register(Room)
 class RoomAdmin(admin.ModelAdmin):
     list_display = ('__str__', 'organization', 'room_owner',
                     'number_of_turns', 'current_round', 'current_month')
     list_filter = ('organization',)
     readonly_fields = ('key',)
+    inlines = [RoundAdminInline, ]
 
     def current_month(self, obj):
         current_round = obj.current_round

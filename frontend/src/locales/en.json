@@ -42,7 +42,9 @@
     },
     "waitingHeader": "Waiting for players to join...",
     "waitingTextForOwner": "When all invited players enter the room, you can start the game",
-    "startRoundButton": "Start round"
+    "startRoundButton": "Start round",
+    "roundFinishedHeader": "Round {round} completed",
+    "reStartRoundButton": "Start a new round ({nextRound})"
   },
   "headers": {
     "main": "Main",

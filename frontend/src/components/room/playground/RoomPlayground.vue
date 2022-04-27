@@ -1,33 +1,41 @@
 <template>
   <div>
     <h1>{{ $t('room.room') }} {{ roomCode }}</h1>
-    <WaitingScreen
-      v-if="!roomIsActive"
-      :roomCode="roomCode"
-      :roomOwner="roomOwner"
-    ></WaitingScreen>
-    <template v-else>
-      <h2>
-        {{ $t('room.mechanics') }} "{{ flow }}" / {{ $t('room.round') }} R{{
-          currentRoundKey
-        }}
-        / {{ $t('room.month') }} M{{ currentMonthKey }}
-      </h2>
+    <template v-if="!roomIsFinished">
+      <WaitingScreen
+        v-if="!roomIsActive"
+        :roomCode="roomCode"
+        @reloadRound="reloadRound"
+      ></WaitingScreen>
+      <template v-else>
+        <h2>
+          {{ $t('room.mechanics') }} "{{ flow }}" / {{ $t('room.round') }} R{{
+            currentRoundKey
+          }}
+          / {{ $t('room.month') }} M{{ currentMonthKey }}
+        </h2>
+        <hr />
+        <GameBoard></GameBoard>
+        <hr />
+        <CardsList></CardsList>
+        <hr />
+        {{ roomByCode }} <br />
+      </template>
+      <PlayersList
+        :players="players"
+        :room="roomByCode"
+        v-if="players != undefined && roomByCode != undefined"
+      >
+      </PlayersList>
       <hr />
-
-      <GameBoard></GameBoard>
-      <hr />
-      <CardsList></CardsList>
-      <hr />
-      {{ roomByCode }} <br />
     </template>
-    <PlayersList
-      :players="players"
-      :room="roomByCode"
-      v-if="players != undefined && roomByCode != undefined"
-    >
-    </PlayersList>
-    <hr />
+    <template v-else>
+      <FinishScreen
+        :roundKey="currentRoundKey"
+        :roomCode="roomCode"
+        @reloadRound="reloadRound"
+      ></FinishScreen>
+    </template>
     <router-link :to="mainPath">{{ $t('buttons.toMainPage') }}</router-link>
   </div>
 </template>
@@ -42,6 +50,7 @@ import PlayersList from '@/components/room/playground/PlayersList.vue';
 import GameBoard from '@/components/room/playground/gameBoard/GameBoard.vue';
 import CardsList from '@/components/room/playground/cardsList/CardsList.vue';
 import WaitingScreen from '@/components/room/playground/WaitingScreen.vue';
+import FinishScreen from '@/components/room/playground/FinishScreen.vue';
 
 export default {
   name: 'RoomPlayground',
@@ -50,21 +59,14 @@ export default {
     GameBoard,
     CardsList,
     WaitingScreen,
+    FinishScreen,
   },
   data() {
-    return { mainPath: MAIN_PATH };
+    return { mainPath: MAIN_PATH, skip: false };
   },
   computed: {
     roomCode() {
       return this.$route.params.roomCode;
-    },
-    roomOwner() {
-      if (this.roomByCode != undefined) {
-        if (this.roomByCode.roomOwner != undefined) {
-          return this.roomByCode.roomOwner;
-        }
-      }
-      return {};
     },
     currentRoundKey() {
       if (this.currentRoundByCode != undefined) {
@@ -100,7 +102,13 @@ export default {
       if (this.currentRoundByCode != undefined) {
         return this.currentRoundByCode.isActive;
       }
-      return '-';
+      return false;
+    },
+    roomIsFinished() {
+      if (this.currentRoundByCode != undefined) {
+        return this.currentRoundByCode.isFinished;
+      }
+      return false;
     },
   },
   apollo: {
@@ -118,17 +126,10 @@ export default {
             code: this.roomCode,
           };
         },
+        skip() {
+          return this.skip;
+        },
         updateQuery: (previousResult, { subscriptionData }) => {
-          console.log(
-            'previousResult',
-            JSON.stringify(previousResult.roomByCode.currentRound.currentMonth)
-          );
-          console.log(
-            'subscriptionData',
-            JSON.stringify(
-              subscriptionData.data.roomUpdated.currentRound.currentMonth
-            )
-          );
           return { roomByCode: subscriptionData.data.roomUpdated };
         },
       },
@@ -147,12 +148,23 @@ export default {
             code: this.roomCode,
           };
         },
+        skip() {
+          return this.skip;
+        },
         updateQuery: (previousResult, { subscriptionData }) => {
           return {
             currentRoundByCode: subscriptionData.data.currentRoundUpdated,
           };
         },
       },
+    },
+  },
+  methods: {
+    async reloadRound() {
+      this.skip = true;
+      await this.$apollo.queries.roomByCode.refresh();
+      await this.$apollo.queries.currentRoundByCode.refresh();
+      this.skip = false;
     },
   },
 };

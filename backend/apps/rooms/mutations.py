@@ -42,7 +42,6 @@ class CreateRoom(graphene.Mutation):
             # Создаём необходимое количество месяцев
             first_month = None
             for _ in range(room.number_of_turns+1):
-                print(_)
                 if first_month is not None:
                     Month.objects.create(round=round)
                 else:
@@ -137,3 +136,42 @@ class StartRound(graphene.Mutation):
                 return StartRound(success=True)
         except Exception as e:
             return StartRound(success=False, errors=[str(e)])
+
+
+class ReStartRound(graphene.Mutation):
+    """ Мутация для начала нового раунда комнаты в пространстве организации """
+    success = graphene.Boolean()
+    errors = graphene.List(graphene.String)
+
+    class Arguments:
+        code = graphene.String(required=True)
+
+    def mutate(self, info, code):
+        try:
+            code_array = str(code).split('-')
+            if len(code_array) > 1:
+                user = info.context.user
+                organization = Organization.objects.get(
+                    prefix__iexact=code_array[0])
+                room = Room.objects.get(
+                    key=code_array[1], organization=organization)
+                if room.room_owner == user:
+                    # Создаём новый раунд в комнате
+                    new_round = Round.objects.create(room=room)
+
+                    # Создаём необходимое количество месяцев
+                    first_month = None
+                    for _ in range(room.number_of_turns+1):
+                        if first_month is not None:
+                            Month.objects.create(round=new_round)
+                        else:
+                            first_month = Month.objects.create(round=new_round)
+
+                    new_round.current_month = first_month
+                    new_round.save()
+
+                    room.current_round = new_round
+                    room.save()
+                return ReStartRound(success=True)
+        except Exception as e:
+            return ReStartRound(success=False, errors=[str(e)])

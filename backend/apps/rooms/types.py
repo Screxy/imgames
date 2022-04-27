@@ -35,6 +35,14 @@ class MonthType(DjangoObjectType):
 
 
 class RoundType(DjangoObjectType):
+    is_finished = graphene.Boolean()
+
+    def resolve_is_finished(self, info):
+        if self.current_month is not None and self.room is not None:
+            return self.room.number_of_turns == self.current_month.key
+        else:
+            return False
+
     class Meta:
         model = Round
         fields = "__all__"

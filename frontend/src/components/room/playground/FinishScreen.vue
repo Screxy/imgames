@@ -1,32 +1,32 @@
 <template>
   <div>
-    <p>{{ $t('room.waitingHeader') }}</p>
+    <h2>{{ $t('room.roundFinishedHeader', { round: `R${roundKey}` }) }}</h2>
     <template v-if="isRoomOwner">
-      <p>{{ $t('room.waitingTextForOwner') }}</p>
-      <SubmitButton @click="startRound">{{
-        $t('room.startRoundButton')
+      <SubmitButton @click="reStartRound">{{
+        $t('room.reStartRoundButton', { nextRound: `R${roundKey + 1}` })
       }}</SubmitButton>
     </template>
   </div>
 </template>
 
 <script>
-import SubmitButton from '@/components/ui/SubmitButton.vue';
-import startRound from '@/graphql/mutations/rooms/startRound.gql';
 import isRoomOwner from '@/graphql/queries/rooms/isRoomOwner.gql';
+import SubmitButton from '@/components/ui/SubmitButton.vue';
+import reStartRound from '@/graphql/mutations/rooms/reStartRound.gql';
 
 export default {
-  name: 'WaitingScreen',
+  name: 'FinishScreen',
   components: {
     SubmitButton,
   },
   props: {
+    roundKey: {
+      type: Number,
+      required: true,
+    },
     roomCode: {
       type: String,
       required: true,
-    },
-    roomOwner: {
-      type: Object,
     },
   },
   apollo: {
@@ -40,10 +40,10 @@ export default {
     },
   },
   methods: {
-    startRound() {
+    reStartRound() {
       this.$apollo
         .mutate({
-          mutation: startRound,
+          mutation: reStartRound,
           variables: {
             code: this.roomCode,
           },

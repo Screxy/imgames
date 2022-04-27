@@ -42,7 +42,9 @@
     },
     "waitingHeader": "Ожидаем подключения игроков...",
     "waitingTextForOwner": "Когда все приглашённые игроки зайдут в комнату, вы можете начать игру",
-    "startRoundButton": "Начать раунд"
+    "startRoundButton": "Начать раунд",
+    "roundFinishedHeader": "Раунд {round} завершён",
+    "reStartRoundButton": "Начать новый раунд {nextRound}"
   },
   "headers": {
     "main": "Главная",
