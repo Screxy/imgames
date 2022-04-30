@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1>{{ $t('room.room') }} {{ roomCode }}</h1>
+    <TopBar type="playground" :roomCode="roomCode"></TopBar>
     <template v-if="!roomIsFinished">
       <WaitingScreen
         v-if="!roomIsActive"
@@ -36,12 +36,10 @@
         @reloadRound="reloadRound"
       ></FinishScreen>
     </template>
-    <router-link :to="mainPath">{{ $t('buttons.toMainPage') }}</router-link>
   </div>
 </template>
 
 <script>
-import { MAIN_PATH } from '@/pathVariables';
 import roomByCode from '@/graphql/queries/rooms/roomByCode.gql';
 import currentRoundByCode from '@/graphql/queries/rooms/currentRoundByCode.gql';
 import roomUpdated from '@/graphql/subscriptions/rooms/roomUpdated.gql';
@@ -51,6 +49,7 @@ import GameBoard from '@/components/room/playground/gameBoard/GameBoard.vue';
 import CardsList from '@/components/room/playground/cardsList/CardsList.vue';
 import WaitingScreen from '@/components/room/playground/WaitingScreen.vue';
 import FinishScreen from '@/components/room/playground/FinishScreen.vue';
+import TopBar from '@/components/ui/TopBar.vue';
 
 export default {
   name: 'RoomPlayground',
@@ -60,9 +59,10 @@ export default {
     CardsList,
     WaitingScreen,
     FinishScreen,
+    TopBar,
   },
   data() {
-    return { mainPath: MAIN_PATH, skip: false };
+    return { skip: false };
   },
   computed: {
     roomCode() {

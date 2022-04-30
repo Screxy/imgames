@@ -2,7 +2,7 @@ import Vue from 'vue';
 import VueRouter from 'vue-router';
 import { createProvider } from '@/apollo';
 
-import ExampleComponent from '@/components/ExampleComponent.vue';
+import Main from '@/components/Main.vue';
 import AuthView from '@/components/auth/AuthView.vue';
 import OrganizationCreateView from '@/components/organization/OrganizationCreateView.vue';
 import RoomPlayground from '@/components/room/playground/RoomPlayground.vue';
@@ -70,7 +70,7 @@ const ifNotAuthenticated = async (to, from, next) => {
 const routes = [
   {
     path: '',
-    component: ExampleComponent,
+    component: Main,
     beforeEnter: ifAuthenticated,
     meta: { title: 'Главная - ImGames' },
   },

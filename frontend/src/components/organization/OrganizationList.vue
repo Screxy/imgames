@@ -7,6 +7,9 @@
       </a>
       [{{ organization.prefix }}]
     </div>
+    <router-link to="/new">
+      {{ $t('headers.organizationList') }}
+    </router-link>
   </div>
 </template>
 
@@ -36,4 +39,11 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+h2 {
+  text-align: center;
+  position: sticky;
+  top: 0;
+  left: 0;
+}
+</style>

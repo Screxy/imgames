@@ -1,5 +1,11 @@
 <template>
-  <button @click="sendClick" :disabled="disabled"><slot></slot></button>
+  <button
+    @click="sendClick"
+    :disabled="disabled"
+    :class="{ 'light-text': type == 'light-text' }"
+  >
+    <slot></slot>
+  </button>
 </template>
 
 <script>
@@ -10,6 +16,9 @@ export default {
       type: Boolean,
       required: false,
     },
+    type: {
+      type: String,
+    },
   },
   methods: {
     sendClick() {
@@ -19,4 +28,22 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+@import '@/scss/_variables.scss';
+
+button {
+  cursor: pointer;
+}
+
+.light-text {
+  background-color: transparent;
+  border: 0;
+  color: $light_text_color;
+  font-family: $primary_font;
+  font-size: 1rem;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+</style>

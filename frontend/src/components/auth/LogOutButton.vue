@@ -1,15 +1,21 @@
 <template>
   <div>
-    <button type="button" @click="logOut">{{ $t('buttons.logOut') }}</button>
+    <SubmitButton @click="logOut" :type="'light-text'">{{
+      $t('buttons.logOut')
+    }}</SubmitButton>
   </div>
 </template>
 
 <script>
 import logout from '@/graphql/mutations/logout.gql';
 import { AUTH_PATH } from '@/pathVariables.js';
+import SubmitButton from '@/components/ui/SubmitButton.vue';
 
 export default {
   name: 'LogOutButton',
+  components: {
+    SubmitButton,
+  },
   methods: {
     logOut() {
       this.$store.commit('START_LOADING');
