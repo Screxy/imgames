@@ -44,4 +44,10 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+tr {
+  & td {
+    border-bottom: 0px !important;
+  }
+}
+</style>

@@ -1,5 +1,5 @@
 <template>
-  <table border="1" cellspacing="0">
+  <table cellspacing="0" class="funnel-table normal-border-box">
     <TableHead :stages="stagesByCode"></TableHead>
     <TableBody
       :stages="stagesByCode"
@@ -73,4 +73,27 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss">
+@import '@/scss/_variables.scss';
+
+table.funnel-table {
+  padding: 8px;
+
+  & tr {
+    border: 0px;
+
+    & td,
+    & th {
+      border: 0px;
+      border-bottom: 1px solid #000000;
+      font-family: $primary_font;
+      color: $dark_text_color;
+    }
+
+    & td:not(:first-child),
+    & th:not(:first-child) {
+      text-align: center;
+    }
+  }
+}
+</style>

@@ -1,18 +1,33 @@
 <template>
-  <div style="border: 1px solid black; width: 200px">
-    <span v-if="selected">{{ $t('room.card.selectedCard') }}</span>
-    <h4>{{ data.header }}</h4>
-    <p>{{ data.shortDescription }}</p>
-    <p>{{ data.cost }}₽</p>
-    <SubmitButton
-      :disabled="canNotChoose()"
-      @click="emitSelection()"
-      v-if="!selected"
-      >{{ $t('room.card.chooseCard') }}</SubmitButton
-    >
-    <SubmitButton :disabled="canNotChoose()" @click="emitDeselect()" v-else>{{
-      $t('room.card.deselectCard')
-    }}</SubmitButton>
+  <div class="normal-border-box card">
+    <div class="top-part">
+      <span v-if="selected">{{ $t('room.card.selectedCard') }}</span>
+      <div class="card-header">
+        <h4>{{ data.header }}</h4>
+      </div>
+      <div class="card-description">
+        <p>{{ data.shortDescription }}</p>
+      </div>
+    </div>
+    <div class="bottom-part">
+      <p class="cost">{{ data.cost }} ₽</p>
+      <SubmitButton
+        class="w-100"
+        :type="'bg-blue'"
+        :disabled="canNotChoose()"
+        @click="emitSelection()"
+        v-if="!selected"
+        >{{ $t('room.card.chooseCard') }}</SubmitButton
+      >
+      <SubmitButton
+        class="w-100"
+        :type="'bg-blue'"
+        :disabled="canNotChoose()"
+        @click="emitDeselect()"
+        v-else
+        >{{ $t('room.card.deselectCard') }}</SubmitButton
+      >
+    </div>
   </div>
 </template>
 
@@ -52,4 +67,51 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+@import '@/scss/_variables.scss';
+
+.w-100 {
+  width: 100%;
+}
+
+.card {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 16px;
+  width: 190px;
+  // height: 230px;
+  margin-right: 10px;
+}
+
+p {
+  font-family: $primary_font;
+  font-size: 14px;
+}
+
+h4,
+p {
+  color: $dark_text_color;
+  margin: 0;
+}
+
+h4,
+p.cost {
+  font-family: $primary_font;
+  font-weight: bold;
+  font-size: 16px;
+  margin-bottom: 8px;
+}
+
+.card-header,
+.card-description {
+  margin-bottom: 8px;
+}
+.card-header {
+  height: 70px;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+</style>

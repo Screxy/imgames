@@ -1,19 +1,22 @@
 <template>
-  <div>
+  <div id="cards-panel">
     <h3>{{ $t('room.card.cardsList') }}</h3>
     <WriteTurnPanel
+      class="write-turn-panel"
       :disabled="!canDoStepNowByCode"
       :selectedCardsId="selectedCardsId"
     ></WriteTurnPanel>
-    <Card
-      v-for="card in cardsByCode"
-      :key="card.id"
-      :data="card"
-      :selected="isSelected(card.id)"
-      :disabled="!canDoStepNowByCode"
-      @select="addChoice($event)"
-      @deselect="removeChoice($event)"
-    ></Card>
+    <div class="cards-list">
+      <Card
+        v-for="card in cardsByCode"
+        :key="card.id"
+        :data="card"
+        :selected="isSelected(card.id)"
+        :disabled="!canDoStepNowByCode"
+        @select="addChoice($event)"
+        @deselect="removeChoice($event)"
+      ></Card>
+    </div>
   </div>
 </template>
 
@@ -77,4 +80,20 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+#cards-panel {
+  display: flex;
+  flex-direction: column;
+  & .cards-list {
+    width: 100%;
+    overflow-y: hidden;
+    overflow-x: auto;
+    display: flex;
+    padding-bottom: 0.5rem;
+  }
+
+  & .write-turn-panel {
+    margin: 0 0 0.5rem 0;
+  }
+}
+</style>

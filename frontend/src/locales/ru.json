@@ -22,7 +22,8 @@
     "player": {
       "playersList": "Список игроков",
       "player": "Игрок",
-      "roomOwner": "Владелец комнаты"
+      "roomOwner": "Владелец комнаты",
+      "effectsList": "Эффекты"
     },
     "gameBoard": {
       "gameBoard": "Игровая доска",
@@ -38,13 +39,19 @@
       "chooseCard": "Выбрать",
       "selectedCard": "Выбранная карточка",
       "deselectCard": "Отменить выбор",
-      "send": "Отправить"
+      "send": "Завершить ход"
     },
     "waitingHeader": "Ожидаем подключения игроков...",
     "waitingTextForOwner": "Когда все приглашённые игроки зайдут в комнату, вы можете начать игру",
     "startRoundButton": "Начать раунд",
     "roundFinishedHeader": "Раунд {round} завершён",
-    "reStartRoundButton": "Начать новый раунд {nextRound}"
+    "reStartRoundButton": "Начать новый раунд {nextRound}",
+    "navigation": {
+      "players": "Участники",
+      "effects": "Эффекты",
+      "chat": "Чат",
+      "cards": "Карточки"
+    }
   },
   "headers": {
     "main": "Главная",

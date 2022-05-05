@@ -1,12 +1,14 @@
 <template>
   <div>
     <h3>{{ $t('room.player.playersList') }}</h3>
-    <PlayersListItem
-      v-for="player in players"
-      :key="player.id"
-      :player="player"
-      :ownerId="roomOwnerId"
-    ></PlayersListItem>
+    <div class="players-list-wrapper">
+      <PlayersListItem
+        v-for="player in players"
+        :key="player.id"
+        :player="player"
+        :ownerId="roomOwnerId"
+      ></PlayersListItem>
+    </div>
   </div>
 </template>
 
@@ -41,4 +43,10 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.players-list-wrapper {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  column-gap: 8px;
+}
+</style>

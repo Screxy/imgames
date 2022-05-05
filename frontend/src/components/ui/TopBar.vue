@@ -4,7 +4,10 @@
     <div class="menu-block" v-if="type == 'playground'">
       <div class="left-block">
         <div class="menu-link menu-link-bold">
-          {{ $t('room.room') }} {{ roomCode }}
+          {{ $t('room.room') }} {{ roomCode }} / {{ $t('room.round') }} R{{
+            roomRound
+          }}
+          / {{ $t('room.month') }} M{{ roomMonth }}
         </div>
       </div>
       <div class="right-block">
@@ -36,6 +39,12 @@ export default {
     },
     roomCode: {
       type: String,
+    },
+    roomRound: {
+      type: Number,
+    },
+    roomMonth: {
+      type: Number,
     },
   },
   data() {

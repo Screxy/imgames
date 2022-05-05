@@ -1,41 +1,61 @@
 <template>
-  <div>
-    <TopBar type="playground" :roomCode="roomCode"></TopBar>
-    <template v-if="!roomIsFinished">
-      <WaitingScreen
-        v-if="!roomIsActive"
-        :roomCode="roomCode"
-        @reloadRound="reloadRound"
-      ></WaitingScreen>
-      <template v-else>
-        <h2>
-          {{ $t('room.mechanics') }} "{{ flow }}" / {{ $t('room.round') }} R{{
-            currentRoundKey
-          }}
-          / {{ $t('room.month') }} M{{ currentMonthKey }}
-        </h2>
-        <hr />
-        <GameBoard></GameBoard>
-        <hr />
-        <CardsList></CardsList>
-        <hr />
-        {{ roomByCode }} <br />
+  <div id="playground">
+    <TopBar
+      type="playground"
+      :roomCode="roomCode"
+      :roomRound="currentRoundKey"
+      :roomMonth="currentMonthKey"
+    ></TopBar>
+    <div class="playField">
+      <template v-if="!roomIsFinished">
+        <WaitingScreen
+          class="first-column-top"
+          v-if="!roomIsActive"
+          :roomCode="roomCode"
+          @reloadRound="reloadRound"
+        ></WaitingScreen>
+        <template v-else>
+          <GameBoard class="first-column-top"></GameBoard>
+          <CardsList class="first-column-bottom"></CardsList>
+        </template>
+        <PlayersList
+          class="second-column-top"
+          :players="players"
+          :room="roomByCode"
+          v-if="players != undefined && roomByCode != undefined"
+        >
+        </PlayersList>
+        <EffectsList
+          class="second-column-bottom"
+          v-if="roomIsActive"
+        ></EffectsList>
       </template>
-      <PlayersList
-        :players="players"
-        :room="roomByCode"
-        v-if="players != undefined && roomByCode != undefined"
-      >
-      </PlayersList>
-      <hr />
-    </template>
-    <template v-else>
-      <FinishScreen
-        :roundKey="currentRoundKey"
-        :roomCode="roomCode"
-        @reloadRound="reloadRound"
-      ></FinishScreen>
-    </template>
+      <template v-else>
+        <FinishScreen
+          :roundKey="currentRoundKey"
+          :roomCode="roomCode"
+          @reloadRound="reloadRound"
+        ></FinishScreen>
+      </template>
+      <div class="navigation">
+        <div class="nav-btn">
+          <img src="@/assets/icons/players.svg" alt="" />
+          <p>{{ $t('room.navigation.players') }}</p>
+        </div>
+        <div class="nav-btn">
+          <img src="@/assets/icons/star.svg" alt="" />
+          <p>{{ $t('room.navigation.effects') }}</p>
+        </div>
+        <div class="nav-btn">
+          <img src="@/assets/icons/chat.svg" alt="" />
+          <p>{{ $t('room.navigation.chat') }}</p>
+        </div>
+        <div class="nav-btn">
+          <img src="@/assets/icons/paper.svg" alt="" />
+          <p>{{ $t('room.navigation.cards') }}</p>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -45,6 +65,7 @@ import currentRoundByCode from '@/graphql/queries/rooms/currentRoundByCode.gql';
 import roomUpdated from '@/graphql/subscriptions/rooms/roomUpdated.gql';
 import currentRoundUpdated from '@/graphql/subscriptions/rooms/currentRoundUpdated.gql';
 import PlayersList from '@/components/room/playground/PlayersList.vue';
+import EffectsList from '@/components/room/playground/EffectsList.vue';
 import GameBoard from '@/components/room/playground/gameBoard/GameBoard.vue';
 import CardsList from '@/components/room/playground/cardsList/CardsList.vue';
 import WaitingScreen from '@/components/room/playground/WaitingScreen.vue';
@@ -55,6 +76,7 @@ export default {
   name: 'RoomPlayground',
   components: {
     PlayersList,
+    EffectsList,
     GameBoard,
     CardsList,
     WaitingScreen,
@@ -72,7 +94,7 @@ export default {
       if (this.currentRoundByCode != undefined) {
         return this.currentRoundByCode.key;
       }
-      return '-';
+      return 0;
     },
     currentMonthKey() {
       if (this.currentRoundByCode != undefined) {
@@ -80,7 +102,7 @@ export default {
           return this.currentRoundByCode.currentMonth.key;
         }
       }
-      return '-';
+      return 0;
     },
     flow() {
       if (this.roomByCode != undefined) {
@@ -88,7 +110,7 @@ export default {
           return this.roomByCode.flow.title;
         }
       }
-      return '-';
+      return 0;
     },
     players() {
       if (this.roomByCode != undefined) {
@@ -170,4 +192,81 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+@import '@/scss/_variables.scss';
+
+#playground {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  background: radial-gradient(
+    52.5% 97.01% at 21.67% 20.17%,
+    rgba(82, 110, 255, 0.25) 0%,
+    rgba(249, 216, 167, 0.25) 89.06%
+  );
+  .playField {
+    padding-left: 20px;
+    display: grid;
+    grid-template-columns: 2.8fr 1fr 62px;
+    grid-template-rows: 1.6fr auto;
+    height: 100%;
+    column-gap: 20px;
+    row-gap: 20px;
+
+    & .first-column-top {
+      grid-column-start: 1;
+      grid-column-end: 2;
+      grid-row-start: 1;
+      grid-row-end: 2;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    & .first-column-bottom {
+      grid-column-start: 1;
+      grid-column-end: 2;
+      grid-row-start: 2;
+      grid-row-end: 3;
+    }
+    & .second-column-top {
+      grid-column-start: 2;
+      grid-column-end: 3;
+      grid-row-start: 1;
+      grid-row-end: 2;
+    }
+    & .second-column-bottom {
+      grid-column-start: 2;
+      grid-column-end: 3;
+      grid-row-start: 2;
+      grid-row-end: 3;
+    }
+    & .navigation {
+      grid-column-start: 3;
+      grid-column-end: 4;
+      grid-row-start: 1;
+      grid-row-end: 3;
+    }
+  }
+}
+.navigation {
+  border-left: 1px solid $main_dark_bg_color;
+  & .nav-btn {
+    padding-top: 0.5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    cursor: pointer;
+    transition: 0.2s;
+    & p {
+      text-align: center;
+      font-size: 12px;
+    }
+    & img {
+      height: 48px;
+    }
+    &:hover {
+      background-color: rgba(0, 0, 0, 0.1);
+    }
+  }
+}
+</style>

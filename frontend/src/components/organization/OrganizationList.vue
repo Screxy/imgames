@@ -1,23 +1,33 @@
 <template>
   <div>
     <h2>{{ $t('headers.organizationList') }}</h2>
-    <div v-for="organization in organizationsByUser" :key="organization.id">
+    <SubmitButton @click="$router.push('/new')">{{
+      $t('headers.organizationList')
+    }}</SubmitButton>
+    <div
+      class="normal-border-box organizations-list-item"
+      v-for="organization in organizationsByUser"
+      :key="organization.id"
+    >
+      {{ $t('organization.organization') }} "{{ organization.name }}"
       <a :href="'http://' + organization.subdomain + '.' + getDomainName">
-        {{ $t('organization.organization') }} "{{ organization.name }}"
+        <br />
+        {{ 'http://' + organization.subdomain + '.' + getDomainName }}
       </a>
       [{{ organization.prefix }}]
     </div>
-    <router-link to="/new">
-      {{ $t('headers.organizationList') }}
-    </router-link>
   </div>
 </template>
 
 <script>
 import organizationsByUser from '@/graphql/queries/organizationsByUser.gql';
+import SubmitButton from '@/components/ui/SubmitButton.vue';
 
 export default {
   name: 'OrganizationList',
+  components: {
+    SubmitButton,
+  },
   data() {
     return {
       organizationsByUser: {},
@@ -40,10 +50,15 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import '@/scss/_variables.scss';
+
 h2 {
   text-align: center;
-  position: sticky;
-  top: 0;
-  left: 0;
+}
+.organizations-list-item {
+  padding: 0.5rem;
+  font-family: $primary_font;
+  color: $dark_text_color;
+  margin-bottom: 0.5rem;
 }
 </style>

@@ -2,7 +2,11 @@
   <button
     @click="sendClick"
     :disabled="disabled"
-    :class="{ 'light-text': type == 'light-text' }"
+    :class="{
+      'light-text': type == 'light-text',
+      'bg-blue': type == 'bg-blue',
+      'bg-green': type == 'bg-green',
+    }"
   >
     <slot></slot>
   </button>
@@ -45,5 +49,25 @@ button {
   &:hover {
     text-decoration: underline;
   }
+}
+.bg-blue {
+  border: 0px;
+  background: linear-gradient(135deg, #72edf2 0%, #5151e5 100%);
+  border-radius: 8px;
+  font-family: $primary_font;
+  color: $light_text_color;
+  font-weight: bold;
+  font-size: 14px;
+  height: 40px;
+}
+.bg-green {
+  border: 0px;
+  background: linear-gradient(135deg, #4fcd33 0%, #2d9c8c 100%);
+  border-radius: 8px;
+  font-family: $primary_font;
+  color: $light_text_color;
+  font-weight: bold;
+  font-size: 14px;
+  height: 40px;
 }
 </style>

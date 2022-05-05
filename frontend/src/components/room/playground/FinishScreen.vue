@@ -2,7 +2,7 @@
   <div>
     <h2>{{ $t('room.roundFinishedHeader', { round: `R${roundKey}` }) }}</h2>
     <template v-if="isRoomOwner">
-      <SubmitButton @click="reStartRound">{{
+      <SubmitButton :type="'bg-green'" @click="reStartRound">{{
         $t('room.reStartRoundButton', { nextRound: `R${roundKey + 1}` })
       }}</SubmitButton>
     </template>

@@ -1,9 +1,9 @@
 <template>
-  <div>
-    <p>{{ $t('room.waitingHeader') }}</p>
+  <div class="waiting-screen normal-border-box">
+    <h2>{{ $t('room.waitingHeader') }}</h2>
     <template v-if="isRoomOwner">
       <p>{{ $t('room.waitingTextForOwner') }}</p>
-      <SubmitButton @click="startRound">{{
+      <SubmitButton @click="startRound" :type="'bg-green'">{{
         $t('room.startRoundButton')
       }}</SubmitButton>
     </template>
@@ -60,4 +60,9 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.waiting-screen {
+  padding: 1rem;
+  margin-top: 1rem;
+}
+</style>

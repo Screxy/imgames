@@ -1,8 +1,12 @@
 <template>
   <div>
-    <SubmitButton @click="sendCardChoice" :disabled="isDisabled">{{
-      $t('room.card.send')
-    }}</SubmitButton>
+    <SubmitButton
+      class="w-100"
+      @click="sendCardChoice"
+      :type="'bg-green'"
+      :disabled="isDisabled"
+      >{{ $t('room.card.send') }}</SubmitButton
+    >
   </div>
 </template>
 

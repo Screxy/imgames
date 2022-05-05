@@ -9,7 +9,7 @@
         <CreateRoomView></CreateRoomView>
       </div>
       <div>
-        <OrganizationList></OrganizationList>
+        <OrganizationList class="main-grid-column"></OrganizationList>
       </div>
     </div>
   </div>

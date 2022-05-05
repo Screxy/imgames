@@ -1,6 +1,8 @@
 <template>
-  <div>
+  <div class="normal-border-box create-room-form">
     <TextInput
+      :label="$t('room.moneyPerMonth')"
+      :name="'moneyPerMonth'"
       :placeholder="$t('room.moneyPerMonth')"
       :disabled="formLoading"
       :type="'number'"
@@ -8,6 +10,8 @@
       @input="newRoom != undefined ? (newRoom.moneyPerMonth = +$event) : ''"
     ></TextInput>
     <TextInput
+      :label="$t('room.numberOfTurns')"
+      :name="numberOfTurns"
       :placeholder="$t('room.numberOfTurns')"
       :disabled="formLoading"
       :predefined="defaultRoomSettings.numberOfTurnsDefault"
@@ -19,11 +23,17 @@
       "
     ></TextInput>
     <DropdownSelector
+      :label="'Игровая механика'"
+      :name="'flow'"
       :options="flowsArray"
       :predefined="predefinedFlow"
       @input="newRoom != undefined ? (newRoom.flowId = +$event) : ''"
     ></DropdownSelector>
-    <SubmitButton :disabled="formLoading" @click="createNewRoom">
+    <SubmitButton
+      :type="'bg-green'"
+      :disabled="formLoading"
+      @click="createNewRoom"
+    >
       {{ $t('buttons.create') }}
     </SubmitButton>
   </div>
@@ -129,4 +139,23 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.create-room-form {
+  padding: 1rem;
+  & .user-input {
+    & input {
+      width: 100%;
+      box-sizing: border-box;
+    }
+  }
+  & .user-input-dropdown {
+    & select {
+      width: 100%;
+      box-sizing: border-box;
+    }
+  }
+  & button {
+    width: 100%;
+  }
+}
+</style>

@@ -1,11 +1,13 @@
 <template>
   <div>
     <h2>{{ $t('room.roomsList') }}</h2>
-    <RoomsListItem
-      v-for="room in roomsInOrganization"
-      :key="room.id"
-      :room="room"
-    ></RoomsListItem>
+    <div class="rooms-list">
+      <RoomsListItem
+        v-for="room in roomsInOrganization"
+        :key="room.id"
+        :room="room"
+      ></RoomsListItem>
+    </div>
   </div>
 </template>
 
@@ -39,8 +41,5 @@ export default {
 <style lang="scss" scoped>
 h2 {
   text-align: center;
-  position: sticky;
-  top: 0;
-  left: 0;
 }
 </style>

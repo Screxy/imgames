@@ -22,7 +22,8 @@
     "player": {
       "playersList": "List of players",
       "player": "Player",
-      "roomOwner": "Room owner"
+      "roomOwner": "Room owner",
+      "effectsList": "Effects"
     },
     "gameBoard": {
       "gameBoard": "Game board",
@@ -44,7 +45,13 @@
     "waitingTextForOwner": "When all invited players enter the room, you can start the game",
     "startRoundButton": "Start round",
     "roundFinishedHeader": "Round {round} completed",
-    "reStartRoundButton": "Start a new round ({nextRound})"
+    "reStartRoundButton": "Start a new round ({nextRound})",
+    "navigation": {
+      "players": "Members",
+      "effects": "effects",
+      "chat": "Chat",
+      "cards": "Cards"
+    }
   },
   "headers": {
     "main": "Main",
