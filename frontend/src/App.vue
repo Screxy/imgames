@@ -2,24 +2,16 @@
   <div>
     <Spinner v-if="isLoading"></Spinner>
     <router-view />
-    <hr />
-    <p>{{ $t('version') }} {{ packageVersion }}</p>
-    Auth: {{ isAuthenticated }}<br />
-    Host:{{ path }}<br />
-    Subdomain:{{ subdomain }}<br />
-    Locale:🌐 {{ $i18n.locale }} - {{ $t('message') }}<br />
-    <LocaleSwitcher></LocaleSwitcher>
   </div>
 </template>
 
 <script>
 import Spinner from '@/components/ui/Spinner.vue';
-import LocaleSwitcher from '@/components/locale/LocaleSwitcher.vue';
 import { version } from '../package.json';
 
 export default {
   name: 'App',
-  components: { Spinner, LocaleSwitcher },
+  components: { Spinner },
   computed: {
     isLoading() {
       return this.$store.state.isLoading;
@@ -47,6 +39,7 @@ body {
   padding: 0;
   margin: 0;
   overflow-x: hidden;
+  overflow-y: hidden;
 }
 
 h2, h3, p {

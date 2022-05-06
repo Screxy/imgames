@@ -6,6 +6,7 @@
       'light-text': type == 'light-text',
       'bg-blue': type == 'bg-blue',
       'bg-green': type == 'bg-green',
+      'bg-outline': type == 'bg-outline',
     }"
   >
     <slot></slot>
@@ -69,5 +70,15 @@ button {
   font-weight: bold;
   font-size: 14px;
   height: 40px;
+}
+.bg-outline {
+  border: 1px solid $main_dark_bg_color;
+  font-family: $primary_font;
+  color: $dark_text_color;
+  font-size: 14px;
+  font-weight: bold;
+  height: 40px;
+  border-radius: 8px;
+  background: transparent;
 }
 </style>

@@ -66,9 +66,11 @@ export default {
 
 <style lang="scss" scoped>
 @import '@/scss/_variables.scss';
+
 label,
 input {
   font-family: $primary_font;
+  color: $dark_text_color;
 }
 input {
   padding: 0.5rem 1rem;

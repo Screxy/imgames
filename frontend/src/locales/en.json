@@ -51,7 +51,8 @@
       "effects": "effects",
       "chat": "Chat",
       "cards": "Cards"
-    }
+    },
+    "flow": "Game mechanics"
   },
   "headers": {
     "main": "Main",

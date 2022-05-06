@@ -1,9 +1,12 @@
 <template>
   <div>
     <h2>{{ $t('headers.organizationList') }}</h2>
-    <SubmitButton @click="$router.push('/new')">{{
-      $t('headers.organizationList')
-    }}</SubmitButton>
+    <SubmitButton
+      class="new-organization-btn"
+      :type="'bg-outline'"
+      @click="$router.push('/new')"
+      >{{ $t('headers.organizationList') }}</SubmitButton
+    >
     <div
       class="normal-border-box organizations-list-item"
       v-for="organization in organizationsByUser"
@@ -14,7 +17,6 @@
         <br />
         {{ 'http://' + organization.subdomain + '.' + getDomainName }}
       </a>
-      [{{ organization.prefix }}]
     </div>
   </div>
 </template>
@@ -56,9 +58,16 @@ h2 {
   text-align: center;
 }
 .organizations-list-item {
-  padding: 0.5rem;
+  padding: 1rem;
   font-family: $primary_font;
   color: $dark_text_color;
+  font-size: 14px;
   margin-bottom: 0.5rem;
+  margin-right: 0.5rem;
+}
+
+.new-organization-btn {
+  margin-bottom: 1rem;
+  width: calc(100% - 0.5rem);
 }
 </style>

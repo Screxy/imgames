@@ -20,6 +20,8 @@
       <div class="left-block"></div>
       <div class="right-block">
         <LogOutButton class="menu-link"></LogOutButton>
+        🌐 {{ $i18n.locale }}
+        <LocaleSwitcher></LocaleSwitcher>
       </div>
     </div>
   </div>
@@ -29,10 +31,11 @@
 import { MAIN_PATH } from '@/pathVariables';
 import Logo from '@/components/ui/Logo.vue';
 import LogOutButton from '@/components/auth/LogOutButton.vue';
+import LocaleSwitcher from '@/components/locale/LocaleSwitcher.vue';
 
 export default {
   name: 'TopBar',
-  components: { Logo, LogOutButton },
+  components: { Logo, LogOutButton, LocaleSwitcher },
   props: {
     type: {
       type: String,

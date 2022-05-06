@@ -23,7 +23,7 @@
       "
     ></TextInput>
     <DropdownSelector
-      :label="'Игровая механика'"
+      :label="$t('room.flow')"
       :name="'flow'"
       :options="flowsArray"
       :predefined="predefinedFlow"

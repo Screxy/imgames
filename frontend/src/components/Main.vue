@@ -55,6 +55,7 @@ export default {
   &-column {
     overflow-y: auto;
     overflow-x: hidden;
+    height: calc(100vh - 48px);
   }
 }
 </style>
