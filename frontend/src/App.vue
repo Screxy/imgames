@@ -35,18 +35,40 @@ export default {
 <style lang="scss">
 @import '@/scss/_variables.scss';
 
+
 body {
   padding: 0;
   margin: 0;
   overflow-x: hidden;
   overflow-y: hidden;
+  font-family: $primary_font;
 }
 
-h2, h3, p {
+
+h1, h2, h3, p {
   font-family: $primary_font;
   margin: 0;
   padding: 0.5rem 0;
   color: $dark_text_color;
+}
+
+.scrollable {
+  overflow-y: auto;
+  scrollbar-gutter: stable;
+  &::-webkit-scrollbar {
+    width: 16px;
+  }
+  &::-webkit-scrollbar-track {
+    width: 16px;
+    background-color: rgba(0,0,0,.1);
+  }
+  &::-webkit-scrollbar-thumb {
+    backdrop-filter: blur(12px) saturate(100%);
+    -webkit-backdrop-filter: blur(12px) saturate(100%);
+    background-color: rgba(255, 255, 255, 0.5);
+    border-radius: 12px;
+    border: 1px solid rgba(209, 213, 219, 0.3);
+  }
 }
 
 .normal-border-box {
@@ -75,6 +97,10 @@ h2, h3, p {
     background-color: rgba(255, 255, 255, 0.5);
     border-radius: 12px;
     border: 1px solid rgba(209, 213, 219, 0.3);
+}
+
+.default-background {
+  background: radial-gradient(52.5% 97.01% at 21.67% 20.17%, rgba(82, 110, 255, 0.25) 0%, rgba(249, 216, 167, 0.25) 89.06%);
 }
 
 .w-100 {

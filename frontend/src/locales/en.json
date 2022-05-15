@@ -59,5 +59,17 @@
     "newOrganization": "Create new organization",
     "organizationList": "Your organizations"
   },
-  "version": "Version"
+  "version": "Version",
+  "auth": {
+    "authHeader": "Authorization",
+    "enterButton": "Log in",
+    "emailLabel": "Email",
+    "passwordLabel": "Password",
+    "signUpText": "Don't have an account yet?",
+    "signUpButton": "Sign Up",
+    "signUpHeader": "Sign Up",
+    "enterText": "Already have an account?",
+    "firstNameLabel": "First name",
+    "lastNameLabel": "Last name"
+  }
 }

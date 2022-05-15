@@ -2,14 +2,16 @@
   <div class="container">
     <TopBar></TopBar>
     <div class="main-grid">
-      <div class="main-grid-column">
+      <div class="main-grid-column scrollable">
         <RoomList></RoomList>
       </div>
       <div>
         <CreateRoomView></CreateRoomView>
       </div>
       <div>
-        <OrganizationList class="main-grid-column"></OrganizationList>
+        <OrganizationList
+          class="main-grid-column scrollable"
+        ></OrganizationList>
       </div>
     </div>
   </div>

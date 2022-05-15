@@ -3,6 +3,7 @@
     @click="sendClick"
     :disabled="disabled"
     :class="{
+      'dark-text': type == 'dark-text',
       'light-text': type == 'light-text',
       'bg-blue': type == 'bg-blue',
       'bg-green': type == 'bg-green',
@@ -23,6 +24,7 @@ export default {
     },
     type: {
       type: String,
+      default: 'bg-blue',
     },
   },
   methods: {
@@ -38,6 +40,18 @@ export default {
 
 button {
   cursor: pointer;
+}
+
+.dark-text {
+  background-color: transparent;
+  border: 0;
+  color: $dark_text_color;
+  font-family: $primary_font;
+  font-size: 1rem;
+
+  &:hover {
+    text-decoration: underline;
+  }
 }
 
 .light-text {
@@ -60,6 +74,7 @@ button {
   font-weight: bold;
   font-size: 14px;
   height: 40px;
+  min-width: 100px;
 }
 .bg-green {
   border: 0px;
@@ -70,6 +85,7 @@ button {
   font-weight: bold;
   font-size: 14px;
   height: 40px;
+  min-width: 100px;
 }
 .bg-outline {
   border: 1px solid $main_dark_bg_color;

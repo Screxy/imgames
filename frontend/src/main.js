@@ -12,8 +12,12 @@ import { Integrations } from '@sentry/tracing';
 import App from '@/App.vue';
 import './registerServiceWorker';
 import i18n from './i18n';
+import FlagIcon from 'vue-flag-icon';
 
 Vue.config.productionTip = false;
+
+// Компонент для иконки флагов стран
+Vue.use(FlagIcon);
 
 // Sentry для логирования ошибок фронтенда
 Sentry.init({

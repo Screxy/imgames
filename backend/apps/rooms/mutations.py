@@ -35,25 +35,25 @@ class CreateRoom(graphene.Mutation):
             code = str(room)
 
             # Создаём новый раунд в комнате
-            round = Round.objects.create(room=room)
-            room.current_round = round
+            new_round = Round.objects.create(room=room)
+            room.current_round = new_round
             room.save()
 
             # Создаём необходимое количество месяцев
             first_month = None
             for _ in range(room.number_of_turns+1):
                 if first_month is not None:
-                    Month.objects.create(round=round)
+                    Month.objects.create(round=new_round)
                 else:
-                    first_month = Month.objects.create(round=round)
+                    first_month = Month.objects.create(round=new_round)
 
-            round.current_month = first_month
-            round.save()
+            new_round.current_month = first_month
+            new_round.save()
 
             # Добавляем пользователя как участника
             RoomParticipant.objects.create(room=room, user=user)
 
-            return CreateRoom(success=True, room=room, code=code, round=round)
+            return CreateRoom(success=True, room=room, code=code, round=new_round)
         except Exception as e:
             return CreateRoom(success=False, errors=[str(e)])
 

@@ -47,17 +47,15 @@ class Query(graphene.ObjectType):
         except Exception as e:
             return None
 
-    def resolve_room_by_code(room, info, code):
+    def resolve_room_by_code(self, info, code):
         try:
             code_array = str(code).split('-')
-            if len(code_array) > 1:
-                organization = Organization.objects.get(
-                    prefix__iexact=code_array[0])
-                room = Room.objects.get(
-                    key=code_array[1], organization=organization)
-                return room
-            else:
+            if len(code_array) <= 1:
                 raise Exception('Error code')
+            organization = Organization.objects.get(
+                prefix__iexact=code_array[0])
+            return Room.objects.get(key=code_array[1], organization=organization)
+
         except Exception as e:
             return None
 

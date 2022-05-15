@@ -16,26 +16,50 @@
         >
       </div>
     </div>
+    <div class="menu-block" v-else-if="type == 'auth'">
+      <div class="left-block"></div>
+      <div class="right-block">
+        <LocaleSwitcher></LocaleSwitcher>
+        <SubmitButton
+          class="menu-link"
+          :type="'light-text'"
+          @click="$router.push(signUpPath)"
+          >{{ $t('auth.signUpButton') }}</SubmitButton
+        >
+      </div>
+    </div>
+    <div class="menu-block" v-else-if="type == 'sign-up'">
+      <div class="left-block"></div>
+      <div class="right-block">
+        <LocaleSwitcher></LocaleSwitcher>
+        <SubmitButton
+          class="menu-link"
+          :type="'light-text'"
+          @click="$router.push(authPath)"
+          >{{ $t('auth.enterButton') }}</SubmitButton
+        >
+      </div>
+    </div>
     <div class="menu-block" v-else>
       <div class="left-block"></div>
       <div class="right-block">
-        <LogOutButton class="menu-link"></LogOutButton>
-        🌐 {{ $i18n.locale }}
         <LocaleSwitcher></LocaleSwitcher>
+        <LogOutButton class="menu-link"></LogOutButton>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import { MAIN_PATH } from '@/pathVariables';
+import { MAIN_PATH, SIGN_UP_PATH, AUTH_PATH } from '@/pathVariables';
 import Logo from '@/components/ui/Logo.vue';
 import LogOutButton from '@/components/auth/LogOutButton.vue';
 import LocaleSwitcher from '@/components/locale/LocaleSwitcher.vue';
+import SubmitButton from '@/components/ui/SubmitButton.vue';
 
 export default {
   name: 'TopBar',
-  components: { Logo, LogOutButton, LocaleSwitcher },
+  components: { Logo, LogOutButton, LocaleSwitcher, SubmitButton },
   props: {
     type: {
       type: String,
@@ -53,6 +77,8 @@ export default {
   data() {
     return {
       mainPath: MAIN_PATH,
+      signUpPath: SIGN_UP_PATH,
+      authPath: AUTH_PATH,
     };
   },
 };

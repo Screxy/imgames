@@ -6,6 +6,7 @@ import Main from '@/components/Main.vue';
 import AuthView from '@/components/auth/AuthView.vue';
 import OrganizationCreateView from '@/components/organization/OrganizationCreateView.vue';
 import RoomPlayground from '@/components/room/playground/RoomPlayground.vue';
+import SignUpView from '@/components/auth/SignUpView.vue';
 
 import store from '@/store.js';
 import {
@@ -13,6 +14,7 @@ import {
   AUTH_PATH,
   NEW_ORGANIZATION_PATH,
   ROOMS_ROOT_PATH,
+  SIGN_UP_PATH,
 } from '@/pathVariables.js';
 
 import verifyToken from '@/graphql/mutations/verifyToken.gql';
@@ -79,6 +81,12 @@ const routes = [
     component: AuthView,
     beforeEnter: ifNotAuthenticated,
     meta: { title: 'Войти - ImGames' },
+  },
+  {
+    path: SIGN_UP_PATH,
+    component: SignUpView,
+    beforeEnter: ifNotAuthenticated,
+    meta: { title: 'Зарегистрироваться - ImGames' },
   },
   {
     path: NEW_ORGANIZATION_PATH,

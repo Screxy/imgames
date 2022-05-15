@@ -59,5 +59,17 @@
     "newOrganization": "Создать новую организацию",
     "organizationList": "Ваши организации"
   },
-  "version": "Версия"
+  "version": "Версия",
+  "auth": {
+    "authHeader": "Авторизация",
+    "enterButton": "Войти",
+    "emailLabel": "Электронная почта",
+    "passwordLabel": "Пароль",
+    "signUpText": "Ещё нет учётной записи?",
+    "signUpButton": "Зарегистрироваться",
+    "signUpHeader": "Зарегистрироваться",
+    "enterText": "Уже есть учётная запись?",
+    "firstNameLabel": "Имя",
+    "lastNameLabel": "Фамилия"
+  }
 }
