@@ -1,6 +1,9 @@
 // vue.config.js
 module.exports = {
   lintOnSave: false,
+  css: {
+    sourceMap: false,
+  },
   devServer: {
     hot: true,
     hotOnly: true,

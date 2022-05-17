@@ -1,6 +1,8 @@
 <template>
   <div class="user-input">
-    <label :for="name">{{ label }}</label>
+    <label :for="name" :class="{ 'error-message': isAnyError }">{{
+      label
+    }}</label>
     <input
       :id="name"
       :name="name"
@@ -10,7 +12,13 @@
       :disabled="disabled"
       v-model="inputModel"
       @input="sendInput"
+      :class="{ 'error-input': isAnyError }"
     />
+    <div class="errors">
+      <span class="error-message" v-if="isRequiredError">{{
+        $t('textInput.requiredError')
+      }}</span>
+    </div>
   </div>
 </template>
 
@@ -49,6 +57,18 @@ export default {
     name: {
       type: String,
     },
+    // isRequired: {
+    //   type: Boolean,
+    //   default: false,
+    // },
+    isAnyError: {
+      type: Boolean,
+      default: false,
+    },
+    isRequiredError: {
+      type: Boolean,
+      default: false,
+    },
   },
   watch: {
     predefined(newValue) {
@@ -59,8 +79,10 @@ export default {
   methods: {
     sendInput() {
       this.$emit('input', this.inputModel);
+      this.$v.inputModel.$touch();
     },
   },
+  computed: {},
 };
 </script>
 
@@ -81,5 +103,11 @@ input {
   margin-bottom: 1rem;
   display: flex;
   flex-direction: column;
+}
+.errors {
+  & span {
+    font-size: 14px;
+    margin-bottom: 0.5rem;
+  }
 }
 </style>

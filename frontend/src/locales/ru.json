@@ -70,6 +70,10 @@
     "signUpHeader": "Зарегистрироваться",
     "enterText": "Уже есть учётная запись?",
     "firstNameLabel": "Имя",
-    "lastNameLabel": "Фамилия"
+    "lastNameLabel": "Фамилия",
+    "signUpSuccessText": "Вы успешно зарегистрированы! Войдите в учётную запись."
+  },
+  "textInput": {
+    "requiredError": "Обязательное поле!"
   }
 }

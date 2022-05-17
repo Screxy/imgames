@@ -70,6 +70,10 @@
     "signUpHeader": "Sign Up",
     "enterText": "Already have an account?",
     "firstNameLabel": "First name",
-    "lastNameLabel": "Last name"
+    "lastNameLabel": "Last name",
+    "signUpSuccessText": "You have successfully registered! \nLog in to your account."
+  },
+  "textInput": {
+    "requiredError": "Obligatory field!"
   }
 }

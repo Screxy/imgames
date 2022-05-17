@@ -11,7 +11,7 @@
     ></TextInput>
     <TextInput
       :label="$t('room.numberOfTurns')"
-      :name="numberOfTurns"
+      :name="'numberOfTurns'"
       :placeholder="$t('room.numberOfTurns')"
       :disabled="formLoading"
       :predefined="defaultRoomSettings.numberOfTurnsDefault"

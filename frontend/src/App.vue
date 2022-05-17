@@ -103,6 +103,14 @@ h1, h2, h3, p {
   background: radial-gradient(52.5% 97.01% at 21.67% 20.17%, rgba(82, 110, 255, 0.25) 0%, rgba(249, 216, 167, 0.25) 89.06%);
 }
 
+.error-message {
+  color: $error;
+}
+
+.error-input {
+  outline: 1px solid $error;
+}
+
 .w-100 {
   width: 100%;
 }
