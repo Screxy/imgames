@@ -4,11 +4,12 @@
       <TopBar :type="'sign-up'"></TopBar>
       <div class="sign-up-view default-background">
         <div class="normal-border-box sign-up-box">
-          <h1>{{ $t('auth.signUpHeader') }}</h1>
           <template v-if="isSuccess">
+            <h1>{{ $t('auth.signUpSuccessHeader') }}</h1>
             {{ $t('auth.signUpSuccessText') }}
           </template>
-          <template>
+          <template v-else>
+            <h1>{{ $t('auth.signUpHeader') }}</h1>
             <form @submit.prevent>
               <TextInput
                 :label="$t('auth.emailLabel')"

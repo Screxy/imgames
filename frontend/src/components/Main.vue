@@ -2,15 +2,15 @@
   <div class="container">
     <TopBar></TopBar>
     <div class="main-grid">
-      <div class="main-grid-column scrollable">
+      <div class="main-grid-column scrollable rooms-list">
         <RoomList></RoomList>
       </div>
-      <div>
+      <div class="create-room">
         <CreateRoomView></CreateRoomView>
       </div>
       <div>
         <OrganizationList
-          class="main-grid-column scrollable"
+          class="main-grid-column scrollable organizations-list"
         ></OrganizationList>
       </div>
     </div>
@@ -42,6 +42,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import '@/scss/_variables.scss';
 .main-grid {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
@@ -58,6 +59,43 @@ export default {
     overflow-y: auto;
     overflow-x: hidden;
     height: calc(100vh - 48px);
+  }
+}
+
+@media screen and (max-width: 810px) {
+  .main-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 50vh 50vh;
+
+    & .rooms-list {
+      grid-row-start: 1;
+      grid-row-end: 2;
+      grid-column-start: 2;
+      grid-column-end: 3;
+      height: unset;
+    }
+    & .organizations-list {
+      grid-row-start: 2;
+      grid-row-end: 3;
+      grid-column-start: 2;
+      grid-column-end: 3;
+      border-top: 1px solid $main_dark_bg_color;
+    }
+    & .create-room {
+      grid-row-start: 1;
+      grid-row-end: 3;
+      grid-column-start: 1;
+      grid-column-end: 2;
+      display: flex;
+      & * {
+        margin: auto;
+      }
+    }
+    & .organizations-list,
+    & .create-room {
+      height: 50vh;
+    }
   }
 }
 </style>

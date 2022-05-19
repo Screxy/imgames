@@ -1,6 +1,8 @@
 <template lang="html">
   <div>
-    <Spinner v-if="isLoading"></Spinner>
+    <div class="spinner-box" v-if="isLoading">
+      <Spinner></Spinner>
+    </div> 
     <router-view />
   </div>
 </template>
@@ -113,6 +115,19 @@ h1, h2, h3, p {
 
 .w-100 {
   width: 100%;
+}
+
+.spinner-box {
+  position: absolute;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0,0,0,.4);
+  display: flex;
+  z-index: 10000;
+
+  & * {
+    margin: auto;
+  }
 }
 
 @font-face {

@@ -125,6 +125,10 @@ export default {
     & .auth-view {
       & .auth-box {
         width: 96%;
+
+        & h1 {
+          font-size: 24px;
+        }
       }
     }
   }

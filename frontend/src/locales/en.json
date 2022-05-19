@@ -71,7 +71,8 @@
     "enterText": "Already have an account?",
     "firstNameLabel": "First name",
     "lastNameLabel": "Last name",
-    "signUpSuccessText": "You have successfully registered! \nLog in to your account."
+    "signUpSuccessText": "Sign in to your account to start playing.",
+    "signUpSuccessHeader": "You have successfully registered!"
   },
   "textInput": {
     "requiredError": "Obligatory field!"
