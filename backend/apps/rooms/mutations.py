@@ -59,7 +59,7 @@ class CreateRoom(graphene.Mutation):
 
 
 class WriteTurn(graphene.Mutation):
-    """ Мутация для создания комнаты (+ раунда и необходимого количества месяцев) в пространстве организации """
+    """ Мутация для записи шага пользователя в комнате """
     success = graphene.Boolean()
     errors = graphene.List(graphene.String)
     turn = graphene.Field(TurnType)
@@ -86,7 +86,7 @@ class WriteTurn(graphene.Mutation):
                 if turn != 0:
                     raise Exception('Turn exists!')
 
-                # Если не сущестовал такой ход, тогда создаём
+                # Если не существовал такой ход, тогда создаём
                 turn = Turn.objects.create(
                     month=current_month, user=user)
 
@@ -94,6 +94,8 @@ class WriteTurn(graphene.Mutation):
                 for card_id in cards_id:
                     card = Card.objects.get(pk=card_id)
                     CardChoice.objects.create(card=card, turn=turn)
+
+                    # TODO: обновить данные в computed-таблицах
 
                 # Проверяем, если все сделали ход
                 turns_count = Turn.objects.filter(

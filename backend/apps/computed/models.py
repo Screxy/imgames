@@ -29,7 +29,7 @@ class StageComputed(models.Model):
             MaxValueValidator(100.00),
             MinValueValidator(0.01)
         ])
-    cardinal_value = models.PositiveIntegerField("Входной трафик")
+    # cardinal_value = models.PositiveIntegerField("Входной трафик")
 
     def __str__(self):
         return f'ChannelComputed #{self.id}'

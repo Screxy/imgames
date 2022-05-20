@@ -35,6 +35,7 @@ class Query(graphene.ObjectType):
                 stages = Stage.objects.filter(flow=flow)
 
                 answer_array = []
+                # if current_month.key == 0:
                 total_data = [Decimal(0)]
                 for i in range(len(stages)):
                     total_data += [Decimal(0), Decimal(0)]

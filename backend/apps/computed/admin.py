@@ -10,5 +10,5 @@ class ChannelComputedAdmin(admin.ModelAdmin):
 
 @admin.register(StageComputed)
 class StageComputedAdmin(admin.ModelAdmin):
-    list_display = ('id', 'turn', 'conversion', 'cardinal_value', 'stage')
+    list_display = ('id', 'turn', 'conversion', 'stage')
     list_display_links = ('id', 'turn')
