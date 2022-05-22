@@ -15,7 +15,7 @@ class Mutation(apps.users.schema.Mutation, apps.rooms.schema.Mutation, apps.orga
     pass
 
 
-class Subscription(apps.rooms.schema.Subscription):
+class Subscription(apps.rooms.schema.Subscription, apps.computed.schema.Subscription):
     test = graphene.String()
 
     def resolve_test(root, info):

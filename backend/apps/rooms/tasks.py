@@ -1,14 +1,25 @@
 from hashlib import new
 from celery import shared_task
 from apps.organizations.models import Organization
-from apps.rooms.models import Room, Month, Turn
-from apps.flows.models import Stage, Channel
+from apps.rooms.models import Room, Month, Turn, CardChoice
+from apps.flows.models import Stage, Channel, ParameterChange
 from apps.computed.models import ChannelComputed, StageComputed
 from graphene_subscriptions.events import SubscriptionEvent
 from django.forms.models import model_to_dict
 import json
 
 MONTH_EVENT = 'month_event'
+
+
+def compute_value(old_value, math_operator, change_value):
+    if math_operator == '+':
+        return old_value+change_value
+    if math_operator == '-':
+        return old_value-change_value
+    if math_operator == '*':
+        return old_value*change_value
+    if math_operator == '/':
+        return old_value/change_value
 
 
 @shared_task
@@ -27,7 +38,6 @@ def change_month_in_room(room_id):
 
         # Получаем набор шагов за прошедший игровой месяц
         old_month_users_turns = Turn.objects.filter(month=old_month)
-        print(old_month_users_turns)
 
         # Если месяц был в комнате начальным (шаг игрока №1)
         if old_month.key == 0:
@@ -81,15 +91,44 @@ def change_month_in_room(room_id):
                     ChannelComputed.objects.create(
                         turn=turn, channel=old_computed_channel.channel, cardinal_value=old_computed_channel.cardinal_value)
 
-            # 2. Для каждого изменения из-за карточек обновляем данные
-            # TODO: для каждого шага получаем набор выборов карточек
-            # TODO: для каждого выбора карточек получаем карточку
-            # TODO: для каждой карточки получаем набор изменения параметров
-            # Для каждого изменения карточки
-            # - если изменение начального параметра
-            # - если изменение конверсии этапа
+        # 2. Для каждого изменения из-за карточек обновляем данные
 
-            # Высчитываем следующий номер месяца
+        # Для каждого шага за последний месяц
+        for turn in old_month_users_turns:
+            # Получаем набор выборов карточек за ход игрока
+            user_card_choices = CardChoice.objects.filter(turn=turn)
+
+            # Для каждого выбора карточек
+            for choice in user_card_choices:
+                # По карточке в выборе находим все изменения параметров
+                parameter_change_list = ParameterChange.objects.filter(
+                    card=choice.card)
+
+                # Для каждого изменения параметра
+                for parameter_change in parameter_change_list:
+                    # Если происходит изменение начального трафика канала
+                    if parameter_change.type == "FSVL":
+                        # Находим в вычисляемых значениях ChannelComputed
+                        computed_channel = ChannelComputed.objects.get(
+                            channel=parameter_change.channel, turn=turn)
+
+                        # Изменяем значение трафика
+                        computed_channel.cardinal_value = compute_value(
+                            old_value=computed_channel.cardinal_value, math_operator=parameter_change.math_operator, change_value=parameter_change.value)
+                        computed_channel.save()
+
+                    # Если происходит изменение конверсии этапа:
+                    if parameter_change.type == "CONV":
+                        # Находим вычисляемое значение StageComputed
+                        computed_stage = StageComputed.objects.get(
+                            stage=parameter_change.stage, turn=turn)
+
+                        # Изменяем значение конверсии этапа
+                        computed_stage.conversion = compute_value(
+                            old_value=computed_stage.conversion, math_operator=parameter_change.math_operator, change_value=parameter_change.value)
+                        computed_stage.save()
+
+        # Высчитываем следующий номер месяца
         new_key = old_month.key+1
 
         # TODO: check that the new month is not bigger than the maximum key

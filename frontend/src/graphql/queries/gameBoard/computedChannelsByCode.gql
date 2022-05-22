@@ -3,8 +3,10 @@ query ($code: String!) {
     channel {
       id
       name
+      __typename
     }
     data
     isTotal
+    __typename
   }
 }

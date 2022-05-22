@@ -9,7 +9,8 @@ class ChannelComputed(models.Model):
         Channel, verbose_name="Изначальный канал", on_delete=models.CASCADE)
     turn = models.ForeignKey(
         Turn, verbose_name="Шаг пользователя", on_delete=models.CASCADE)
-    cardinal_value = models.PositiveIntegerField("Входной трафик")
+    cardinal_value = models.DecimalField(
+        "Входной трафик", decimal_places=2, max_digits=10)
 
     def __str__(self):
         return f'ChannelComputed #{self.id}'

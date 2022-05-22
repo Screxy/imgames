@@ -143,8 +143,6 @@ class Subscription(graphene.ObjectType):
                 room = Room.objects.get(
                     key=code_array[1], organization=organization)
                 current_round = room.current_round
-                print(room.current_round.current_month)
-                print(room.current_round.current_month.key)
                 return self.filter(lambda event: filter_round_events(event, current_round)).map(lambda event: event.instance)
         except Exception as e:
             return None
