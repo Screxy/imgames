@@ -25,7 +25,9 @@ function verifyAuth(to, from) {
   return new Promise(function (resolve, reject) {
     provider.defaultClient
       .mutate({ mutation: verifyToken })
-      .then(() => {
+      .then((result) => {
+        let userId = result.data.verifyToken.payload.user_id;
+        store.commit('SET_USER_ID', userId);
         store.commit('SET_IS_AUTHENTICATED', true);
       })
       .catch((error) => {

@@ -26,6 +26,7 @@ function getSubdomain(url) {
 const store = new Vuex.Store({
   strict: true,
   state: {
+    userId: false,
     isAuthenticated: false,
     isLoading: false,
     gotVerifiedAuth: false,
@@ -44,6 +45,9 @@ const store = new Vuex.Store({
     },
     SET_GOT_VERIFIED_AUTH(state, boolean) {
       state.gotVerifiedAuth = boolean;
+    },
+    SET_USER_ID(state, userId) {
+      state.userId = userId;
     },
   },
   actions: {},

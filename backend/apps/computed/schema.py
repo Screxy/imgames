@@ -14,8 +14,6 @@ def prepare_computed_game_data_array(room, user):
     # Получаем обновлённый объект комнаты
     room = Room.objects.get(pk=room.id)
     current_month = room.current_round.current_month
-    print(room.current_round)
-    print(current_month)
 
     # Находим текущий механику комнаты
     flow = room.flow
@@ -29,7 +27,6 @@ def prepare_computed_game_data_array(room, user):
     answer_array = []
     # Если начальный месяц
     if current_month.key == 0:
-        print("Начальный месяц")
         total_data = [Decimal(0)]
 
         for i in range(len(stages)):
@@ -70,7 +67,6 @@ def prepare_computed_game_data_array(room, user):
 
     # Если не начальный месяц
     else:
-        print("Не начальный месяц")
         # Находим предыдущий месяц
         prev_month_key = current_month.key-1
         prev_month = Month.objects.get(

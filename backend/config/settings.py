@@ -271,6 +271,7 @@ GRAPHQL_JWT = {
     'JWT_VERIFY_EXPIRATION': True,
     'JWT_VERIFY': True,
     'JWT_COOKIE_DOMAIN': env.str('DOMAIN_HOST'),
+    'JWT_PAYLOAD_HANDLER': 'apps.users.schema.jwt_payload',
     # TODO:
     # HTTPS -
     'JWT_COOKIE_SECURE': True,

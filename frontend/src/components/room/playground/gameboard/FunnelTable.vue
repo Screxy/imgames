@@ -14,6 +14,7 @@
 import channelsByCode from '@/graphql/queries/gameBoard/channelsByCode.gql';
 import stagesByCode from '@/graphql/queries/gameBoard/stagesByCode.gql';
 import computedChannelsByCode from '@/graphql/queries/gameBoard/computedChannelsByCode.gql';
+import computedChannelsByCodeUpdated from '@/graphql/subscriptions/rooms/computedChannelsByCodeUpdated.gql';
 
 import TableBody from '@/components/room/playground/gameBoard/TableBody.vue';
 import TableFooter from '@/components/room/playground/gameBoard/TableFooter.vue';
@@ -50,9 +51,28 @@ export default {
           code: this.roomCode,
         };
       },
+      subscribeToMore: {
+        document: computedChannelsByCodeUpdated,
+        variables() {
+          return {
+            code: this.roomCode,
+            userId: this.userId,
+          };
+        },
+        updateQuery: (previousResult, { subscriptionData }) => {
+          let newData = {
+            computedChannelsByCode:
+              subscriptionData.data.computedChannelsByCodeUpdated,
+          };
+          return newData;
+        },
+      },
     },
   },
   computed: {
+    userId() {
+      return this.$store.state.userId;
+    },
     roomCode() {
       return this.$route.params.roomCode;
     },
