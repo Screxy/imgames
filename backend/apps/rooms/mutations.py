@@ -177,3 +177,30 @@ class ReStartRound(graphene.Mutation):
                 return ReStartRound(success=True)
         except Exception as e:
             return ReStartRound(success=False, errors=[str(e)])
+
+
+class ConnectRoom(graphene.Mutation):
+    """ Мутация для присоединения к комнате """
+    success = graphene.Boolean()
+    errors = graphene.List(graphene.String)
+    created = graphene.Boolean()
+
+    class Arguments:
+        code = graphene.String(required=True)
+
+    def mutate(self, info, code):
+        try:
+            code_array = str(code).split('-')
+            if len(code_array) > 1:
+                user = info.context.user
+                organization = Organization.objects.get(
+                    prefix__iexact=code_array[0])
+                room = Room.objects.get(
+                    key=code_array[1], organization=organization)
+
+                participant, created =  RoomParticipant.objects.get_or_create(
+                    room=room, user=user)
+
+                return ConnectRoom(success=True, created=created)
+        except Exception as e:
+            return ConnectRoom(success=False, errors=[str(e)])

@@ -64,6 +64,7 @@ import roomByCode from '@/graphql/queries/rooms/roomByCode.gql';
 import currentRoundByCode from '@/graphql/queries/rooms/currentRoundByCode.gql';
 import roomUpdated from '@/graphql/subscriptions/rooms/roomUpdated.gql';
 import currentRoundUpdated from '@/graphql/subscriptions/rooms/currentRoundUpdated.gql';
+import connectRoom from '@/graphql/mutations/rooms/connectRoom.gql';
 import PlayersList from '@/components/room/playground/PlayersList.vue';
 import EffectsList from '@/components/room/playground/EffectsList.vue';
 import GameBoard from '@/components/room/playground/gameBoard/GameBoard.vue';
@@ -71,6 +72,7 @@ import CardsList from '@/components/room/playground/cardsList/CardsList.vue';
 import WaitingScreen from '@/components/room/playground/WaitingScreen.vue';
 import FinishScreen from '@/components/room/playground/FinishScreen.vue';
 import TopBar from '@/components/ui/TopBar.vue';
+import { MAIN_PATH } from '@/pathVariables.js';
 
 export default {
   name: 'RoomPlayground',
@@ -188,6 +190,19 @@ export default {
       await this.$apollo.queries.currentRoundByCode.refresh();
       this.skip = false;
     },
+  },
+  mounted() {
+    this.$apollo
+      .mutate({
+        mutation: connectRoom,
+        variables: {
+          code: this.roomCode,
+        },
+      })
+      .then(() => {})
+      .catch(() => {
+        this.$router.push(MAIN_PATH);
+      });
   },
 };
 </script>

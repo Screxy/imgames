@@ -24,6 +24,8 @@
 <script>
 import TextInput from '@/components/ui/TextInput.vue';
 import SubmitButton from '@/components/ui/SubmitButton.vue';
+import connectRoom from '@/graphql/mutations/rooms/connectRoom.gql';
+import { ROOMS_ROOT_PATH } from '@/pathVariables.js';
 
 export default {
   name: 'ConnectRoomView',
@@ -39,7 +41,25 @@ export default {
   },
   methods: {
     joinRoom() {
-      console.log('!!!');
+      this.formLoading = true;
+      this.$apollo
+        .mutate({
+          mutation: connectRoom,
+          variables: {
+            code: this.roomCode,
+          },
+        })
+        .then((result) => {
+          if (result.data.connectRoom.success) {
+            let roomCode = this.roomCode;
+            this.roomCode = '';
+            this.$router.push(ROOMS_ROOT_PATH + '/' + roomCode.toUpperCase());
+          }
+        })
+        .catch()
+        .finally(() => {
+          this.formLoading = false;
+        });
     },
   },
 };

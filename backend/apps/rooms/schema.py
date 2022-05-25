@@ -1,6 +1,6 @@
 import graphene
 from graphene_django.debug import DjangoDebug
-from apps.rooms.mutations import CreateRoom, WriteTurn, StartRound, ReStartRound
+from apps.rooms.mutations import CreateRoom, WriteTurn, StartRound, ReStartRound, ConnectRoom
 from apps.rooms.types import RoomType, RoundType
 from apps.rooms.models import Room, Turn, Round
 from apps.organizations.models import Organization
@@ -90,6 +90,7 @@ class Mutation(graphene.ObjectType):
     write_turn = WriteTurn.Field()
     start_round = StartRound.Field()
     re_start_round = ReStartRound.Field()
+    connect_room = ConnectRoom.Field()
 
 
 def filter_room_events(event, room):
