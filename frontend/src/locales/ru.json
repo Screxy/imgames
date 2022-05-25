@@ -3,7 +3,8 @@
   "buttons": {
     "create": "Создать",
     "logOut": "Выйти",
-    "toMainPage": "На главную"
+    "toMainPage": "На главную",
+    "connect": "Присоединиться"
   },
   "organization": {
     "organization": "Организация",
@@ -52,12 +53,15 @@
       "chat": "Чат",
       "cards": "Карточки"
     },
-    "flow": "Игровая механика"
+    "flow": "Игровая механика",
+    "connectRoom": "Присоединиться к комнате",
+    "roomCode": "Номер комнаты"
   },
   "headers": {
     "main": "Главная",
     "newOrganization": "Создать новую организацию",
-    "organizationList": "Ваши организации"
+    "organizationList": "Ваши организации",
+    "newOrganizationBtn": "Создать новую организацию"
   },
   "version": "Версия",
   "auth": {

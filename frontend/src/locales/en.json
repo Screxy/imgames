@@ -3,7 +3,8 @@
   "buttons": {
     "create": "Create",
     "logOut": "Log out",
-    "toMainPage": "To the main"
+    "toMainPage": "To the main",
+    "connect": "Join"
   },
   "organization": {
     "organization": "Organization",
@@ -52,12 +53,15 @@
       "chat": "Chat",
       "cards": "Cards"
     },
-    "flow": "Game mechanics"
+    "flow": "Game mechanics",
+    "connectRoom": "Join the room",
+    "roomCode": "Room code"
   },
   "headers": {
     "main": "Main",
     "newOrganization": "Create new organization",
-    "organizationList": "Your organizations"
+    "organizationList": "Your organizations",
+    "newOrganizationBtn": "Create a new organization"
   },
   "version": "Version",
   "auth": {

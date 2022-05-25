@@ -1,12 +1,5 @@
 <template>
-  <div>
-    <h2>{{ $t('headers.organizationList') }}</h2>
-    <SubmitButton
-      class="new-organization-btn"
-      :type="'bg-outline'"
-      @click="$router.push('/new')"
-      >{{ $t('headers.organizationList') }}</SubmitButton
-    >
+  <div class="organizations-list-column scrollable">
     <div
       class="normal-border-box organizations-list-item"
       v-for="organization in organizationsByUser"
@@ -23,13 +16,10 @@
 
 <script>
 import organizationsByUser from '@/graphql/queries/organizationsByUser.gql';
-import SubmitButton from '@/components/ui/SubmitButton.vue';
 
 export default {
   name: 'OrganizationList',
-  components: {
-    SubmitButton,
-  },
+  components: {},
   data() {
     return {
       organizationsByUser: {},
@@ -57,6 +47,12 @@ export default {
 h2 {
   text-align: center;
 }
+
+.organizations-list-column {
+  height: calc(100vh - 139px);
+  overflow-y: auto;
+}
+
 .organizations-list-item {
   padding: 1rem;
   font-family: $primary_font;
@@ -69,5 +65,11 @@ h2 {
 .new-organization-btn {
   margin-bottom: 1rem;
   width: calc(100% - 0.5rem);
+}
+
+@media screen and (max-width: 810px) {
+  .organizations-list-column {
+    height: calc(50vh - 48px);
+  }
 }
 </style>

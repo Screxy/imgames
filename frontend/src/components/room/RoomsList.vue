@@ -1,13 +1,10 @@
 <template>
-  <div>
-    <h2>{{ $t('room.roomsList') }}</h2>
-    <div class="rooms-list">
-      <RoomsListItem
-        v-for="room in roomsInOrganization"
-        :key="room.id"
-        :room="room"
-      ></RoomsListItem>
-    </div>
+  <div class="rooms-list scrollable">
+    <RoomsListItem
+      v-for="room in roomsInOrganization"
+      :key="room.id"
+      :room="room"
+    ></RoomsListItem>
   </div>
 </template>
 
@@ -39,7 +36,13 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-h2 {
-  text-align: center;
+.rooms-list {
+  height: calc(100vh - 95px);
+  overflow-y: auto;
+}
+@media screen and (max-width: 810px) {
+  .rooms-list {
+    height: calc(50vh - 48px);
+  }
 }
 </style>
