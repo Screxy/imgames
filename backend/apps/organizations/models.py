@@ -15,8 +15,8 @@ class OrganizationSettings(models.Model):
         "Количество денег в месяц в комнате по умолчанию", default=10000)
 
     class Meta:
-        verbose_name = "[DEV] Настройки организации"
-        verbose_name_plural = "[DEV] Настройки организаций"
+        verbose_name = "Настройки организации"
+        verbose_name_plural = "Настройки организаций"
 
     def __str__(self):
         return "Настройки организации '"+str(self.organization.name)+"'"

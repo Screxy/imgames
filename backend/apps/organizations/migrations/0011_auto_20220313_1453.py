@@ -12,11 +12,13 @@ class Migration(migrations.Migration):
     operations = [
         migrations.AlterModelOptions(
             name='organizationsettings',
-            options={'verbose_name': '[DEV] Настройки организации', 'verbose_name_plural': '[DEV] Настройки организаций'},
+            options={'verbose_name': 'Настройки организации',
+                     'verbose_name_plural': 'Настройки организаций'},
         ),
         migrations.AddField(
             model_name='organizationsettings',
             name='money_per_month_default',
-            field=models.PositiveIntegerField(default=10000, verbose_name='Количество денег в месяц в комнате по умолчанию'),
+            field=models.PositiveIntegerField(
+                default=10000, verbose_name='Количество денег в месяц в комнате по умолчанию'),
         ),
     ]

@@ -20,7 +20,7 @@
         </template>
         <PlayersList
           class="second-column-top"
-          :players="players"
+          :players="roomParticipants"
           :room="roomByCode"
           v-if="players != undefined && roomByCode != undefined"
         >
@@ -65,6 +65,7 @@ import currentRoundByCode from '@/graphql/queries/rooms/currentRoundByCode.gql';
 import roomUpdated from '@/graphql/subscriptions/rooms/roomUpdated.gql';
 import currentRoundUpdated from '@/graphql/subscriptions/rooms/currentRoundUpdated.gql';
 import connectRoom from '@/graphql/mutations/rooms/connectRoom.gql';
+import roomParticipants from '@/graphql/queries/rooms/roomParticipants.gql';
 import PlayersList from '@/components/room/playground/PlayersList.vue';
 import EffectsList from '@/components/room/playground/EffectsList.vue';
 import GameBoard from '@/components/room/playground/gameBoard/GameBoard.vue';
@@ -180,6 +181,14 @@ export default {
             currentRoundByCode: subscriptionData.data.currentRoundUpdated,
           };
         },
+      },
+    },
+    roomParticipants: {
+      query: roomParticipants,
+      variables() {
+        return {
+          code: this.roomCode,
+        };
       },
     },
   },

@@ -1,8 +1,8 @@
 import graphene
 from graphene_django.debug import DjangoDebug
 from apps.rooms.mutations import CreateRoom, WriteTurn, StartRound, ReStartRound, ConnectRoom
-from apps.rooms.types import RoomType, RoundType
-from apps.rooms.models import Room, Turn, Round
+from apps.rooms.types import RoomType, RoundType, RoomParticipantType
+from apps.rooms.models import Room, Turn, Round, RoomParticipant
 from apps.organizations.models import Organization
 from graphene_subscriptions.events import CREATED, UPDATED, DELETED
 from apps.rooms.tasks import MONTH_EVENT
@@ -15,11 +15,27 @@ class Query(graphene.ObjectType):
         RoomType, code=graphene.String(), description='Информация о комнате по коду комнаты')
     rooms_in_organization = graphene.List(
         RoomType, subdomain=graphene.String(), description='Список комнат в организации')
-    can_do_step_now_by_code = graphene.Boolean(code=graphene.String())
+    can_do_step_now_by_code = graphene.Boolean(
+        code=graphene.String(), description='Может ли пользователь делать ход в данный момент')
     current_round_by_code = graphene.Field(
         RoundType, code=graphene.String(), description='Информация о текущем раунде по коду комнаты')
     is_room_owner = graphene.Boolean(
         code=graphene.String(), description='Является ли владельцем комнаты')
+    room_participants = graphene.List(RoomParticipantType, code=graphene.String(
+    ), description='Список участников комнаты')
+
+    def resolve_room_participants(self, info, code):
+        try:
+            code_array = str(code).split('-')
+            if len(code_array) > 1:
+                user = info.context.user
+                organization = Organization.objects.get(
+                    prefix__iexact=code_array[0])
+                room = Room.objects.get(
+                    key=code_array[1], organization=organization)
+                return RoomParticipant.objects.filter(room=room)
+        except Exception as e:
+            return None
 
     def resolve_can_do_step_now_by_code(root, info, code):
         try:
@@ -40,7 +56,7 @@ class Query(graphene.ObjectType):
         except Exception as e:
             return None
 
-    def resolve_rooms_in_organization(root, info, subdomain):
+    def resolve_rooms_in_organization(self, info, subdomain):
         try:
             organization = Organization.objects.get(subdomain=subdomain)
             return Room.objects.filter(organization=organization).order_by('-key')

@@ -17,7 +17,7 @@ class ChannelComputed(models.Model):
 
     class Meta:
         verbose_name = 'Просчитанный канал'
-        verbose_name_plural = '[DEV] Просчитанные каналы'
+        verbose_name_plural = 'Просчитанные каналы'
 
 
 class StageComputed(models.Model):
@@ -37,4 +37,4 @@ class StageComputed(models.Model):
 
     class Meta:
         verbose_name = 'Просчитанный этап'
-        verbose_name_plural = '[DEV] Просчитанные этапы'
+        verbose_name_plural = 'Просчитанные этапы'

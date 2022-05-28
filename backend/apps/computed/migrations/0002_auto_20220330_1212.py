@@ -12,10 +12,12 @@ class Migration(migrations.Migration):
     operations = [
         migrations.AlterModelOptions(
             name='channelcomputed',
-            options={'verbose_name': 'Просчитанный канал', 'verbose_name_plural': '[DEV] Просчитанные каналы'},
+            options={'verbose_name': 'Просчитанный канал',
+                     'verbose_name_plural': 'Просчитанные каналы'},
         ),
         migrations.AlterModelOptions(
             name='stagecomputed',
-            options={'verbose_name': 'Просчитанный этап', 'verbose_name_plural': '[DEV] Просчитанные этапы'},
+            options={'verbose_name': 'Просчитанный этап',
+                     'verbose_name_plural': 'Просчитанные этапы'},
         ),
     ]
