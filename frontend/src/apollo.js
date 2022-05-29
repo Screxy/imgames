@@ -12,7 +12,7 @@ Vue.use(VueApollo);
 const AUTH_TOKEN = 'jwt-token';
 
 let wsHostDomain = process.env.VUE_APP_WS_HOST_DOMAIN || 'localhost:8000';
-let wsProtocol = process.env.VUE_APP_WS_PROTOCOL || 'wss';
+let wsProtocol = process.env.VUE_APP_WS_PROTOCOL || 'ws';
 // Config
 const defaultOptions = {
   httpEndpoint: '/graphql',
