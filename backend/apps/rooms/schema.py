@@ -37,7 +37,7 @@ class Query(graphene.ObjectType):
         except Exception as e:
             return None
 
-    def resolve_can_do_step_now_by_code(root, info, code):
+    def resolve_can_do_step_now_by_code(self, info, code):
         try:
             code_array = str(code).split('-')
             if len(code_array) > 1:
