@@ -72,8 +72,10 @@ services:
 
   # Celery Worker
   celery:
-    build: ./project
-    command: celery worker --app=core --loglevel=info
+    restart: always
+    build:
+      context: ./backend
+    command: celery --app config worker --loglevel=info
     volumes:
       - ./backend:/app
     env_file: .env

@@ -3,7 +3,9 @@ FROM node:10-alpine as build-deps
 
 WORKDIR /app/
 
-COPY frontend/package*.json  /app/
+# RUN apk add python3 build-base
+
+COPY frontend/package.json  /app/
 RUN npm install
 
 COPY frontend /app/
