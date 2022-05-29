@@ -12,7 +12,7 @@
           class="first-column-top"
           v-if="!roomIsActive"
           :roomCode="roomCode"
-          @reloadRound="reloadRound"
+          @reloadRound="reloadRound()"
         ></WaitingScreen>
         <template v-else>
           <GameBoard class="first-column-top"></GameBoard>
@@ -20,7 +20,7 @@
         </template>
         <PlayersList
           class="second-column-top"
-          :players="roomParticipants"
+          :players="players"
           :room="roomByCode"
           v-if="players != undefined && roomByCode != undefined"
         >
@@ -34,7 +34,7 @@
         <FinishScreen
           :roundKey="currentRoundKey"
           :roomCode="roomCode"
-          @reloadRound="reloadRound"
+          @reloadRound="reloadRound()"
         ></FinishScreen>
       </template>
       <div class="navigation">
@@ -66,6 +66,7 @@ import roomUpdated from '@/graphql/subscriptions/rooms/roomUpdated.gql';
 import currentRoundUpdated from '@/graphql/subscriptions/rooms/currentRoundUpdated.gql';
 import connectRoom from '@/graphql/mutations/rooms/connectRoom.gql';
 import roomParticipants from '@/graphql/queries/rooms/roomParticipants.gql';
+import roomParticipantsUpdated from '@/graphql/subscriptions/rooms/roomParticipantsUpdated.gql';
 import PlayersList from '@/components/room/playground/PlayersList.vue';
 import EffectsList from '@/components/room/playground/EffectsList.vue';
 import GameBoard from '@/components/room/playground/gameBoard/GameBoard.vue';
@@ -117,8 +118,8 @@ export default {
     },
     players() {
       if (this.roomByCode != undefined) {
-        if (this.roomByCode.roomparticipantSet != undefined) {
-          return this.roomByCode.roomparticipantSet;
+        if (this.roomParticipants != undefined) {
+          return this.roomParticipants;
         }
       }
       return [];
@@ -189,6 +190,30 @@ export default {
         return {
           code: this.roomCode,
         };
+      },
+      subscribeToMore: {
+        document: roomParticipantsUpdated,
+        variables() {
+          return {
+            code: this.roomCode,
+          };
+        },
+        skip() {
+          return this.skip;
+        },
+        updateQuery: (previousResult, { subscriptionData }) => {
+          let existIndex = previousResult.roomParticipants.findIndex(
+            (el) => el.id == subscriptionData.data.roomParticipantsUpdated.id
+          );
+          if (existIndex == -1) {
+            previousResult.roomParticipants.push(
+              subscriptionData.data.roomParticipantsUpdated
+            );
+          }
+          return {
+            roomParticipants: previousResult.roomParticipants,
+          };
+        },
       },
     },
   },

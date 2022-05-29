@@ -35,4 +35,4 @@ class UserAdmin(BaseUserAdmin):
 # Регистрируем новый UserAdmin
 admin.site.register(User, UserAdmin)
 # Отключаем модель Group для админпанели.
-admin.site.unregister(Group)
+# admin.site.register(Group)

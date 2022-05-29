@@ -119,9 +119,18 @@ def filter_room_events(event, room):
         return False
 
 
+def filter_room_participants_events(event, room):
+    try:
+        if event.operation in [UPDATED, CREATED] and isinstance(event.instance, RoomParticipant):
+            return (event.instance.room.pk == int(room.id))
+        return False
+    except Exception as e:
+        return False
+
+
 def filter_round_events(event, current_round):
     try:
-        if (event.operation == UPDATED):
+        if event.operation in [UPDATED, CREATED]:
             return (event.operation == UPDATED and isinstance(event.instance, Round) and event.instance.pk == int(current_round.id))
         else:
             return False
@@ -132,6 +141,24 @@ def filter_round_events(event, current_round):
 class Subscription(graphene.ObjectType):
     room_updated = graphene.Field(RoomType, code=graphene.String())
     current_round_updated = graphene.Field(RoundType, code=graphene.String())
+    room_participants_updated = graphene.Field(
+        RoomParticipantType, code=graphene.String())
+
+    # Подписка на обновления списка участников комнаты по коду
+    def resolve_room_participants_updated(self, info, code):
+        try:
+            code_array = str(code).split('-')
+            if len(code_array) > 1:
+                user = info.context.user
+                organization = Organization.objects.get(
+                    prefix__iexact=code_array[0])
+                room = Room.objects.get(
+                    key=code_array[1], organization=organization)
+                return self.filter(lambda event: filter_room_participants_events(event, room)).map(lambda event: event.instance)
+            else:
+                raise Exception('Error code')
+        except Exception as e:
+            return None
 
     # Подписка на обновления комнаты по коду
     def resolve_room_updated(self, info, code):

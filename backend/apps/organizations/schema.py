@@ -21,7 +21,7 @@ class Query(graphene.ObjectType):
         try:
             user = info.context.user
             organization = Organization.objects.get(
-                subdomain=subdomain, organization_owner=user)
+                subdomain=subdomain)
             return OrganizationSettings.objects.get(organization=organization)
         except Exception as e:
             return None
