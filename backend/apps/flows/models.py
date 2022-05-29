@@ -1,17 +1,17 @@
 from django.db import models
-from organizations.models import Organization
+from apps.organizations.models import Organization
 from django.core.validators import MaxValueValidator, MinValueValidator
 
 MATH_OPERATOR_SELECTION = [
     ('+', '[+] Сложение'),
-    ('-', '[-] Вычиатение'),
+    ('-', '[-] Вычитание'),
     ('*', '[*] Умножение'),
     ('/', '[/] Деление'),
 ]
 
 CHANGE_TYPES_SELECTION = [
     ('FSVL', 'Изменение начального значения'),
-    ('AVCH', 'Изменение среднего чека'),
+    # ('AVCH', 'Изменение среднего чека'),
     ('CONV', 'Изменение конверсии'),
 ]
 
@@ -38,7 +38,21 @@ class ParameterChange(models.Model):
         verbose_name_plural = "Изменения параметров"
 
     def __str__(self):
-        return "Изменение параметра #"+str(self.id)
+        return f"Изменение параметра #{str(self.id)}"
+
+
+class StageInSequence(models.Model):
+    """Место в последовательности этапов"""
+    stage = models.OneToOneField(
+        "Stage", verbose_name="Изменяемый этап", on_delete=models.CASCADE)
+    place = models.PositiveIntegerField("Место")
+
+    class Meta:
+        verbose_name = "Место в последовательности этапов"
+        verbose_name_plural = "Места в последовательности этапов"
+
+    def __str__(self):
+        return f"(#{str(self.id)})"
 
 
 class Stage(models.Model):
@@ -53,25 +67,30 @@ class Stage(models.Model):
         ])
 
     class Meta:
-        verbose_name = "Этап"
-        verbose_name_plural = "Этапы"
+        verbose_name = "Этап воронки"
+        verbose_name_plural = "Этапы воронки"
 
     def __str__(self):
         return "'"+self.name+"'"+" (#"+str(self.id)+")"
 
-
-class StageInSequence(models.Model):
-    """Место в последовательности этапов"""
-    stage = models.OneToOneField(
-        "Stage", verbose_name="Изменяемый этап", on_delete=models.CASCADE)
-    place = models.PositiveIntegerField("Место")
-
-    class Meta:
-        verbose_name = "Место в последовательности этапов"
-        verbose_name_plural = "Места в последовательности этапов"
-
-    def __str__(self):
-        return "(#"+str(self.id)+")"
+    def save(self, *args, **kwargs):
+        stages_in_flow = Stage.objects.filter(flow=self.flow)
+        print('stages_in_flow', stages_in_flow)
+        new_place = 1
+        if len(stages_in_flow) != 0:
+            new_place = 2
+            for stage in stages_in_flow:
+                stage_in_sequence = StageInSequence.objects.filter(
+                    stage=stage).first()
+                print('stage_in_sequence', stage_in_sequence)
+                if stage_in_sequence is not None:
+                    print('stage_in_sequence is not None')
+                    if stage_in_sequence.place >= new_place:
+                        new_place = stage_in_sequence.place+1
+                        print('stage_in_sequence.place+1', new_place)
+        super(Stage, self).save(*args, **kwargs)
+        StageInSequence.objects.get_or_create(
+            stage=self, place=new_place)
 
 
 class Channel(models.Model):
@@ -83,8 +102,8 @@ class Channel(models.Model):
         "Начальное значение", decimal_places=2, max_digits=10)
 
     class Meta:
-        verbose_name = "Параметр"
-        verbose_name_plural = "Параметры"
+        verbose_name = "Параметр / Канал"
+        verbose_name_plural = "Параметры / Каналы"
 
     def __str__(self):
         return "'"+self.name+"'"+" (#"+str(self.id)+")"
@@ -118,4 +137,4 @@ class Flow(models.Model):
         verbose_name_plural = "Механики"
 
     def __str__(self):
-        return self.title+" - "+str(self.organization)+" (#"+str(self.pk)+")"
+        return f'{self.title} - {str(self.organization)} (#{str(self.pk)})'

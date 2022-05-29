@@ -1,4 +1,6 @@
-from .models import RoomParticipant, CardChoice, Winner, Turn, Month, Round, Room
+import graphene
+from apps.rooms.models import CardChoice, Winner, Turn, Month, Round, Room, RoomParticipant
+from apps.organizations.models import Organization
 from graphene_django.types import DjangoObjectType
 
 
@@ -33,12 +35,26 @@ class MonthType(DjangoObjectType):
 
 
 class RoundType(DjangoObjectType):
+    is_finished = graphene.Boolean()
+
+    def resolve_is_finished(self, info):
+        if self.current_month is not None and self.room is not None:
+            return self.room.number_of_turns == self.current_month.key
+        else:
+            return False
+
     class Meta:
         model = Round
         fields = "__all__"
 
 
 class RoomType(DjangoObjectType):
+    code = graphene.String()
+
+    def resolve_code(self, info):
+        organization = self.organization
+        return f'{organization.prefix}-{str(self.key)}'.upper()
+
     class Meta:
         model = Room
         fields = "__all__"

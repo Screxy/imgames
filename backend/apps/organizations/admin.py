@@ -1,5 +1,9 @@
 from django.contrib import admin
-from organizations.models import Organization, OrganizationSettings
+from apps.organizations.models import Organization, OrganizationSettings
+
+
+class OrganizationSettingsInline(admin.StackedInline):
+    model = OrganizationSettings
 
 
 @admin.register(OrganizationSettings)
@@ -13,9 +17,7 @@ class OrganizationAdmin(admin.ModelAdmin):
     list_display = ('id', 'name', 'subdomain', 'prefix')
     list_display_links = ('id', 'name')
     search_fields = ('name', 'subdomain', 'prefix')
+    inlines = [OrganizationSettingsInline, ]
 
     def get_readonly_fields(self, request, obj=None):
-        if obj:
-            return ['subdomain']
-        else:
-            return []
+        return ['subdomain'] if obj else []

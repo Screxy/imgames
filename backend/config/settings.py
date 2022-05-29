@@ -62,6 +62,8 @@ DJANGO_APPS = [
 THIRD_PARTY_APPS = [
     'graphene_django',
     'django_extensions',
+    'channels',
+    'graphene_subscriptions'
 ]
 
 LOCAL_APPS = [
@@ -69,6 +71,7 @@ LOCAL_APPS = [
     'apps.organizations',
     'apps.flows',
     'apps.rooms',
+    'apps.computed'
 ]
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
@@ -252,6 +255,7 @@ GRAPHENE = {
     'MIDDLEWARE': [
         'graphql_jwt.middleware.JSONWebTokenMiddleware',
     ],
+    'SUBSCRIPTION_PATH': '/ws/subscriptions/'
 }
 
 if DEBUG:
@@ -266,6 +270,8 @@ GRAPHQL_JWT = {
     'JWT_AUTH_HEADER_PREFIX': 'Bearer',
     'JWT_VERIFY_EXPIRATION': True,
     'JWT_VERIFY': True,
+    'JWT_COOKIE_DOMAIN': env.str('DOMAIN_HOST'),
+    'JWT_PAYLOAD_HANDLER': 'apps.users.schema.jwt_payload',
     # TODO:
     # HTTPS -
     'JWT_COOKIE_SECURE': True,
@@ -274,3 +280,17 @@ GRAPHQL_JWT = {
 }
 
 DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
+
+ASGI_APPLICATION = 'config.asgi.application'
+
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [("redis", 6379)],
+        }
+    }
+}
+
+CELERY_BROKER_URL = env.str('CELERY_BROKER_URL')
+CELERY_RESULT_BACKEND = env.str('CELERY_RESULT_BACKEND')

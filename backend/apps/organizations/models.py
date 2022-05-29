@@ -6,7 +6,13 @@ class OrganizationSettings(models.Model):
     organization = models.OneToOneField(
         "Organization", verbose_name="Организация", on_delete=models.CASCADE, unique=True)
     number_of_turns_default = models.PositiveIntegerField(
-        "Количество шагов в комнате по умолчанию", default=3)
+        "Количество месяцев в комнате по умолчанию", default=3)
+    number_of_turns_max = models.PositiveIntegerField(
+        "Максимальное количество месяцев в комнате по умолчанию", default=12)
+    number_participants_max = models.PositiveIntegerField(
+        "Максимальное количество участников в комнате по умолчанию", default=20)
+    money_per_month_default = models.PositiveIntegerField(
+        "Количество денег в месяц в комнате по умолчанию", default=10000)
 
     class Meta:
         verbose_name = "Настройки организации"
@@ -18,7 +24,7 @@ class OrganizationSettings(models.Model):
 
 # Организация
 class Organization(models.Model):
-    organization_owner_id = models.ForeignKey(
+    organization_owner = models.ForeignKey(
         "users.User", verbose_name="Владелец организации", on_delete=models.CASCADE)
     name = models.CharField("Название пространства", max_length=255)
     subdomain = models.CharField("Поддомен", max_length=50)

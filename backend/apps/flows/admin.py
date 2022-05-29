@@ -8,10 +8,16 @@ class FlowAdmin(admin.ModelAdmin):
     list_display_links = ('id', 'title')
 
 
+class ParameterChangeInline(admin.TabularInline):
+    model = ParameterChange
+    extra = 0
+
+
 @admin.register(Card)
 class CardAdmin(admin.ModelAdmin):
     list_display = ('id', 'header', 'short_description', 'flow')
     list_display_links = ('id', 'header')
+    inlines = [ParameterChangeInline, ]
 
 
 @admin.register(Channel)

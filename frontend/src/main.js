@@ -11,8 +11,17 @@ import { Integrations } from '@sentry/tracing';
 
 import App from '@/App.vue';
 import './registerServiceWorker';
+import i18n from './i18n';
+import FlagIcon from 'vue-flag-icon';
+import Vuelidate from 'vuelidate';
 
 Vue.config.productionTip = false;
+
+// Библиотека для валидации
+Vue.use(Vuelidate);
+
+// Компонент для иконки флагов стран
+Vue.use(FlagIcon);
 
 // Sentry для логирования ошибок фронтенда
 Sentry.init({
@@ -44,5 +53,6 @@ new Vue({
   router,
   store,
   provide: createProvider().provide(),
+  i18n,
   render: (h) => h(App),
 }).$mount('#app');

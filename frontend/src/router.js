@@ -2,11 +2,20 @@ import Vue from 'vue';
 import VueRouter from 'vue-router';
 import { createProvider } from '@/apollo';
 
-import ExampleComponent from '@/components/ExampleComponent.vue';
+import Main from '@/components/Main.vue';
 import AuthView from '@/components/auth/AuthView.vue';
+import OrganizationCreateView from '@/components/organization/OrganizationCreateView.vue';
+import RoomPlayground from '@/components/room/playground/RoomPlayground.vue';
+import SignUpView from '@/components/auth/SignUpView.vue';
 
 import store from '@/store.js';
-import { MAIN_PATH, AUTH_PATH } from '@/pathVariables.js';
+import {
+  MAIN_PATH,
+  AUTH_PATH,
+  NEW_ORGANIZATION_PATH,
+  ROOMS_ROOT_PATH,
+  SIGN_UP_PATH,
+} from '@/pathVariables.js';
 
 import verifyToken from '@/graphql/mutations/verifyToken.gql';
 
@@ -16,14 +25,16 @@ function verifyAuth(to, from) {
   return new Promise(function (resolve, reject) {
     provider.defaultClient
       .mutate({ mutation: verifyToken })
-      .then(() => {
-        store.state.isAuthenticated = true;
+      .then((result) => {
+        let userId = result.data.verifyToken.payload.user_id;
+        store.commit('SET_USER_ID', userId);
+        store.commit('SET_IS_AUTHENTICATED', true);
       })
       .catch((error) => {
-        store.state.isAuthenticated = false;
+        store.commit('SET_IS_AUTHENTICATED', false);
       })
       .finally(() => {
-        store.state.gotVerifiedAuth = true;
+        store.commit('SET_GOT_VERIFIED_AUTH', true);
         store.commit('STOP_LOADING');
         resolve();
       });
@@ -39,12 +50,9 @@ const ifAuthenticated = async (to, from, next) => {
       next();
       return;
     }
-    console.log('window.location.href', store.state.isAuthenticated);
     next(AUTH_PATH);
-    // window.location.href = 'http://localhost:8000' + AUTH_PATH;
-    // next('http://localhost:8000/auth');
   } catch (error) {
-    console.log('ERROE TEST: ', error);
+    console.log('ERROR TEST: ', error);
   }
 };
 
@@ -59,14 +67,14 @@ const ifNotAuthenticated = async (to, from, next) => {
     }
     next(MAIN_PATH);
   } catch (error) {
-    console.log('ERROE TEST: ', error);
+    console.log('ERROR TEST: ', error);
   }
 };
 
 const routes = [
   {
     path: '',
-    component: ExampleComponent,
+    component: Main,
     beforeEnter: ifAuthenticated,
     meta: { title: 'Главная - ImGames' },
   },
@@ -75,6 +83,24 @@ const routes = [
     component: AuthView,
     beforeEnter: ifNotAuthenticated,
     meta: { title: 'Войти - ImGames' },
+  },
+  {
+    path: SIGN_UP_PATH,
+    component: SignUpView,
+    beforeEnter: ifNotAuthenticated,
+    meta: { title: 'Зарегистрироваться - ImGames' },
+  },
+  {
+    path: NEW_ORGANIZATION_PATH,
+    component: OrganizationCreateView,
+    beforeEnter: ifAuthenticated,
+    meta: { title: 'Создать пространство - ImGames' },
+  },
+  {
+    path: ROOMS_ROOT_PATH + '/:roomCode',
+    component: RoomPlayground,
+    beforeEnter: ifAuthenticated,
+    meta: { title: 'Игровая комната' },
   },
 ];
 

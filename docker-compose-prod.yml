@@ -1,8 +1,8 @@
 version: '3.3'
 
 volumes:
-    postgres_data: {}
-
+  postgres_data: {}
+  redis_data: {}
 
 services:
   backend:
@@ -28,7 +28,7 @@ services:
       context: .
       dockerfile: nginx/Dockerfile
     ports:
-      - "8000:80"
+      - '8000:80'
     depends_on:
       - backend
     volumes:
@@ -36,7 +36,31 @@ services:
       - ./backend/staticfiles/:/staticfiles/
       - ./nginx/prod.conf:/etc/nginx/nginx.conf:ro
 
+  # Брокер сообщений Redis
+  redis:
+    container_name: sagelove_redis
+    restart: always
+    image: redis:alpine
+    env_file: .env
+    volumes:
+      - redis_data:/var/lib/redis
 
+  # Бэкенд Django ASGI
+  backend_asgi:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile.asgi
+    depends_on:
+      - postgres
+      - redis
+    volumes:
+      - ./backend:/app
+    command: /start_asgi.sh
+    entrypoint: /entrypoint.sh
+    restart: on-failure
+    env_file: .env
+    links:
+      - redis
 
   backups:
     image: prodrigestivill/postgres-backup-local
@@ -46,3 +70,13 @@ services:
     volumes:
       - /tmp/backups/:/backups/
 
+  # Celery Worker
+  celery:
+    build: ./project
+    command: celery worker --app=core --loglevel=info
+    volumes:
+      - ./backend:/app
+    env_file: .env
+    depends_on:
+      - backend
+      - redis

@@ -1,5 +1,6 @@
 import graphene
 import graphql_jwt
+from datetime import timezone
 from graphene_django import DjangoObjectType
 from uuid import uuid4
 
@@ -10,6 +11,13 @@ from django.template.loader import render_to_string
 
 from apps.users.models import User
 from graphql_jwt.decorators import login_required
+from datetime import datetime
+from config.settings import GRAPHQL_JWT
+
+
+def jwt_payload(user, context=None):
+    username = user.get_username()
+    return {user.USERNAME_FIELD: username, 'user_id': user.id, 'email': user.email, 'exp': datetime.now(timezone.utc) + GRAPHQL_JWT['JWT_EXPIRATION_DELTA']}
 
 
 class UserType(DjangoObjectType):
