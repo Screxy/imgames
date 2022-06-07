@@ -1,8 +1,8 @@
 import graphene
 from graphene_django.debug import DjangoDebug
 from apps.rooms.mutations import CreateRoom, WriteTurn, StartRound, ReStartRound, ConnectRoom
-from apps.rooms.types import RoomType, RoundType, RoomParticipantType
-from apps.rooms.models import Room, Turn, Round, RoomParticipant
+from apps.rooms.types import RoomType, RoundType, RoomParticipantType, TurnType
+from apps.rooms.models import Month, Room, Turn, Round, RoomParticipant
 from apps.organizations.models import Organization
 from graphene_subscriptions.events import CREATED, UPDATED, DELETED
 from apps.rooms.tasks import MONTH_EVENT
@@ -23,6 +23,8 @@ class Query(graphene.ObjectType):
         code=graphene.String(), description='Является ли владельцем комнаты')
     room_participants = graphene.List(RoomParticipantType, code=graphene.String(
     ), description='Список участников комнаты')
+    turns_from_current_round = graphene.List(TurnType, code=graphene.String(
+    ), description='Список ходов пользователя в комнате за текущий раунд')
 
     def resolve_room_participants(self, info, code):
         try:
@@ -97,6 +99,25 @@ class Query(graphene.ObjectType):
                 room = Room.objects.get(
                     key=code_array[1], organization=organization)
                 return user == room.room_owner
+        except Exception as e:
+            return None
+
+    def resolve_turns_from_current_round(self, info, code):
+        try:
+            code_array = str(code).split('-')
+            if len(code_array) > 1:
+                user = info.context.user
+                organization = Organization.objects.get(
+                    prefix__iexact=code_array[0])
+                room = Room.objects.get(
+                    key=code_array[1], organization=organization)
+                current_round = room.current_round
+                months = Month.objects.filter(round=current_round)
+                turns = []
+                for month in months:
+                    turn = Turn.objects.filter(user=user, month=month)
+                    turns += turn
+                return turns
         except Exception as e:
             return None
 

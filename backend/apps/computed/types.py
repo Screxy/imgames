@@ -8,3 +8,4 @@ class ComputedGameDataType(graphene.ObjectType):
         graphene.Decimal, array=graphene.List(graphene.Decimal))
     channel = graphene.Field(ChannelType)
     is_total = graphene.Boolean()
+    month_key = graphene.Int()

@@ -1,0 +1,16 @@
+query ($code: String!) {
+  turnsFromCurrentRound(code: $code) {
+    id
+    cardchoiceSet {
+      id
+      card {
+        id
+        header
+        cost
+        __typename
+      }
+      __typename
+    }
+    __typename
+  }
+}

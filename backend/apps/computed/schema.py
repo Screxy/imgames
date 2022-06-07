@@ -10,10 +10,10 @@ from apps.users.models import User
 from graphene_subscriptions.events import CREATED, UPDATED, DELETED
 
 
-def prepare_computed_game_data_array(room, user):
+def prepare_computed_game_data_array(room, user, current_month):
     # Получаем обновлённый объект комнаты
     room = Room.objects.get(pk=room.id)
-    current_month = room.current_round.current_month
+    # current_month = room.current_round.current_month
 
     # Находим текущий механику комнаты
     flow = room.flow
@@ -116,11 +116,11 @@ def prepare_computed_game_data_array(room, user):
 
             # Добавляем данные в массив возвращаемых значений
             answer_array += [ComputedGameDataType(
-                data=data, channel=computed_channel.channel, is_total=False)]
+                data=data, channel=computed_channel.channel, is_total=False, month_key=current_month.key)]
 
         # Добавляем значение ИТОГО
         answer_array += [ComputedGameDataType(
-            data=total_data, channel=None, is_total=True)]
+            data=total_data, channel=None, is_total=True, month_key=current_month.key)]
 
         return answer_array
 
@@ -128,6 +128,8 @@ def prepare_computed_game_data_array(room, user):
 class Query(graphene.ObjectType):
     debug_computed = graphene.Field(DjangoDebug, name='__debug_computed')
     computed_channels_by_code = graphene.List(ComputedGameDataType, code=graphene.String(
+    ), description='Игровые данные пользователя на текущий месяц по коду комнаты')
+    all_computed_months_by_code = graphene.List(ComputedGameDataType, code=graphene.String(
     ), description='Игровые данные пользователя на текущий месяц по коду комнаты')
 
     def resolve_computed_channels_by_code(root, info, code):
@@ -139,7 +141,29 @@ class Query(graphene.ObjectType):
                     prefix__iexact=code_array[0])
                 room = Room.objects.get(
                     key=code_array[1], organization=organization)
-                return prepare_computed_game_data_array(room=room, user=user)
+                return prepare_computed_game_data_array(room=room, user=user, current_month=room.current_round.current_month)
+            else:
+                raise Exception('Error code')
+        except Exception as e:
+            print(e)
+            return None
+
+    def resolve_all_computed_months_by_code(root, info, code):
+        try:
+            code_array = str(code).split('-')
+            if len(code_array) > 1:
+                user = info.context.user
+                organization = Organization.objects.get(
+                    prefix__iexact=code_array[0])
+                room = Room.objects.get(
+                    key=code_array[1], organization=organization)
+                current_round = room.current_round
+                months = Month.objects.filter(round=current_round)
+                computed_data = []
+                for month in months:
+                    computed_data += prepare_computed_game_data_array(
+                        room=room, user=user, current_month=month)
+                return computed_data
             else:
                 raise Exception('Error code')
         except Exception as e:

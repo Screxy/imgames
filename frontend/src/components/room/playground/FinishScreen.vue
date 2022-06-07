@@ -1,6 +1,10 @@
 <template>
   <div>
     <h2>{{ $t('room.roundFinishedHeader', { round: `R${roundKey}` }) }}</h2>
+    <div>
+      {{ turnsFromCurrentRound }}
+    </div>
+    <div>{{ allComputedMonthsByCode }}</div>
     <template v-if="isRoomOwner">
       <SubmitButton :type="'bg-green'" @click="reStartRound">{{
         $t('room.reStartRoundButton', { nextRound: `R${roundKey + 1}` })
@@ -13,6 +17,8 @@
 import isRoomOwner from '@/graphql/queries/rooms/isRoomOwner.gql';
 import SubmitButton from '@/components/ui/SubmitButton.vue';
 import reStartRound from '@/graphql/mutations/rooms/reStartRound.gql';
+import turnsFromCurrentRound from '@/graphql/queries/rooms/turnsFromCurrentRound.gql';
+import allComputedMonthsByCode from '@/graphql/queries/gameBoard/allComputedMonthsByCode.gql';
 
 export default {
   name: 'FinishScreen',
@@ -32,6 +38,22 @@ export default {
   apollo: {
     isRoomOwner: {
       query: isRoomOwner,
+      variables() {
+        return {
+          code: this.roomCode,
+        };
+      },
+    },
+    turnsFromCurrentRound: {
+      query: turnsFromCurrentRound,
+      variables() {
+        return {
+          code: this.roomCode,
+        };
+      },
+    },
+    allComputedMonthsByCode: {
+      query: allComputedMonthsByCode,
       variables() {
         return {
           code: this.roomCode,
