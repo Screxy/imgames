@@ -65,6 +65,7 @@ export default {
           // EMIT CLEAN CHOICE
         })
         .finally(() => {
+          this.$emit('clean')
           this.isLoading = false;
         });
     },

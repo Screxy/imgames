@@ -1,7 +1,9 @@
 <template>
   <div class="normal-border-box card">
+    <div class="selected-icon" v-if="selected">
+      <img src="@/assets/icons/check.svg" />
+    </div>
     <div class="top-part">
-      <span v-if="selected">{{ $t('room.card.selectedCard') }}</span>
       <div class="card-header">
         <h4>{{ data.header }}</h4>
       </div>
@@ -83,6 +85,17 @@ export default {
   width: 190px;
   // height: 230px;
   margin-right: 10px;
+  position: relative;
+
+  & .selected-icon {
+    position: absolute;
+    right: 8px;
+    top: 8px;
+    z-index: 1000;
+    & img {
+      height: 28px;
+    }
+  }
 }
 
 p {

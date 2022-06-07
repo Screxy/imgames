@@ -5,6 +5,7 @@
       class="write-turn-panel"
       :disabled="!canDoStepNowByCode"
       :selectedCardsId="selectedCardsId"
+      @clean="selectedCardsId = []"
     ></WriteTurnPanel>
     <div class="cards-list">
       <Card
