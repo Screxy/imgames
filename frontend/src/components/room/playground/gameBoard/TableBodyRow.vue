@@ -4,11 +4,11 @@
     <CardinalNumberCell :value="+data[0]"></CardinalNumberCell>
     <template v-for="(stage, index) in stages">
       <PercentCell
-        :key="stage.id + '.1'"
+        :key="'bodycell-' + monthKey + '-' + stage.id + '.1'"
         :value="+data[1 + index * 2]"
       ></PercentCell>
       <CardinalNumberCell
-        :key="stage.id + '.2'"
+        :key="'bodycell-' + monthKey + '-' + stage.id + '.2'"
         :value="+data[2 + index * 2]"
         v-if="index != stages.length - 1"
       ></CardinalNumberCell>
@@ -38,6 +38,10 @@ export default {
     },
     data: {
       type: Array,
+    },
+    monthKey: {
+      type: undefined,
+      default: 0,
     },
   },
 };

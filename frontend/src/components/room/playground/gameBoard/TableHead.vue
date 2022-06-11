@@ -10,11 +10,11 @@
       <template v-for="(stage, index) in sortedStages">
         <TableHeadCell
           :textContent="$t('room.gameBoard.stageConversion') + ' ' + stage.name"
-          :key="stage.id + '.1'"
+          :key="'head-' + monthKey + '-' + stage.id + '.1'"
         ></TableHeadCell>
         <TableHeadCell
           :textContent="stage.name"
-          :key="stage.id + '.2'"
+          :key="'head-' + monthKey + '-' + stage.id + '.2'"
           v-if="index != stages.length - 1"
         ></TableHeadCell>
       </template>
@@ -35,6 +35,10 @@ export default {
   props: {
     stages: {
       type: Array,
+    },
+    monthKey: {
+      type: undefined,
+      default: 0,
     },
   },
   computed: {

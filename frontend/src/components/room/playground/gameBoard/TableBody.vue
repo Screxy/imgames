@@ -2,10 +2,11 @@
   <tbody>
     <TableBodyRow
       v-for="channel in channels"
-      :key="channel.id"
+      :key="'body-' + monthKey + '-' + channel.id"
       :channel="channel"
       :stages="stages"
       :data="rowData(channel.id)"
+      :monthKey="monthKey"
     ></TableBodyRow>
   </tbody>
 </template>
@@ -27,6 +28,10 @@ export default {
     },
     data: {
       type: Array,
+    },
+    monthKey: {
+      type: undefined,
+      default: 0,
     },
   },
   methods: {
