@@ -10,10 +10,11 @@ from apps.users.models import User
 from graphene_subscriptions.events import CREATED, UPDATED, DELETED
 
 
-def prepare_computed_game_data_array(room, user, current_month):
+def prepare_computed_game_data_array(room, user, current_month=None):
     # Получаем обновлённый объект комнаты
     room = Room.objects.get(pk=room.id)
-    # current_month = room.current_round.current_month
+    if current_month is None:
+        current_month = room.current_round.current_month
 
     # Находим текущий механику комнаты
     flow = room.flow
