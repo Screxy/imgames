@@ -56,7 +56,8 @@
     "flow": "Game mechanics",
     "connectRoom": "Join the room",
     "roomCode": "Room code",
-    "startMonth": "Start month"
+    "startMonth": "Start month",
+    "step": "Step"
   },
   "headers": {
     "main": "Main",

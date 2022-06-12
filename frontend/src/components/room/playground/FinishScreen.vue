@@ -1,16 +1,13 @@
 <template>
   <div class="finish-screen">
     <h2>{{ $t('room.roundFinishedHeader', { round: `R${roundKey}` }) }}</h2>
-    <!-- <div>
-      {{ turnsFromCurrentRound }}
-    </div> -->
-
-    <!-- <FinishFunnelTable
-      :computedChannelsByCode="computedDataForMonth(0)"
-      :channelsByCode="channelsByCode"
-      :stagesByCode="stagesByCode"
-      :monthKey="monthKey"
-    ></FinishFunnelTable> -->
+    <template v-if="isRoomOwner">
+      <div class="next-round-btn">
+        <SubmitButton :type="'bg-green'" @click="reStartRound">{{
+          $t('room.reStartRoundButton', { nextRound: `R${roundKey + 1}` })
+        }}</SubmitButton>
+      </div>
+    </template>
     <template v-for="(monthKey, index) in monthKeys">
       <small v-if="monthKey == null" :key="monthKey + '-' + index + '!'">{{
         $t('room.startMonth')
@@ -25,11 +22,12 @@
         :key="'fft--' + index"
         :monthKey="monthKey"
       ></FinishFunnelTable>
-    </template>
-    <template v-if="isRoomOwner">
-      <SubmitButton :type="'bg-green'" @click="reStartRound">{{
-        $t('room.reStartRoundButton', { nextRound: `R${roundKey + 1}` })
-      }}</SubmitButton>
+      <FinishTurnChoices
+        v-if="computedTurnForMonth(monthKey != null ? monthKey : 0) != null"
+        :turn="computedTurnForMonth(monthKey != null ? monthKey : 0)"
+        :monthKey="monthKey != null ? monthKey : 0"
+        :key="'ftc--' + monthKey + '-' + index"
+      ></FinishTurnChoices>
     </template>
   </div>
 </template>
@@ -43,12 +41,14 @@ import turnsFromCurrentRound from '@/graphql/queries/rooms/turnsFromCurrentRound
 import allComputedMonthsByCode from '@/graphql/queries/gameBoard/allComputedMonthsByCode.gql';
 import channelsByCode from '@/graphql/queries/gameBoard/channelsByCode.gql';
 import stagesByCode from '@/graphql/queries/gameBoard/stagesByCode.gql';
+import FinishTurnChoices from '@/components/room/playground/FinishTurnChoices.vue';
 
 export default {
   name: 'FinishScreen',
   components: {
     SubmitButton,
     FinishFunnelTable,
+    FinishTurnChoices,
   },
   props: {
     roundKey: {
@@ -129,6 +129,9 @@ export default {
         (el) => el.monthKey == monthKey
       );
     },
+    computedTurnForMonth(monthKey) {
+      return this.turnsFromCurrentRound.find((el) => el.month.key == monthKey);
+    },
   },
   watch: {
     allComputedMonthsByCode() {
@@ -144,4 +147,20 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.finish-screen {
+  grid-column-start: 1;
+  grid-column-end: 3;
+  grid-row-start: 1;
+  grid-row-end: 3;
+  overflow-y: auto;
+}
+
+.next-round-btn {
+  margin-top: 16px;
+  margin-bottom: 16px;
+  position: sticky;
+  top: 1rem;
+  z-index: 1000;
+}
+</style>
