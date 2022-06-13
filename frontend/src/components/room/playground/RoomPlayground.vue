@@ -7,6 +7,11 @@
       :roomMonth="currentMonthKey"
     ></TopBar>
     <div class="playField">
+      <div
+        class="mobile-fade"
+        v-if="isPlayersMenuOpened || isEffectsMenuOpened"
+        @click="closeMenuOpened"
+      ></div>
       <template v-if="!roomIsFinished">
         <WaitingScreen
           class="first-column-top"
@@ -15,20 +20,28 @@
           @reloadRound="reloadRound()"
         ></WaitingScreen>
         <template v-else>
-          <GameBoard class="first-column-top"></GameBoard>
+          <GameBoard class="first-column-top scrollable"></GameBoard>
           <CardsList class="first-column-bottom"></CardsList>
         </template>
-        <PlayersList
-          class="second-column-top"
-          :players="players"
-          :room="roomByCode"
-          v-if="players != undefined && roomByCode != undefined"
-        >
-        </PlayersList>
-        <EffectsList
-          class="second-column-bottom"
-          v-if="roomIsActive"
-        ></EffectsList>
+        <transition name="slide-fade" mode="out-in">
+          <PlayersList
+            class="mobile-popup second-column-top"
+            :players="players"
+            :room="roomByCode"
+            v-if="
+              players != undefined &&
+              roomByCode != undefined &&
+              (!isMobileScreen || isPlayersMenuOpened)
+            "
+          >
+          </PlayersList>
+        </transition>
+        <transition name="slide-fade" mode="out-in">
+          <EffectsList
+            class="mobile-popup second-column-bottom"
+            v-if="roomIsActive && (!isMobileScreen || isEffectsMenuOpened)"
+          ></EffectsList>
+        </transition>
       </template>
       <template v-else>
         <FinishScreen
@@ -38,11 +51,11 @@
         ></FinishScreen>
       </template>
       <div class="navigation">
-        <div class="nav-btn">
+        <div class="nav-btn" @click="openPlayersMenu">
           <img src="@/assets/icons/players.svg" alt="" />
           <p>{{ $t('room.navigation.players') }}</p>
         </div>
-        <div class="nav-btn">
+        <div class="nav-btn" @click="openEffectsMenu">
           <img src="@/assets/icons/star.svg" alt="" />
           <p>{{ $t('room.navigation.effects') }}</p>
         </div>
@@ -88,7 +101,12 @@ export default {
     TopBar,
   },
   data() {
-    return { skip: false };
+    return {
+      skip: false,
+      isPlayersMenuOpened: false,
+      isEffectsMenuOpened: false,
+      windowWidth: window.innerWidth,
+    };
   },
   computed: {
     roomCode() {
@@ -135,6 +153,9 @@ export default {
         return this.currentRoundByCode.isFinished;
       }
       return false;
+    },
+    isMobileScreen() {
+      return this.windowWidth <= 610;
     },
   },
   apollo: {
@@ -224,8 +245,26 @@ export default {
       await this.$apollo.queries.currentRoundByCode.refresh();
       this.skip = false;
     },
+    closeMenuOpened() {
+      this.isPlayersMenuOpened = false;
+      this.isEffectsMenuOpened = false;
+    },
+    openPlayersMenu() {
+      this.closeMenuOpened();
+      this.isPlayersMenuOpened = true;
+    },
+    openEffectsMenu() {
+      this.closeMenuOpened();
+      this.isEffectsMenuOpened = true;
+    },
+    onResize() {
+      this.windowWidth = window.innerWidth;
+    },
   },
   mounted() {
+    this.$nextTick(() => {
+      window.addEventListener('resize', this.onResize);
+    });
     this.$apollo
       .mutate({
         mutation: connectRoom,
@@ -238,11 +277,20 @@ export default {
         this.$router.push(MAIN_PATH);
       });
   },
+  beforeDestroy() {
+    window.removeEventListener('resize', this.onResize);
+  },
 };
 </script>
 
 <style lang="scss" scoped>
 @import '@/scss/_variables.scss';
+
+.mobile-fade {
+  // display: none;
+  // visibility: hidden;
+  display: none !important;
+}
 
 #playground {
   display: flex;
@@ -316,6 +364,84 @@ export default {
     }
     &:hover {
       background-color: rgba(0, 0, 0, 0.1);
+    }
+  }
+}
+
+.slide-fade-enter-active {
+  transition: all 0.3s ease;
+}
+.slide-fade-leave-active {
+  transition: all 0.4s cubic-bezier(1, 0.5, 0.8, 1);
+}
+.slide-fade-enter,
+.slide-fade-leave-to {
+  transform: translateY(10px);
+  opacity: 0;
+}
+
+@media screen and (max-width: 610px) {
+  #playground {
+    .playField {
+      padding: 0px 10px;
+      display: grid;
+      grid-template-columns: 1fr;
+      grid-template-rows: 1.6fr auto 88px;
+      height: 100%;
+      max-height: calc(100vh - 48px);
+      row-gap: 0px;
+
+      & .first-column-top {
+        grid-column-start: 1;
+        grid-column-end: 2;
+        grid-row-start: 1;
+        grid-row-end: 2;
+        overflow-x: scroll;
+        width: calc(100vw - 20px);
+      }
+      & .first-column-bottom {
+        grid-column-start: 1;
+        grid-column-end: 2;
+        grid-row-start: 2;
+        grid-row-end: 3;
+        width: calc(100vw - 20px);
+      }
+      & .navigation {
+        border-left: none;
+        grid-column-start: 1;
+        grid-column-end: 2;
+        grid-row-start: 3;
+        grid-row-end: 4;
+        width: 100%;
+        display: flex;
+        justify-content: space-around;
+      }
+      & .second-column-top,
+      .second-column-bottom {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+      }
+      & .mobile-fade {
+        display: block !important;
+        width: 100vw;
+        height: 100vh;
+        background: rgba(0, 0, 0, 0.3);
+        position: absolute;
+        top: 0;
+        left: 0;
+        z-index: 1000;
+      }
+      & .mobile-popup {
+        z-index: 10000;
+        backdrop-filter: blur(12px) saturate(100%);
+        -webkit-backdrop-filter: blur(12px) saturate(100%);
+        background-color: rgba(255, 255, 255, 0.8);
+        border-radius: 16px 16px 0px 0px;
+        padding: 1rem;
+        box-sizing: border-box;
+        width: 100%;
+      }
     }
   }
 }

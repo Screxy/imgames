@@ -83,6 +83,7 @@ export default {
   justify-content: space-between;
   padding: 16px;
   width: 190px;
+  min-width: 190px;
   // height: 230px;
   margin-right: 10px;
   position: relative;

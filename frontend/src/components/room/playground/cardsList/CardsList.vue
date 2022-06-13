@@ -7,7 +7,7 @@
       :selectedCardsId="selectedCardsId"
       @clean="selectedCardsId = []"
     ></WriteTurnPanel>
-    <div class="cards-list">
+    <div class="cards-list scrollable">
       <Card
         v-for="card in cardsByCode"
         :key="card.id"
@@ -95,6 +95,14 @@ export default {
 
   & .write-turn-panel {
     margin: 0 0 0.5rem 0;
+  }
+}
+@media screen and (max-width: 610px) {
+  h3 {
+    display: none;
+  }
+  .write-turn-panel {
+    margin-top: 0.5rem;
   }
 }
 </style>

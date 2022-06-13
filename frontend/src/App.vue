@@ -74,31 +74,27 @@ h1, h2, h3, p {
 }
 
 .normal-border-box {
+  position: relative;
+  // border-image-slice: 1;
   // border: 2px solid;
-  border-image-slice: 1 !important;
-  border-image-source: linear-gradient(
-    288.78deg,
-    #4d3658 0%,
-    #cddfe9 43.75%,
-    #1da1ac 100%
-  );
-  // box-shadow: 2px 16px 19px 0px rgba(0, 0, 0, 0.09);
-  // background: url(./assets/tile.png),
-  //   radial-gradient(
-  //     90.16% 143.01% at 15.32% 21.04%,
-  //     rgba(224, 249, 255, 0.2) 0%,
-  //     rgba(110, 191, 244, 0.0447917) 77.08%,
-  //     rgba(70, 144, 213, 0) 100%
-  //   );
-  // background-blend-mode: overlay, normal;
-  // filter: drop-shadow(2px 16px 19px rgba(0, 0, 0, 0.09));
-  // backdrop-filter: blur(80px);
-  // border-radius: 8px;
-    backdrop-filter: blur(12px) saturate(100%);
-    -webkit-backdrop-filter: blur(12px) saturate(100%);
-    background-color: rgba(255, 255, 255, 0.5);
-    border-radius: 12px;
-    border: 1px solid rgba(209, 213, 219, 0.3);
+  // border-image: linear-gradient(288.78deg, #6A3F7E 0%, #CDDFE9 43.75%, #1DA1AC 100%);
+  backdrop-filter: blur(12px) saturate(100%);
+  -webkit-backdrop-filter: blur(12px) saturate(100%);
+  background-color: rgba(255, 255, 255, 0.8);
+  border-radius: 12px;
+  z-index: 1;
+  border: 1px solid rgba(209, 213, 219, 0.3);
+  // &::before {
+  //   content: "";
+  //   position: absolute;
+  //   top: -2px;
+  //   bottom: -2px;
+  //   left: -2px;
+  //   right: -2px;
+  //   background: linear-gradient(288.78deg, #6A3F7E 0%, #CDDFE9 43.75%, #1DA1AC 100%);
+  //   border-radius: 12px;
+  //   z-index: -1;
+  // }
 }
 
 .default-background {

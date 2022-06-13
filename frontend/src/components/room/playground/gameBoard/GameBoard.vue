@@ -16,4 +16,10 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+@media screen and (max-width: 610px) {
+  h3 {
+    display: none;
+  }
+}
+</style>

@@ -3,7 +3,7 @@
     <Logo></Logo>
     <div class="menu-block" v-if="type == 'playground'">
       <div class="left-block">
-        <div class="menu-link menu-link-bold">
+        <div class="menu-link menu-link-bold room-data">
           {{ $t('room.room') }} {{ roomCode }} / {{ $t('room.round') }} R{{
             roomRound
           }}
@@ -122,6 +122,16 @@ export default {
         }
       }
     }
+
+    .room-data-short {
+      display: none;
+    }
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .room-data {
+    display: none !important;
   }
 }
 </style>
