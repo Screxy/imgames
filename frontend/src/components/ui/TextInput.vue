@@ -79,7 +79,7 @@ export default {
   methods: {
     sendInput() {
       this.$emit('input', this.inputModel);
-      this.$v.inputModel.$touch();
+      if (this.$v != undefined) this.$v.inputModel.$touch();
     },
   },
   computed: {},

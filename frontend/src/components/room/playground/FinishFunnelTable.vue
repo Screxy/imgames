@@ -24,7 +24,7 @@ import TableFooter from '@/components/room/playground/gameBoard/TableFooter.vue'
 import TableHead from '@/components/room/playground/gameBoard/TableHead.vue';
 
 export default {
-  name: 'FunnelTable',
+  name: 'FinishFunnelTable',
   props: {
     computedChannelsByCode: {
       type: Array,
@@ -44,32 +44,32 @@ export default {
     TableBody,
     TableFooter,
   },
-  apollo: {
-    // computedChannelsByCode: {
-    //   query: computedChannelsByCode,
-    //   variables() {
-    //     return {
-    //       code: this.roomCode,
-    //     };
-    //   },
-    //   subscribeToMore: {
-    //     document: computedChannelsByCodeUpdated,
-    //     variables() {
-    //       return {
-    //         code: this.roomCode,
-    //         userId: this.userId,
-    //       };
-    //     },
-    //     updateQuery: (previousResult, { subscriptionData }) => {
-    //       let newData = {
-    //         computedChannelsByCode:
-    //           subscriptionData.data.computedChannelsByCodeUpdated,
-    //       };
-    //       return newData;
-    //     },
-    //   },
-    // },
-  },
+  // apollo: {
+  // computedChannelsByCode: {
+  //   query: computedChannelsByCode,
+  //   variables() {
+  //     return {
+  //       code: this.roomCode,
+  //     };
+  //   },
+  //   subscribeToMore: {
+  //     document: computedChannelsByCodeUpdated,
+  //     variables() {
+  //       return {
+  //         code: this.roomCode,
+  //         userId: this.userId,
+  //       };
+  //     },
+  //     updateQuery: (previousResult, { subscriptionData }) => {
+  //       let newData = {
+  //         computedChannelsByCode:
+  //           subscriptionData.data.computedChannelsByCodeUpdated,
+  //       };
+  //       return newData;
+  //     },
+  //   },
+  // },
+  // },
   computed: {
     userId() {
       return this.$store.state.userId;

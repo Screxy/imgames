@@ -41,14 +41,25 @@ export default {
       default: 0,
     },
   },
-  computed: {
-    sortedStages() {
-      if (Array.isArray(this.stages)) {
-        return this.stages.sort(
-          (a, b) => a.stageinsequence.place - b.stageinsequence.place
-        );
+  data() {
+    return {
+      sortedStages: [],
+    };
+  },
+  mounted() {
+    if (Array.isArray(this.stages)) {
+      this.sortedStages = this.stages.sort(
+        (a, b) => a.stageinsequence.place - b.stageinsequence.place
+      );
+    }
+  },
+  watch: {
+    stages(newVal) {
+      if (Array.isArray(newVal)) {
+        this.sortedStages = newVal
+          .slice()
+          .sort((a, b) => a.stageinsequence.place - b.stageinsequence.place);
       }
-      return [];
     },
   },
 };
