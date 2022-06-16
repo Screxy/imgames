@@ -62,7 +62,7 @@ export default {
 
 <style lang="scss" scoped>
 .waiting-screen {
-  padding: 1rem;
-  margin-top: 1rem;
+  padding: 1rem !important;
+  margin: 1rem !important;
 }
 </style>

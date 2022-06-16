@@ -24,7 +24,9 @@
       "playersList": "List of players",
       "player": "Player",
       "roomOwner": "Room owner",
-      "effectsList": "Effects"
+      "effectsList": "Effects",
+      "chat": "Chat",
+      "you": "You"
     },
     "gameBoard": {
       "gameBoard": "Game board",

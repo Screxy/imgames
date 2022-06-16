@@ -9,12 +9,15 @@
     <div class="playField">
       <div
         class="mobile-fade"
-        v-if="isPlayersMenuOpened || isEffectsMenuOpened"
+        v-if="
+          isMobileScreen &&
+          (isPlayersMenuShown || isEffectsMenuShown || isChatShown)
+        "
         @click="closeMenuOpened"
       ></div>
       <template v-if="!roomIsFinished">
         <WaitingScreen
-          class="first-column-top"
+          class="first-column-full"
           v-if="!roomIsActive"
           :roomCode="roomCode"
           @reloadRound="reloadRound()"
@@ -31,7 +34,7 @@
             v-if="
               players != undefined &&
               roomByCode != undefined &&
-              (!isMobileScreen || isPlayersMenuOpened)
+              isPlayersMenuShown
             "
           >
           </PlayersList>
@@ -39,12 +42,19 @@
         <transition name="slide-fade" mode="out-in">
           <EffectsList
             class="mobile-popup second-column-bottom"
-            v-if="roomIsActive && (!isMobileScreen || isEffectsMenuOpened)"
+            v-if="isEffectsMenuShown"
           ></EffectsList>
+        </transition>
+        <transition name="slide-fade" mode="out-in">
+          <Chat
+            class="mobile-popup second-column-full"
+            v-if="isChatShown"
+          ></Chat>
         </transition>
       </template>
       <template v-else>
         <FinishScreen
+          class="first-column-full"
           :roundKey="currentRoundKey"
           :roomCode="roomCode"
           @reloadRound="reloadRound()"
@@ -59,7 +69,7 @@
           <img src="@/assets/icons/star.svg" alt="" />
           <p>{{ $t('room.navigation.effects') }}</p>
         </div>
-        <div class="nav-btn">
+        <div class="nav-btn" @click="openChat">
           <img src="@/assets/icons/chat.svg" alt="" />
           <p>{{ $t('room.navigation.chat') }}</p>
         </div>
@@ -87,6 +97,7 @@ import CardsList from '@/components/room/playground/cardsList/CardsList.vue';
 import WaitingScreen from '@/components/room/playground/WaitingScreen.vue';
 import FinishScreen from '@/components/room/playground/FinishScreen.vue';
 import TopBar from '@/components/ui/TopBar.vue';
+import Chat from '@/components/room/playground/Chat.vue';
 import { MAIN_PATH } from '@/pathVariables.js';
 
 export default {
@@ -99,16 +110,39 @@ export default {
     WaitingScreen,
     FinishScreen,
     TopBar,
+    Chat,
   },
   data() {
     return {
       skip: false,
-      isPlayersMenuOpened: false,
+      isPlayersMenuOpened: !(window.innerWidth <= 610),
       isEffectsMenuOpened: false,
+      isChatOpened: false,
       windowWidth: window.innerWidth,
     };
   },
   computed: {
+    isChatShown() {
+      if (this.isMobileScreen) {
+        return this.isChatOpened;
+      } else {
+        return !(this.isPlayersMenuOpened || this.isEffectsMenuOpened);
+      }
+    },
+    isPlayersMenuShown() {
+      if (this.isMobileScreen) {
+        return this.isPlayersMenuOpened;
+      } else {
+        return !this.isChatOpened;
+      }
+    },
+    isEffectsMenuShown() {
+      if (this.isMobileScreen) {
+        return this.isEffectsMenuOpened;
+      } else {
+        return !this.isChatOpened;
+      }
+    },
     roomCode() {
       return this.$route.params.roomCode;
     },
@@ -248,6 +282,7 @@ export default {
     closeMenuOpened() {
       this.isPlayersMenuOpened = false;
       this.isEffectsMenuOpened = false;
+      this.isChatOpened = false;
     },
     openPlayersMenu() {
       this.closeMenuOpened();
@@ -256,6 +291,10 @@ export default {
     openEffectsMenu() {
       this.closeMenuOpened();
       this.isEffectsMenuOpened = true;
+    },
+    openChat() {
+      this.closeMenuOpened();
+      this.isChatOpened = true;
     },
     onResize() {
       this.windowWidth = window.innerWidth;
@@ -326,16 +365,33 @@ export default {
       grid-row-start: 2;
       grid-row-end: 3;
     }
+    & .first-column-full {
+      grid-column-start: 1;
+      grid-column-end: 2;
+      grid-row-start: 1;
+      grid-row-end: 3;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
     & .second-column-top {
       grid-column-start: 2;
       grid-column-end: 3;
       grid-row-start: 1;
       grid-row-end: 2;
+      min-height: calc((100vh - 210px) / 2);
     }
     & .second-column-bottom {
       grid-column-start: 2;
       grid-column-end: 3;
       grid-row-start: 2;
+      grid-row-end: 3;
+      min-height: calc((100vh - 210px) / 2);
+    }
+    & .second-column-full {
+      grid-column-start: 2;
+      grid-column-end: 3;
+      grid-row-start: 1;
       grid-row-end: 3;
     }
     & .navigation {
@@ -417,7 +473,8 @@ export default {
         justify-content: space-around;
       }
       & .second-column-top,
-      .second-column-bottom {
+      & .second-column-bottom,
+      & .second-column-full {
         position: absolute;
         bottom: 0;
         left: 0;

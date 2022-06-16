@@ -1,34 +1,40 @@
 <template>
-  <div class="finish-screen">
-    <h2>{{ $t('room.roundFinishedHeader', { round: `R${roundKey}` }) }}</h2>
-    <template v-if="isRoomOwner">
-      <div class="next-round-btn">
-        <SubmitButton :type="'bg-green'" @click="reStartRound">{{
-          $t('room.reStartRoundButton', { nextRound: `R${roundKey + 1}` })
-        }}</SubmitButton>
-      </div>
-    </template>
-    <template v-for="(monthKey, index) in monthKeys">
-      <small v-if="monthKey == null" :key="monthKey + '-' + index + '!'">{{
-        $t('room.startMonth')
-      }}</small>
-      <small v-if="monthKey != null" :key="monthKey + '-' + index + '!!'"
-        >{{ $t('room.month') }} №{{ monthKey }}</small
-      >
-      <FinishFunnelTable
-        :computedChannelsByCode="computedDataForMonth(monthKey)"
-        :channelsByCode="channelsByCode"
-        :stagesByCode="stagesByCode"
-        :key="'fft--' + index"
-        :monthKey="monthKey"
-      ></FinishFunnelTable>
-      <FinishTurnChoices
-        v-if="computedTurnForMonth(monthKey != null ? monthKey : 0) != null"
-        :turn="computedTurnForMonth(monthKey != null ? monthKey : 0)"
-        :monthKey="monthKey != null ? monthKey : 0"
-        :key="'ftc--' + monthKey + '-' + index"
-      ></FinishTurnChoices>
-    </template>
+  <div class="finish-screen scrollable">
+    <div>
+      <h2>{{ $t('room.roundFinishedHeader', { round: `R${roundKey}` }) }}</h2>
+      <template v-if="isRoomOwner">
+        <div class="next-round-btn">
+          <SubmitButton :type="'bg-green'" @click="reStartRound">{{
+            $t('room.reStartRoundButton', { nextRound: `R${roundKey + 1}` })
+          }}</SubmitButton>
+        </div>
+      </template>
+    </div>
+    <div class="history-row">
+      <template v-for="(monthKey, index) in monthKeys">
+        <div class="history-row-item" :key="monthKey + '-' + index + '!div'">
+          <small v-if="monthKey == null" :key="monthKey + '-' + index + '!'">{{
+            $t('room.startMonth')
+          }}</small>
+          <small v-if="monthKey != null" :key="monthKey + '-' + index + '!!'"
+            >{{ $t('room.month') }} №{{ monthKey }}</small
+          >
+          <FinishFunnelTable
+            :computedChannelsByCode="computedDataForMonth(monthKey)"
+            :channelsByCode="channelsByCode"
+            :stagesByCode="stagesByCode"
+            :key="'fft--' + index"
+            :monthKey="monthKey"
+          ></FinishFunnelTable>
+          <FinishTurnChoices
+            v-if="computedTurnForMonth(monthKey != null ? monthKey : 0) != null"
+            :turn="computedTurnForMonth(monthKey != null ? monthKey : 0)"
+            :monthKey="monthKey != null ? monthKey : 0"
+            :key="'ftc--' + monthKey + '-' + index"
+          ></FinishTurnChoices>
+        </div>
+      </template>
+    </div>
   </div>
 </template>
 
@@ -162,5 +168,12 @@ export default {
   position: sticky;
   top: 1rem;
   z-index: 1000;
+}
+.history-row {
+  display: flex;
+  flex-direction: column;
+  &-item {
+    margin: auto;
+  }
 }
 </style>

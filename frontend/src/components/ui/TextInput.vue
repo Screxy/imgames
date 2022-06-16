@@ -12,6 +12,7 @@
       :disabled="disabled"
       v-model="inputModel"
       @input="sendInput"
+      @keyup.enter="sendEnter"
       :class="{ 'error-input': isAnyError }"
     />
     <div class="errors">
@@ -81,6 +82,9 @@ export default {
       this.$emit('input', this.inputModel);
       if (this.$v != undefined) this.$v.inputModel.$touch();
     },
+    sendEnter() {
+      this.$emit('enter');
+    },
   },
   computed: {},
 };
@@ -98,6 +102,8 @@ input {
   padding: 0.5rem 1rem;
   border-radius: 8px;
   border: none;
+  min-height: 40px;
+  box-sizing: border-box;
 }
 .user-input {
   margin-bottom: 1rem;
