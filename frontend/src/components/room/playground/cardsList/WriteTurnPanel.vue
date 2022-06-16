@@ -13,6 +13,7 @@
 <script>
 import SubmitButton from '@/components/ui/SubmitButton.vue';
 import writeTurn from '@/graphql/mutations/rooms/writeTurn.gql';
+import cardsByCode from '@/graphql/queries/gameBoard/cardsByCode.gql';
 
 export default {
   name: 'WriteTurnPanel',
@@ -34,6 +35,16 @@ export default {
       isLoading: false,
     };
   },
+  apollo: {
+    cardsByCode: {
+      query: cardsByCode,
+      variables() {
+        return {
+          code: this.roomCode,
+        };
+      },
+    },
+  },
   computed: {
     roomCode() {
       return this.$route.params.roomCode;
@@ -44,9 +55,7 @@ export default {
   },
   methods: {
     sendCardChoice() {
-      console.log('Отправляем массив: ', this.selectedCardsId);
       this.isLoading = true;
-      // TODO: add mutation support
       this.$apollo
         .mutate({
           mutation: writeTurn,
@@ -55,17 +64,22 @@ export default {
             cardsId: this.selectedCardsId,
           },
           update: (store, { data: { writeTurn } }) => {
-            console.log('DATA FOR CACHE', writeTurn);
+            // console.log('DATA FOR CACHE', writeTurn);
           },
         })
         .then(() => {})
-        .catch((e) => {
-          console.log(e);
-          // TODO:
-          // EMIT CLEAN CHOICE
-        })
+        .catch((e) => {})
         .finally(() => {
-          this.$emit('clean')
+          let chosenCards = this.cardsByCode.filter((el) => {
+            return this.selectedCardsId.includes(+el.id);
+          });
+          // console.log(chosenCards);
+          for (let index = 0; index < chosenCards.length; index++) {
+            const card = chosenCards[index];
+            console.log(chosenCards[index]);
+            this.$store.commit('ADD_CHOSEN_CARD', card);
+          }
+          this.$emit('clean');
           this.isLoading = false;
         });
     },

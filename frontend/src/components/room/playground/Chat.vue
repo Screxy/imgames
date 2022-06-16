@@ -68,11 +68,13 @@ export default {
     userId() {
       return this.$store.state.userId;
     },
+    messages() {
+      return this.$store.state.messages;
+    },
   },
   data() {
     return {
       newMessageText: '',
-      messages: [],
     };
   },
   methods: {
@@ -87,7 +89,7 @@ export default {
             id: this.userId,
           },
         };
-        this.messages.push(message);
+        this.$store.commit('ADD_MESSAGE', message);
         this.newMessageText = '';
         setTimeout(() => {
           this.$refs.messagesBox.scrollTop =

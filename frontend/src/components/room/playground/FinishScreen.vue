@@ -141,6 +141,7 @@ export default {
   },
   watch: {
     allComputedMonthsByCode() {
+      this.$store.commit('CLEAN_CHOSEN_CARD');
       this.monthKeys = [
         ...new Set(this.allComputedMonthsByCode.map((el) => el.monthKey)),
       ].sort((a, b) => {
@@ -176,11 +177,6 @@ export default {
 
   &-item {
     margin: auto;
-  }
-}
-@media screen and (max-width: 610px) {
-  .finish-screen {
-    // padding-top: 338px;
   }
 }
 </style>

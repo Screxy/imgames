@@ -8,7 +8,7 @@
       {{ $t('organization.organization') }} "{{ organization.name }}"
       <a :href="'http://' + organization.subdomain + '.' + getDomainName">
         <br />
-        {{ 'http://' + organization.subdomain + '.' + getDomainName }}
+        {{ 'https://' + organization.subdomain + '.' + getDomainName }}
       </a>
     </div>
   </div>

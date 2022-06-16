@@ -24,9 +24,10 @@
       "playersList": "Список игроков",
       "player": "Игрок",
       "roomOwner": "Владелец комнаты",
-      "effectsList": "Эффекты",
+      "effectsList": "Изменения",
       "chat": "Чат",
-      "you": "Вы"
+      "you": "Вы",
+      "application": "Кол-во"
     },
     "gameBoard": {
       "gameBoard": "Игровая доска",

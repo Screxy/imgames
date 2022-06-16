@@ -64,5 +64,6 @@ export default {
 .waiting-screen {
   padding: 1rem !important;
   margin: 1rem !important;
+  display: flex;
 }
 </style>

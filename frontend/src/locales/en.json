@@ -26,7 +26,8 @@
       "roomOwner": "Room owner",
       "effectsList": "Effects",
       "chat": "Chat",
-      "you": "You"
+      "you": "You",
+      "application": "Qty"
     },
     "gameBoard": {
       "gameBoard": "Game board",
