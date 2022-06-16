@@ -10,7 +10,7 @@
         <CreateRoomView></CreateRoomView>
         <ConnectRoomView></ConnectRoomView>
       </div>
-      <div>
+      <div class="organizations">
         <h2>{{ $t('headers.organizationList') }}</h2>
         <SubmitButton
           class="new-organization-btn"
@@ -81,6 +81,7 @@ h2 {
     display: grid;
     grid-template-columns: 1fr 1fr;
     grid-template-rows: 50vh 50vh;
+    height: calc(100vh - 48px);
 
     & .rooms-list {
       grid-row-start: 1;
@@ -119,9 +120,16 @@ h2 {
     flex-direction: column;
     overflow-y: auto;
 
-    & .organizations-list,
+    & .organizations {
+      max-height: 300px;
+    }
+
+    & .organizations-list {
+      height: 100%;
+    }
+
     & .create-room {
-      height: unset;
+      height: 550px;
     }
   }
 }
