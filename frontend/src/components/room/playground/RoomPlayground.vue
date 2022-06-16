@@ -53,8 +53,33 @@
         </transition>
       </template>
       <template v-else>
+        <transition name="slide-fade" mode="out-in">
+          <PlayersList
+            class="mobile-popup second-column-top"
+            :players="players"
+            :room="roomByCode"
+            v-if="
+              players != undefined &&
+              roomByCode != undefined &&
+              isPlayersMenuShown
+            "
+          >
+          </PlayersList>
+        </transition>
+        <transition name="slide-fade" mode="out-in">
+          <EffectsList
+            class="mobile-popup second-column-bottom"
+            v-if="isEffectsMenuShown"
+          ></EffectsList>
+        </transition>
+        <transition name="slide-fade" mode="out-in">
+          <Chat
+            class="mobile-popup second-column-full"
+            v-if="isChatShown"
+          ></Chat>
+        </transition>
         <FinishScreen
-          class="two-column-full"
+          class="first-column-full"
           :roundKey="currentRoundKey"
           :roomCode="roomCode"
           @reloadRound="reloadRound()"
