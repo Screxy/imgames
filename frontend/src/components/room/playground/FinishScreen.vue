@@ -2,6 +2,7 @@
   <div class="finish-screen scrollable">
     <div>
       <h2>{{ $t('room.roundFinishedHeader', { round: `R${roundKey}` }) }}</h2>
+      {{ winnersFromCurrentRound }}
       <template v-if="isRoomOwner">
         <div class="next-round-btn">
           <SubmitButton :type="'bg-green'" @click="reStartRound">{{
@@ -47,6 +48,7 @@ import turnsFromCurrentRound from '@/graphql/queries/rooms/turnsFromCurrentRound
 import allComputedMonthsByCode from '@/graphql/queries/gameBoard/allComputedMonthsByCode.gql';
 import channelsByCode from '@/graphql/queries/gameBoard/channelsByCode.gql';
 import stagesByCode from '@/graphql/queries/gameBoard/stagesByCode.gql';
+import winnersFromCurrentRound from '@/graphql/queries/rooms/winnersFromCurrentRound.gql';
 import FinishTurnChoices from '@/components/room/playground/FinishTurnChoices.vue';
 
 export default {
@@ -72,6 +74,14 @@ export default {
     };
   },
   apollo: {
+    winnersFromCurrentRound: {
+      query: winnersFromCurrentRound,
+      variables() {
+        return {
+          code: this.roomCode,
+        };
+      },
+    },
     channelsByCode: {
       query: channelsByCode,
       variables() {

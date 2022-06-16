@@ -1,12 +1,15 @@
+from collections import defaultdict
 from hashlib import new
 from celery import shared_task
-from apps.organizations.models import Organization
-from apps.rooms.models import Room, Month, Turn, CardChoice
+from apps.organizations.models import Organization, OrganizationSettings
+from apps.rooms.models import Room, Month, Turn, CardChoice, Winner
 from apps.flows.models import Stage, Channel, ParameterChange
 from apps.computed.models import ChannelComputed, StageComputed
+from apps.users.models import User
+from apps.computed.schema import prepare_computed_game_data_array
 from graphene_subscriptions.events import SubscriptionEvent
 from django.forms.models import model_to_dict
-import json
+from collections import defaultdict
 
 MONTH_EVENT = 'month_event'
 
@@ -143,6 +146,28 @@ def change_month_in_room(room_id):
             raise Exception('Error month')
         current_round.current_month = new_month[0]
         current_round.save()
+
+        if Month.objects.filter(key=new_key+1, round=current_round).count() == 0:
+            try:
+                print('ПОСЛЕДНИЙ МЕСЯЦ!!!')
+                rating = defaultdict(int)
+                for turn in old_month_users_turns:
+                    computed_array = prepare_computed_game_data_array(
+                        room=room, user=turn.user)
+                    computed_total = computed_array[:-1][0].data[-1]
+                    rating[turn.user.id] = int(float(computed_total))
+                rating = sorted(rating)
+
+                for i, user_id in enumerate(rating[:3]):
+                    place = i + 1
+                    user = User.objects.get(pk=user_id)
+                    Winner.objects.create(
+                        user=user, place=place, round=current_round)
+                    print(f'place: {i}, user_id: {user_id}')
+
+                print('ПОСЛЕДНИЙ МЕСЯЦ!!!')
+            except Exception as e:
+                print('ERROR', e)
 
         # Отправляем всем событие на обновление состояния комнаты
         # TODO: проверить, что корректно обновляется раунд

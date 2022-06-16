@@ -95,8 +95,6 @@ class WriteTurn(graphene.Mutation):
                     card = Card.objects.get(pk=card_id)
                     CardChoice.objects.create(card=card, turn=turn)
 
-                    # TODO: обновить данные в computed-таблицах
-
                 # Проверяем, если все сделали ход
                 turns_count = Turn.objects.filter(
                     month=current_month).count()
@@ -198,7 +196,7 @@ class ConnectRoom(graphene.Mutation):
                 room = Room.objects.get(
                     key=code_array[1], organization=organization)
 
-                participant, created =  RoomParticipant.objects.get_or_create(
+                participant, created = RoomParticipant.objects.get_or_create(
                     room=room, user=user)
 
                 return ConnectRoom(success=True, created=created)
