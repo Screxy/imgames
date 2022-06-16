@@ -172,8 +172,15 @@ export default {
 .history-row {
   display: flex;
   flex-direction: column;
+  margin-bottom: 1rem;
+
   &-item {
     margin: auto;
+  }
+}
+@media screen and (max-width: 610px) {
+  .finish-screen {
+    // padding-top: 338px;
   }
 }
 </style>

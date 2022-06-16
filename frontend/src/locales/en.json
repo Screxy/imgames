@@ -59,7 +59,8 @@
     "connectRoom": "Join the room",
     "roomCode": "Room code",
     "startMonth": "Start month",
-    "step": "Step"
+    "step": "Step",
+    "passStep": "Skip a turn"
   },
   "headers": {
     "main": "Main",

@@ -54,7 +54,7 @@
       </template>
       <template v-else>
         <FinishScreen
-          class="first-column-full"
+          class="two-column-full"
           :roundKey="currentRoundKey"
           :roomCode="roomCode"
           @reloadRound="reloadRound()"
@@ -370,10 +370,21 @@ export default {
       grid-column-end: 2;
       grid-row-start: 1;
       grid-row-end: 3;
-      display: flex;
+      // display: flex;
       flex-direction: column;
       justify-content: center;
     }
+
+    & .two-column-full {
+      grid-column-start: 1;
+      grid-column-end: 3;
+      grid-row-start: 1;
+      grid-row-end: 3;
+      // display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
     & .second-column-top {
       grid-column-start: 2;
       grid-column-end: 3;

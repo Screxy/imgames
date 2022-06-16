@@ -5,6 +5,7 @@
     </div>
     <small>{{ $t('room.step') }} №{{ monthKey + 1 }}</small>
     <div class="cards-row">
+      <p v-if="turn.cardchoiceSet.length == 0">{{ $t('room.passStep') }}</p>
       <template v-for="(cardChoice, index) in turn.cardchoiceSet">
         <div
           class="card-box normal-border-box"
