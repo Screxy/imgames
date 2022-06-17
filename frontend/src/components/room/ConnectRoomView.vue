@@ -1,7 +1,7 @@
 <template>
   <div>
     <h2>{{ $t('room.connectRoom') }}</h2>
-    <div class="normal-border-box connect-room-form">
+    <div class="normal-border-box connect-room-form green-border-box">
       <TextInput
         :label="$t('room.roomCode')"
         :name="'roomCode'"

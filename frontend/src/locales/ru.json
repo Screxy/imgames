@@ -61,7 +61,13 @@
     "roomCode": "Номер комнаты",
     "startMonth": "Начальный месяц",
     "step": "Ход",
-    "passStep": "Пропуск хода"
+    "passStep": "Пропуск хода",
+    "firstPlace": "I место",
+    "secondPlace": "II место",
+    "thirdPlace": "III место",
+    "yourResult": "Ваш результат",
+    "notPrizePlace": "Не призовое место",
+    "place": "Место"
   },
   "headers": {
     "main": "Главная",

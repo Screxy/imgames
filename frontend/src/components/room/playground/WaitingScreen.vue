@@ -1,5 +1,5 @@
 <template>
-  <div class="waiting-screen normal-border-box">
+  <div class="waiting-screen normal-border-box green-border-box">
     <h2>{{ $t('room.waitingHeader') }}</h2>
     <template v-if="isRoomOwner">
       <p>{{ $t('room.waitingTextForOwner') }}</p>

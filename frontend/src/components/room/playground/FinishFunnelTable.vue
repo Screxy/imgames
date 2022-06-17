@@ -1,5 +1,8 @@
 <template>
-  <table cellspacing="0" class="funnel-table normal-border-box">
+  <table
+    cellspacing="0"
+    class="funnel-table normal-border-box orange-border-box"
+  >
     <TableHead :stages="stagesByCode" :monthKey="monthKey"></TableHead>
     <TableBody
       :stages="stagesByCode"

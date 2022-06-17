@@ -61,7 +61,13 @@
     "roomCode": "Room code",
     "startMonth": "Start month",
     "step": "Step",
-    "passStep": "Skip a turn"
+    "passStep": "Skip a turn",
+    "firstPlace": "1st place",
+    "secondPlace": "2nd place",
+    "thirdPlace": "III place",
+    "yourResult": "Your score",
+    "notPrizePlace": "Not a prize",
+    "place": "Place"
   },
   "headers": {
     "main": "Main",

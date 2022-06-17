@@ -54,6 +54,19 @@ h1, h2, h3, p {
   color: $dark_text_color;
 }
 
+a {
+  color: $dark_text_color;
+  &:visited, &:active {
+    color: $dark_text_color;
+  }
+  &:hover {
+     color: lighten($dark_text_color, 10);
+  }
+  
+  
+}
+
+
 .scrollable {
   overflow-y: auto;
   scrollbar-gutter: stable;
@@ -75,27 +88,62 @@ h1, h2, h3, p {
 
 .normal-border-box {
   position: relative;
-  // border-image-slice: 1;
-  // border: 2px solid;
-  // border-image: linear-gradient(288.78deg, #6A3F7E 0%, #CDDFE9 43.75%, #1DA1AC 100%);
   backdrop-filter: blur(12px) saturate(100%);
   -webkit-backdrop-filter: blur(12px) saturate(100%);
   background-color: rgba(255, 255, 255, 0.8);
-  border-radius: 12px;
+  border-radius: 8px;
   z-index: 1;
-  border: 1px solid rgba(209, 213, 219, 0.3);
-  // &::before {
-  //   content: "";
-  //   position: absolute;
-  //   top: -2px;
-  //   bottom: -2px;
-  //   left: -2px;
-  //   right: -2px;
-  //   background: linear-gradient(288.78deg, #6A3F7E 0%, #CDDFE9 43.75%, #1DA1AC 100%);
-  //   border-radius: 12px;
-  //   z-index: -1;
-  // }
+  position: relative;
+  border: none;
 }
+
+.normal-border-box::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 8px;
+  padding: 2px;
+  background: linear-gradient(
+    288.78deg,
+    #6a3f7e 0%,
+    #cddfe9 43.75%,
+    #1da1ac 100%
+  );
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  z-index: -1;
+}
+
+.gold-border-box::before {
+  background: conic-gradient(#edc800, #e3b600, #f3cf00, #ffe800,
+								#edc800, #e3b600, #f3cf00, #ffe800,
+								#edc800, #e3b600, #f3cf00, #ffe800,
+								#edc800, #e3b600, #f3cf00, #ffe800);
+}
+
+.silver-border-box::before {
+  background: conic-gradient(#d7d7d7, #c3c3c3, #cccccc, #c6c6c6,
+								#d7d7d7, #c3c3c3, #cccccc, #c6c6c6,
+								#d7d7d7, #c3c3c3, #cccccc, #c6c6c6,
+								#d7d7d7, #c3c3c3, #cccccc, #c6c6c6);
+}
+
+.bronze-border-box::before {
+  background: conic-gradient(#d95641, #b14439, #b2453a, #d25645, 
+								#d95641, #b14439, #b2453a, #d25645,
+								#d95641, #b14439, #b2453a, #d25645,
+								#d95641, #b14439, #b2453a, #d25645);
+}
+
+.green-border-box::before {
+  background: linear-gradient(151.73deg, #4CC938 0%, #30A083 100%);
+}
+
+.orange-border-box::before {
+  background: linear-gradient(151.73deg, #FDE2AE 0%, #F65775 100%);
+}
+
 
 .default-background {
   background: radial-gradient(52.5% 97.01% at 21.67% 20.17%, rgba(82, 110, 255, 0.25) 0%, rgba(249, 216, 167, 0.25) 89.06%);

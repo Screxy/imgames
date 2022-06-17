@@ -1,5 +1,5 @@
 <template>
-  <div class="normal-border-box create-room-form">
+  <div class="normal-border-box create-room-form green-border-box">
     <TextInput
       :label="$t('room.moneyPerMonth')"
       :name="'moneyPerMonth'"

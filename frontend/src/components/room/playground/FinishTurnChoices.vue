@@ -8,7 +8,7 @@
       <p v-if="turn.cardchoiceSet.length == 0">{{ $t('room.passStep') }}</p>
       <template v-for="(cardChoice, index) in turn.cardchoiceSet">
         <div
-          class="card-box normal-border-box"
+          class="card-box normal-border-box orange-border-box"
           :key="'M' + monthKey + '-' + cardChoice.id"
         >
           {{ cardChoice.card.header }}

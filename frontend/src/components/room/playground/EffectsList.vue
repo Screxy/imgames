@@ -4,7 +4,7 @@
     <div class="effects-list">
       <p v-if="chosenCards.length == 0">Эффекты отсутствуют</p>
       <template v-for="(effect, index) in chosenCards">
-        <div class="effect normal-border-box" :key="index">
+        <div class="effect normal-border-box orange-border-box" :key="index">
           <div class="header-column" style="display: flex">
             <div style="margin: auto">
               {{ effect.header }}

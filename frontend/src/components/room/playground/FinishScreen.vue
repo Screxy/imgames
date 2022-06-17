@@ -2,7 +2,7 @@
   <div class="finish-screen scrollable">
     <div>
       <h2>{{ $t('room.roundFinishedHeader', { round: `R${roundKey}` }) }}</h2>
-      {{ winnersFromCurrentRound }}
+
       <template v-if="isRoomOwner">
         <div class="next-round-btn">
           <SubmitButton :type="'bg-green'" @click="reStartRound">{{
@@ -10,6 +10,45 @@
           }}</SubmitButton>
         </div>
       </template>
+    </div>
+    <h3 v-if="winnersFromCurrentRound != undefined">Призовые места</h3>
+    <div class="place-box" v-if="winnersFromCurrentRound != undefined">
+      <div
+        class="place-card normal-border-box"
+        :class="{
+          'gold-border-box': userPlace == 'A_1',
+          'silver-border-box': userPlace == 'A_2',
+          'bronze-border-box': userPlace == 'A_3',
+        }"
+      >
+        <div>
+          <p>{{ $t('room.yourResult') }}</p>
+        </div>
+        <div class="place-text">
+          {{ placeText(userPlace) }}
+        </div>
+      </div>
+    </div>
+    <div class="place-box" v-if="winnersFromCurrentRound != undefined">
+      <div class="places-row">
+        <div
+          class="place-card normal-border-box"
+          :class="{
+            'gold-border-box': winner.place == 'A_1',
+            'silver-border-box': winner.place == 'A_2',
+            'bronze-border-box': winner.place == 'A_3',
+          }"
+          v-for="winner in winnersFromCurrentRound"
+          :key="winner.id"
+        >
+          <small>{{ $t('room.place') }}</small>
+          <p class="place-text place-text-small">
+            {{ placeText(winner.place) }}
+          </p>
+          <small>{{ $t('room.player.player') }}</small>
+          <p>{{ winner.user.lastName }} {{ winner.user.firstName }}</p>
+        </div>
+      </div>
     </div>
     <div class="history-row">
       <template v-for="(monthKey, index) in monthKeys">
@@ -73,6 +112,21 @@ export default {
       monthKeys: [],
     };
   },
+  computed: {
+    userId() {
+      return this.$store.state.userId;
+    },
+    userPlace() {
+      let userRating = this.winnersFromCurrentRound.find(
+        (el) => el.user.id == this.userId
+      );
+      if (userRating == null) {
+        return '-';
+      } else {
+        return userRating.place;
+      }
+    },
+  },
   apollo: {
     winnersFromCurrentRound: {
       query: winnersFromCurrentRound,
@@ -124,6 +178,21 @@ export default {
     },
   },
   methods: {
+    placeText(place) {
+      switch (place) {
+        case 'A_1':
+          return this.$t('room.firstPlace');
+
+        case 'A_2':
+          return this.$t('room.secondPlace');
+
+        case 'A_3':
+          return this.$t('room.thirdPlace');
+
+        default:
+          return this.$t('room.notPrizePlace');
+      }
+    },
     reStartRound() {
       this.$apollo
         .mutate({
@@ -165,6 +234,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.place-card {
+  padding: 0.5rem;
+}
+
 .finish-screen {
   grid-column-start: 1;
   grid-column-end: 3;
@@ -187,6 +260,37 @@ export default {
 
   &-item {
     margin: auto;
+  }
+}
+.place-box {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 0.5rem;
+  margin: 1.5rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid rgb(48, 45, 86);
+
+  & .place-row {
+    display: flex;
+    justify-content: space-around;
+    width: 100%;
+    border-top: 1px solid;
+
+    margin: 0.5rem auto;
+    display: flex;
+  }
+
+  & * {
+    margin: auto;
+  }
+}
+.place-text {
+  text-align: center;
+  font-size: 1.5rem;
+  font-weight: bold;
+
+  &-small {
+    font-size: 1rem;
   }
 }
 </style>

@@ -1,5 +1,8 @@
 <template>
-  <div class="organizations-list-column scrollable">
+  <div
+    class="organizations-list-column scrollable"
+    style="scrollbar-gutter: unset"
+  >
     <div
       class="normal-border-box organizations-list-item"
       v-for="organization in organizationsByUser"
