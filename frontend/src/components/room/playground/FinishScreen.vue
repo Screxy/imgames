@@ -238,6 +238,13 @@ export default {
   padding: 0.5rem;
 }
 
+.places-row {
+  display: flex;
+  justify-content: space-around;
+  width: 100%;
+  margin: 0.5rem auto !important;
+}
+
 .finish-screen {
   grid-column-start: 1;
   grid-column-end: 3;
@@ -269,16 +276,6 @@ export default {
   margin: 1.5rem;
   padding-bottom: 0.5rem;
   border-bottom: 1px solid rgb(48, 45, 86);
-
-  & .place-row {
-    display: flex;
-    justify-content: space-around;
-    width: 100%;
-    border-top: 1px solid;
-
-    margin: 0.5rem auto;
-    display: flex;
-  }
 
   & * {
     margin: auto;
