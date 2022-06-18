@@ -23,8 +23,22 @@
           @reloadRound="reloadRound()"
         ></WaitingScreen>
         <template v-else>
-          <GameBoard class="first-column-top scrollable"></GameBoard>
-          <CardsList class="first-column-bottom"></CardsList>
+          <GameBoard
+            :class="{
+              'first-column-top': isCardsListOpened,
+              'd-flex': !isCardsListOpened,
+              'first-column-full': !isCardsListOpened,
+            }"
+            class="scrollable"
+          ></GameBoard>
+          <transition name="slide-fade" mode="out-in">
+            <CardsList
+              v-if="isCardsListOpened"
+              :class="{
+                'first-column-bottom': isCardsListOpened,
+              }"
+            ></CardsList>
+          </transition>
         </template>
         <transition name="slide-fade" mode="out-in">
           <PlayersList
@@ -98,7 +112,7 @@
           <img src="@/assets/icons/chat.svg" alt="" />
           <p>{{ $t('room.navigation.chat') }}</p>
         </div>
-        <div class="nav-btn">
+        <div class="nav-btn" @click="toggleCards">
           <img src="@/assets/icons/paper.svg" alt="" />
           <p>{{ $t('room.navigation.cards') }}</p>
         </div>
@@ -143,6 +157,7 @@ export default {
       isPlayersMenuOpened: !(window.innerWidth <= 610),
       isEffectsMenuOpened: false,
       isChatOpened: false,
+      isCardsListOpened: true,
       windowWidth: window.innerWidth,
     };
   },
@@ -151,7 +166,7 @@ export default {
       if (this.isMobileScreen) {
         return this.isChatOpened;
       } else {
-        return !(this.isPlayersMenuOpened || this.isEffectsMenuOpened);
+        return !(this.isPlayersMenuShown || this.isEffectsMenuShown);
       }
     },
     isPlayersMenuShown() {
@@ -324,6 +339,10 @@ export default {
     onResize() {
       this.windowWidth = window.innerWidth;
     },
+    toggleCards() {
+      this.closeMenuOpened();
+      this.isCardsListOpened = !this.isCardsListOpened;
+    },
   },
   mounted() {
     this.$nextTick(() => {
@@ -471,6 +490,12 @@ export default {
 .slide-fade-leave-to {
   transform: translateY(10px);
   opacity: 0;
+}
+.d-none {
+  display: none !important;
+}
+.d-flex {
+  display: flex !important;
 }
 
 @media screen and (max-width: 610px) {

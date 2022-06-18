@@ -85,6 +85,8 @@ export default {
 #cards-panel {
   display: flex;
   flex-direction: column;
+  min-height: 300px;
+
   & .cards-list {
     width: 100%;
     overflow-y: hidden;
