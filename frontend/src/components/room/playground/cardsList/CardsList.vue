@@ -92,6 +92,7 @@ export default {
     display: flex;
     padding-bottom: 0.5rem;
     max-width: 70vw;
+    max-height: 300px;
   }
 
   & .write-turn-panel {
