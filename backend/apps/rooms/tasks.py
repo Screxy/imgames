@@ -10,6 +10,7 @@ from apps.computed.schema import prepare_computed_game_data_array
 from graphene_subscriptions.events import SubscriptionEvent
 from django.forms.models import model_to_dict
 from collections import defaultdict
+from math import ceil
 
 MONTH_EVENT = 'month_event'
 
@@ -116,8 +117,8 @@ def change_month_in_room(room_id):
                             channel=parameter_change.channel, turn=turn)
 
                         # Изменяем значение трафика
-                        computed_channel.cardinal_value = compute_value(
-                            old_value=computed_channel.cardinal_value, math_operator=parameter_change.math_operator, change_value=parameter_change.value)
+                        computed_channel.cardinal_value = ceil(compute_value(
+                            old_value=computed_channel.cardinal_value, math_operator=parameter_change.math_operator, change_value=parameter_change.value))
                         computed_channel.save()
 
                     # Если происходит изменение конверсии этапа:
@@ -127,8 +128,8 @@ def change_month_in_room(room_id):
                             stage=parameter_change.stage, turn=turn)
 
                         # Изменяем значение конверсии этапа
-                        computed_stage.conversion = compute_value(
-                            old_value=computed_stage.conversion, math_operator=parameter_change.math_operator, change_value=parameter_change.value)
+                        computed_stage.conversion = round(compute_value(
+                            old_value=computed_stage.conversion, math_operator=parameter_change.math_operator, change_value=parameter_change.value), 1)
                         computed_stage.save()
 
         # Высчитываем следующий номер месяца
