@@ -45,7 +45,7 @@ def prepare_computed_game_data_array(room, user, current_month=None):
             for i, stage in enumerate(stages, start=0):
 
                 # Высчитываем значение после конверсии
-                channel_next = channel_next * stage.conversion
+                channel_next = ceil(channel_next * stage.conversion)
 
                 #
                 total_data[1+(2*i)] = '{0:.2f}'.format(
@@ -104,7 +104,7 @@ def prepare_computed_game_data_array(room, user, current_month=None):
             for i, stage in enumerate(computed_stages, start=0):
 
                 # Высчитываем значение после конверсии
-                channel_next = channel_next * stage.conversion
+                channel_next = ceil(channel_next * stage.conversion)
 
                 #
                 total_data[1+(2*i)] = '{0:.2f}'.format(
