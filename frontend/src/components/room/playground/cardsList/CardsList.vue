@@ -91,6 +91,7 @@ export default {
     overflow-x: auto;
     display: flex;
     padding-bottom: 0.5rem;
+    max-width: 70vw;
   }
 
   & .write-turn-panel {
@@ -100,6 +101,11 @@ export default {
 @media screen and (max-width: 610px) {
   h3 {
     display: none;
+  }
+  #cards-panel {
+    & .cards-list {
+      max-width: 100vw;
+    }
   }
   .write-turn-panel {
     margin-top: 0.5rem;
