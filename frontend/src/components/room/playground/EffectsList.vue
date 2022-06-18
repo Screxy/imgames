@@ -1,7 +1,7 @@
 <template>
   <div class="effects-box">
     <h3>{{ $t('room.player.effectsList') }}</h3>
-    <div class="effects-list">
+    <div class="effects-list scrollable">
       <p v-if="chosenCards.length == 0">Эффекты отсутствуют</p>
       <template v-for="(effect, index) in chosenCards">
         <div class="effect normal-border-box orange-border-box" :key="index">
@@ -38,6 +38,7 @@ export default {
 <style lang="scss" scoped>
 .effects-box {
   & .effects-list {
+    height: 99%;
     & .effect {
       padding: 0.5rem;
       display: flex;

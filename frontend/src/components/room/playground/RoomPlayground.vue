@@ -422,6 +422,7 @@ export default {
       grid-column-end: 3;
       grid-row-start: 2;
       grid-row-end: 3;
+      max-height: 350px;
       min-height: calc((100vh - 210px) / 2);
     }
     & .second-column-full {
