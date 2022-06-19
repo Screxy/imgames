@@ -17,6 +17,8 @@ class ParameterChangeInline(admin.TabularInline):
 class CardAdmin(admin.ModelAdmin):
     list_display = ('id', 'header', 'short_description', 'flow')
     list_display_links = ('id', 'header')
+    list_filter = ('flow',)
+    search_fields = ('header', 'flow__title',)
     inlines = [ParameterChangeInline, ]
 
 
