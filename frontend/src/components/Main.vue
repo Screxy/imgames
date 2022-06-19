@@ -129,7 +129,7 @@ h2 {
     }
 
     & .create-room {
-      height: 550px;
+      height: auto;
     }
   }
 }
