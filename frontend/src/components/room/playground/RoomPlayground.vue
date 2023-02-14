@@ -5,8 +5,10 @@
       :roomCode="roomCode"
       :roomRound="currentRoundKey"
       :roomMonth="currentMonthKey"
+      :roomTotalMonths="roomTotalMonthsNumber"
+      :highlight="highlight"
     ></TopBar>
-    <div class="playField">
+    <div class="playField" v-bind:class="{ playField_fullScreen: !isAnyMenuShown }">
       <div
         class="mobile-fade"
         v-if="
@@ -33,6 +35,7 @@
           ></GameBoard>
           <transition name="slide-fade" mode="out-in">
             <CardsList
+              @clean="reloadRound()"
               v-if="isCardsListOpened"
               :class="{
                 'first-column-bottom': isCardsListOpened,
@@ -42,6 +45,7 @@
         </template>
         <transition name="slide-fade" mode="out-in">
           <PlayersList
+            @closeMenu="closeMenuOpened"
             class="mobile-popup second-column-top"
             :players="players"
             :room="roomByCode"
@@ -61,14 +65,17 @@
         </transition>
         <transition name="slide-fade" mode="out-in">
           <Chat
+            @closeMenu="closeMenuOpened"
             class="mobile-popup second-column-full"
             v-if="isChatShown"
+            :messages="getChatByRoomCode"
           ></Chat>
         </transition>
       </template>
       <template v-else>
         <transition name="slide-fade" mode="out-in">
           <PlayersList
+            @closeMenu="closeMenuOpened"
             class="mobile-popup second-column-top"
             :players="players"
             :room="roomByCode"
@@ -88,6 +95,8 @@
         </transition>
         <transition name="slide-fade" mode="out-in">
           <Chat
+            @closeMenu="closeMenuOpened"
+            :messages="getChatByRoomCode"
             class="mobile-popup second-column-full"
             v-if="isChatShown"
           ></Chat>
@@ -99,7 +108,7 @@
           @reloadRound="reloadRound()"
         ></FinishScreen>
       </template>
-      <div class="navigation">
+      <div class="navigation" v-bind:class="{ navigation_fullScreen: !isAnyMenuShown }">
         <div class="nav-btn" @click="openPlayersMenu">
           <img src="@/assets/icons/players.svg" alt="" />
           <p>{{ $t('room.navigation.players') }}</p>
@@ -124,11 +133,11 @@
 <script>
 import roomByCode from '@/graphql/queries/rooms/roomByCode.gql';
 import currentRoundByCode from '@/graphql/queries/rooms/currentRoundByCode.gql';
-import roomUpdated from '@/graphql/subscriptions/rooms/roomUpdated.gql';
-import currentRoundUpdated from '@/graphql/subscriptions/rooms/currentRoundUpdated.gql';
+// import roomUpdated from '@/graphql/subscriptions/rooms/roomUpdated.gql';
+// import currentRoundUpdated from '@/graphql/subscriptions/rooms/currentRoundUpdated.gql';
 import connectRoom from '@/graphql/mutations/rooms/connectRoom.gql';
 import roomParticipants from '@/graphql/queries/rooms/roomParticipants.gql';
-import roomParticipantsUpdated from '@/graphql/subscriptions/rooms/roomParticipantsUpdated.gql';
+// import roomParticipantsUpdated from '@/graphql/subscriptions/rooms/roomParticipantsUpdated.gql';
 import PlayersList from '@/components/room/playground/PlayersList.vue';
 import EffectsList from '@/components/room/playground/EffectsList.vue';
 import GameBoard from '@/components/room/playground/gameBoard/GameBoard.vue';
@@ -138,6 +147,8 @@ import FinishScreen from '@/components/room/playground/FinishScreen.vue';
 import TopBar from '@/components/ui/TopBar.vue';
 import Chat from '@/components/room/playground/Chat.vue';
 import { MAIN_PATH } from '@/pathVariables.js';
+import getChatByRoomCode from '@/graphql/queries/rooms/getChatByRoomCode.gql';
+// import chatUpdated from '@/graphql/subscriptions/rooms/chatUpdated.gql';
 
 export default {
   name: 'RoomPlayground',
@@ -155,33 +166,23 @@ export default {
     return {
       skip: false,
       isPlayersMenuOpened: !(window.innerWidth <= 610),
-      isEffectsMenuOpened: false,
+      isEffectsMenuOpened: !(window.innerWidth <= 610),
       isChatOpened: false,
       isCardsListOpened: true,
       windowWidth: window.innerWidth,
+      highlight: false,
+      keepOnLinstening: true,
     };
   },
   computed: {
     isChatShown() {
-      if (this.isMobileScreen) {
-        return this.isChatOpened;
-      } else {
-        return !(this.isPlayersMenuShown || this.isEffectsMenuShown);
-      }
+      return this.isChatOpened;
     },
     isPlayersMenuShown() {
-      if (this.isMobileScreen) {
-        return this.isPlayersMenuOpened;
-      } else {
-        return !this.isChatOpened;
-      }
+      return this.isPlayersMenuOpened;
     },
     isEffectsMenuShown() {
-      if (this.isMobileScreen) {
-        return this.isEffectsMenuOpened;
-      } else {
-        return !this.isChatOpened;
-      }
+      return this.isEffectsMenuOpened;
     },
     roomCode() {
       return this.$route.params.roomCode;
@@ -194,11 +195,18 @@ export default {
     },
     currentMonthKey() {
       if (this.currentRoundByCode != undefined) {
-        if (this.currentRoundByCode.currentMonth != undefined) {
-          return this.currentRoundByCode.currentMonth.key;
-        }
+        return this.currentRoundByCode.currentMonthKey
       }
       return 0;
+    },
+    currentMonthId() {
+      if (this.currentMonthByCode != undefined) {
+        return this.currentMonthByCode.id;
+      }
+      return 0;
+    },
+    roomTotalMonthsNumber() {
+      return this.roomByCode.numberOfTurns;
     },
     flow() {
       if (this.roomByCode != undefined) {
@@ -231,6 +239,9 @@ export default {
     isMobileScreen() {
       return this.windowWidth <= 610;
     },
+    isAnyMenuShown() {
+      return this.isPlayersMenuOpened || this.isEffectsMenuOpened || this.isChatOpened;
+    },
   },
   apollo: {
     roomByCode: {
@@ -240,19 +251,13 @@ export default {
           code: this.roomCode,
         };
       },
-      subscribeToMore: {
-        document: roomUpdated,
-        variables() {
-          return {
-            code: this.roomCode,
-          };
-        },
-        skip() {
-          return this.skip;
-        },
-        updateQuery: (previousResult, { subscriptionData }) => {
-          return { roomByCode: subscriptionData.data.roomUpdated };
-        },
+    },
+    getChatByRoomCode: {
+      query: getChatByRoomCode,
+      variables() {
+        return {
+          code: this.roomCode,
+        };
       },
     },
     currentRoundByCode: {
@@ -262,22 +267,6 @@ export default {
           code: this.roomCode,
         };
       },
-      subscribeToMore: {
-        document: currentRoundUpdated,
-        variables() {
-          return {
-            code: this.roomCode,
-          };
-        },
-        skip() {
-          return this.skip;
-        },
-        updateQuery: (previousResult, { subscriptionData }) => {
-          return {
-            currentRoundByCode: subscriptionData.data.currentRoundUpdated,
-          };
-        },
-      },
     },
     roomParticipants: {
       query: roomParticipants,
@@ -286,38 +275,19 @@ export default {
           code: this.roomCode,
         };
       },
-      subscribeToMore: {
-        document: roomParticipantsUpdated,
-        variables() {
-          return {
-            code: this.roomCode,
-          };
-        },
-        skip() {
-          return this.skip;
-        },
-        updateQuery: (previousResult, { subscriptionData }) => {
-          let existIndex = previousResult.roomParticipants.findIndex(
-            (el) => el.id == subscriptionData.data.roomParticipantsUpdated.id
-          );
-          if (existIndex == -1) {
-            previousResult.roomParticipants.push(
-              subscriptionData.data.roomParticipantsUpdated
-            );
-          }
-          return {
-            roomParticipants: previousResult.roomParticipants,
-          };
-        },
-      },
     },
   },
   methods: {
     async reloadRound() {
       this.skip = true;
-      await this.$apollo.queries.roomByCode.refresh();
       await this.$apollo.queries.currentRoundByCode.refresh();
+      await this.$apollo.queries.roomParticipants.refresh();
+      this.$root.$emit("update");
       this.skip = false;
+    },
+    async startHighlightAnim() {
+        this.highlight=true;
+        setTimeout(() => { this.highlight=false; }, 6000);
     },
     closeMenuOpened() {
       this.isPlayersMenuOpened = false;
@@ -327,10 +297,16 @@ export default {
     openPlayersMenu() {
       this.closeMenuOpened();
       this.isPlayersMenuOpened = true;
+      if (!this.isMobileScreen) {
+        this.isEffectsMenuOpened = true;
+      }
     },
     openEffectsMenu() {
       this.closeMenuOpened();
       this.isEffectsMenuOpened = true;
+      if (!this.isMobileScreen) {
+        this.isPlayersMenuOpened = true;
+      }
     },
     openChat() {
       this.closeMenuOpened();
@@ -343,10 +319,14 @@ export default {
       this.closeMenuOpened();
       this.isCardsListOpened = !this.isCardsListOpened;
     },
+    awaitIsOver() {
+      this.$apollo.queries.roomParticipants.refresh();
+      this.$root.$emit("awaitIsOver");
+    },
   },
   mounted() {
     this.$nextTick(() => {
-      window.addEventListener('resize', this.onResize);
+      this.window.addEventListener('resize', this.onResize);
     });
     this.$apollo
       .mutate({
@@ -358,11 +338,53 @@ export default {
       .then(() => {})
       .catch(() => {
         this.$router.push(MAIN_PATH);
-      });
+    });
+    this.$root.$on('refreshRound', () => {
+      this.$apollo.queries.currentRoundByCode.refresh();
+    });
+
+
+    let pusher = window.pusher;
+    let channel = pusher.subscribe(this.roomCode);
+
+
+    channel.bind('participantsUpdate', () => {
+      this.$apollo.queries.roomParticipants.refresh();
+    });
+    channel.bind('roomUpdate', () => {
+      this.$apollo.queries.roomByCode.refresh();
+    });
+    channel.bind('roundUpdate', () => {
+      this.$apollo.queries.currentRoundByCode.refresh();
+    });
+    channel.bind('chatUpdate', () => {
+      this.$apollo.queries.getChatByRoomCode.refresh();
+    });
   },
   beforeDestroy() {
     window.removeEventListener('resize', this.onResize);
   },
+  watch: {
+    currentMonthKey: {
+      handler(){
+        this.awaitIsOver();
+        this.startHighlightAnim();
+      },
+      immediate: true
+    },
+    players: {
+      async handler() {
+        await this.$apollo.queries.currentRoundByCode.refresh();
+      },
+      immediate: true
+    },
+    roomByCode: { 
+     async handler() {
+        reloadRound();
+     },
+     immediate: true
+   },
+  }
 };
 </script>
 
@@ -393,7 +415,10 @@ export default {
     max-height: calc(100vh - 48px);
     column-gap: 20px;
     row-gap: 20px;
-
+    &_fullScreen {
+      grid-template-columns: 1fr 62px;
+      column-gap: 0px;
+    }
     & .first-column-top {
       grid-column-start: 1;
       grid-column-end: 2;
@@ -408,6 +433,7 @@ export default {
       grid-column-end: 2;
       grid-row-start: 2;
       grid-row-end: 3;
+      padding-right: 18px;
     }
     & .first-column-full {
       grid-column-start: 1;
@@ -455,6 +481,10 @@ export default {
       grid-column-end: 4;
       grid-row-start: 1;
       grid-row-end: 3;
+    }
+    & .navigation_fullScreen {
+      grid-column-start: 2;
+      grid-column-end: 3;
     }
   }
 }

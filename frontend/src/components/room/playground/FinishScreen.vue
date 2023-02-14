@@ -25,7 +25,7 @@
           <p>{{ $t('room.yourResult') }}</p>
         </div>
         <div class="place-text">
-          {{ placeText(userPlace) }}
+          {{ placeText(userPlace) }} ( {{ allComputedMonthsByCodeTotal }} )
         </div>
       </div>
     </div>
@@ -47,6 +47,8 @@
           </p>
           <small>{{ $t('room.player.player') }}</small>
           <p>{{ winner.user.lastName }} {{ winner.user.firstName }}</p>
+          <small>{{ $t('room.scores')}}</small>
+          <p>{{ winner.result }}</p>
         </div>
       </div>
     </div>
@@ -85,6 +87,7 @@ import FinishFunnelTable from '@/components/room/playground/FinishFunnelTable.vu
 import reStartRound from '@/graphql/mutations/rooms/reStartRound.gql';
 import turnsFromCurrentRound from '@/graphql/queries/rooms/turnsFromCurrentRound.gql';
 import allComputedMonthsByCode from '@/graphql/queries/gameBoard/allComputedMonthsByCode.gql';
+import allComputedMonthsByCodeTotal from '@/graphql/queries/gameBoard/allComputedMonthsByCodeTotal.gql';
 import channelsByCode from '@/graphql/queries/gameBoard/channelsByCode.gql';
 import stagesByCode from '@/graphql/queries/gameBoard/stagesByCode.gql';
 import winnersFromCurrentRound from '@/graphql/queries/rooms/winnersFromCurrentRound.gql';
@@ -176,6 +179,14 @@ export default {
         };
       },
     },
+    allComputedMonthsByCodeTotal: {
+      query: allComputedMonthsByCodeTotal,
+      variables() {
+        return {
+          code: this.roomCode,
+        };
+      },
+    },
   },
   methods: {
     placeText(place) {
@@ -228,8 +239,27 @@ export default {
         if (b == null || a < b) return -1;
         return 0;
       });
+      this.$apollo.queries.winnersFromCurrentRound.refresh();
+    },
+    allComputedMonthsByCodeTotal() {
+      this.$store.commit('CLEAN_CHOSEN_CARD');
+      this.monthKeys = [
+        ...new Set(this.allComputedMonthsByCode.map((el) => el.monthKey)),
+      ].sort((a, b) => {
+        if (a > b) return 1;
+        if (b == null || a < b) return -1;
+        return 0;
+      });
+      this.$apollo.queries.winnersFromCurrentRound.refresh();
     },
   },
+  mounted() {
+    this.$root.$on('update', () => {
+      this.$apollo.queries.allComputedMonthsByCode.refresh();
+      this.$apollo.queries.allComputedMonthsByCodeTotal.refresh();
+      this.$apollo.queries.winnersFromCurrentRound.refresh();
+    });
+  }
 };
 </script>
 
@@ -267,6 +297,7 @@ export default {
 
   &-item {
     margin: auto;
+    width: 100%;
   }
 }
 .place-box {

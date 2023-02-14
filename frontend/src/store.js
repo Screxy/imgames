@@ -34,6 +34,7 @@ const store = new Vuex.Store({
     packageVersion: process.env.PACKAGE_VERSION || '0',
     chosenCards: [],
     messages: [],
+    userName: "",
   },
   mutations: {
     START_LOADING(state) {
@@ -51,6 +52,9 @@ const store = new Vuex.Store({
     SET_USER_ID(state, userId) {
       state.userId = userId;
     },
+    SET_USER_NAME(state, name) {
+      state.userName = name;
+    },
     ADD_CHOSEN_CARD(state, card) {
       if (card != undefined) {
         let existCardIndex = state.chosenCards.findIndex((el) => {
@@ -64,15 +68,12 @@ const store = new Vuex.Store({
             count: 1,
           });
         } else {
-          state.chosenCards[existCardIndex].count += 1;
+          state.chosenCards[existCardIndex].count += 1;     
         }
       }
     },
     CLEAN_CHOSEN_CARD(state) {
       state.chosenCards = [];
-    },
-    ADD_MESSAGE(state, message) {
-      state.messages.push(message);
     },
   },
   actions: {},

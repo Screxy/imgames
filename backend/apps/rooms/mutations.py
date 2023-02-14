@@ -1,10 +1,10 @@
 import graphene
-from .models import Room, Round, Month, Turn, CardChoice, RoomParticipant
-
+from .models import Room, Round, Month, Turn, CardChoice, RoomParticipant, Message
 from apps.organizations.models import Organization
 from apps.flows.models import Flow, Card
 from apps.rooms.types import RoundType, RoomType, TurnType
 from apps.rooms.tasks import change_month_in_room
+from config.pusher import pusher_client
 
 
 class CreateRoom(graphene.Mutation):
@@ -79,6 +79,36 @@ class WriteTurn(graphene.Mutation):
                     key=code_array[1], organization=organization)
                 current_round = room.current_round
                 current_month = current_round.current_month
+                
+                
+                # Считаем бюджет на данный месяц
+                months = Month.objects.filter(round=current_round)
+                turns = []
+                expenses = 0
+                for month in months:
+                    turns += Turn.objects.filter(user=user, month=month)
+                for turn in turns:
+                    choices = CardChoice.objects.filter(turn=turn)
+                    for choice in choices:
+                        card = choice.card
+                        expense = card.cost
+                        expenses += expense
+                months_passed = current_month.key
+                
+                if months_passed == 0:
+                    balance = room.money_per_month
+                else:
+                    balance = room.money_per_month * (months_passed + 1)
+                    balance = balance - expenses
+
+                # Если общая ценна карточек больше бюджета на месяц, возвращаем ошибку
+                cards_price = 0
+                for card_id in cards_id:
+                    card = Card.objects.get(pk=card_id)
+                    cards_price += card.cost
+                    
+                if cards_price > balance:
+                    raise Exception('Cards price is bigger than money given per month')
 
                 # Если шаг существует, возвращаем ошибку
                 turn = Turn.objects.filter(
@@ -95,14 +125,39 @@ class WriteTurn(graphene.Mutation):
                     card = Card.objects.get(pk=card_id)
                     CardChoice.objects.create(card=card, turn=turn)
 
-                # Проверяем, если все сделали ход
-                turns_count = Turn.objects.filter(
-                    month=current_month).count()
-                participants_count = RoomParticipant.objects.filter(
-                    room=room).count()
-                if turns_count >= participants_count:
-                    task = change_month_in_room.delay(room.id)
+                # Участники комнаты и участники комнаты, которые сделали ход
+                all_participants = RoomParticipant.objects.filter(room=room)
+                turn_made_participants = RoomParticipant.objects.filter(room=room, is_turn_made=True)
 
+                # Проверяем все ли другие сделали ход
+                # количество участников сделавших ход должно быть на 1 меньше, чем участников всего
+                if turn_made_participants.count() >= (all_participants.count()-1):
+                    # Обнуляем их шаги, если был не последний месяц
+                    key = current_month.key
+                    if not (Month.objects.filter(key=key+2, round=current_round).count() == 0):
+                        turn_made_participants.update(is_turn_made=False)
+
+                    # Завершаем раунд, если был последний месяц
+                    else:
+                        current_participant = all_participants.get(user=user)
+                        current_participant.is_turn_made = True
+                        current_participant.save()
+                        current_round_update = Round.objects.get(id=current_round.id)
+                        current_round_update.is_finished = True
+                        current_round_update.save()
+                    
+                    # Меняем месяц
+                    task = change_month_in_room.delay(room.id)
+                    pusher_client.trigger(room.code, 'roundUpdate', {})
+
+                # Если не все, то записываем, что текущий участник сделал ход
+                else:
+
+                    current_participant = all_participants.get(user=user)
+                    current_participant.is_turn_made = True
+                    current_participant.save()
+
+                pusher_client.trigger(code, 'participantsUpdate', {})
                 # Возвращаем результат
                 return WriteTurn(turn=turn, success=True)
             return WriteTurn(success=False, errors=['Error code!'])
@@ -133,10 +188,43 @@ class StartRound(graphene.Mutation):
                         raise Exception('Already started!')
                     current_round.is_active = True
                     current_round.save()
+
+                    # Так отправится запрос roomParticipantUpdated
+                    current_participant_filter = RoomParticipant.objects.filter(room=room, user=user)
+                    current_participant_filter.update(is_turn_made=True)
+                    current_participant_update = RoomParticipant.objects.get(room=room, user=user)
+                    current_participant_update.is_turn_made = False
+                    current_participant_update.save()
+                
+                pusher_client.trigger(code, 'roundUpdate', {})
                 return StartRound(success=True)
         except Exception as e:
             return StartRound(success=False, errors=[str(e)])
 
+class SendMessage(graphene.Mutation):
+    """ Мутация отправки сообщения внутри комнаты """
+    success = graphene.Boolean()
+    errors = graphene.List(graphene.String)
+
+    class Arguments:
+        code = graphene.String(required=True)
+        text = graphene.String(required=True)
+
+    def mutate(self, info, code, text):
+        try:
+            code_array = str(code).split('-')
+            if len(code_array) > 1:
+                user = info.context.user
+                organization = Organization.objects.get(
+                    prefix__iexact=code_array[0])
+                room = Room.objects.get(
+                    key=code_array[1], organization=organization)
+                Message.objects.create(room=room, user=user, text=text)
+                pusher_client.trigger(code, 'chatUpdate', {})
+                return SendMessage(success=True)
+        except Exception as e:
+            print(e)
+            return SendMessage(success=False, errors=[str(e)])
 
 class ReStartRound(graphene.Mutation):
     """ Мутация для начала нового раунда комнаты в пространстве организации """
@@ -166,12 +254,21 @@ class ReStartRound(graphene.Mutation):
                             Month.objects.create(round=new_round)
                         else:
                             first_month = Month.objects.create(round=new_round)
-
+                    
                     new_round.current_month = first_month
                     new_round.save()
 
+                    # Обнуляем ходы в очереди у участников
+                    participants = RoomParticipant.objects.filter(room=room)
+                    participants.update(is_turn_made=False)
+
+                    old_round = room.current_round
+                    old_round.save()
+
                     room.current_round = new_round
                     room.save()
+                # pusher_client.trigger(code, 'roundUpdate', {})
+                pusher_client.trigger(code, 'roomUpdate', {})
                 return ReStartRound(success=True)
         except Exception as e:
             return ReStartRound(success=False, errors=[str(e)])
@@ -198,7 +295,7 @@ class ConnectRoom(graphene.Mutation):
 
                 participant, created = RoomParticipant.objects.get_or_create(
                     room=room, user=user)
-
+                pusher_client.trigger(code, 'participantsUpdate', {})
                 return ConnectRoom(success=True, created=created)
         except Exception as e:
             return ConnectRoom(success=False, errors=[str(e)])

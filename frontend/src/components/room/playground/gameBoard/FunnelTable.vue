@@ -90,6 +90,14 @@ export default {
       return dataArray;
     },
   },
+  watch: {
+    computedChannelsByCode: {
+      handler() {
+        this.$root.$emit("refreshRound");
+      },
+      immediate: true,
+    }
+  }
 };
 </script>
 

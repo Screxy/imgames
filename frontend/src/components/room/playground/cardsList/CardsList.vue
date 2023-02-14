@@ -1,11 +1,18 @@
 <template>
   <div id="cards-panel">
-    <h3>{{ $t('room.card.cardsList') }}</h3>
+    <div class="waiting-title" v-if="!canDoStepNowByCode || waitingForOthers">
+      {{ $t('room.card.waitingForOthers') }}
+    </div>
+    <div class="cards-context">
+      <h3 class="cards-title">{{ $t('room.card.cardsList') }}</h3>
+      <p class="current-budget">{{ $t('room.card.moneyLeft') }}: {{ balance }} / {{ moneyPerMonth }}</p>
+    </div>
     <WriteTurnPanel
       class="write-turn-panel"
-      :disabled="!canDoStepNowByCode"
+      :disabled="balance < 0 || (!canDoStepNowByCode || waitingForOthers)"
       :selectedCardsId="selectedCardsId"
-      @clean="selectedCardsId = []"
+      @clean="selectedCardsId = []; $emit('clean')"
+      @cardsAreSend="waitingForOthers = true"
     ></WriteTurnPanel>
     <div class="cards-list scrollable">
       <Card
@@ -13,7 +20,7 @@
         :key="card.id"
         :data="card"
         :selected="isSelected(card.id)"
-        :disabled="!canDoStepNowByCode"
+        :disabled="!canDoStepNowByCode || waitingForOthers"
         @select="addChoice($event)"
         @deselect="removeChoice($event)"
       ></Card>
@@ -24,6 +31,8 @@
 <script>
 import cardsByCode from '@/graphql/queries/gameBoard/cardsByCode.gql';
 import canDoStepNowByCode from '@/graphql/queries/gameBoard/canDoStepNowByCode.gql';
+import roomByCode from '@/graphql/queries/rooms/roomByCode.gql';
+import getMoneyPerMonth from '@/graphql/queries/gameBoard/getMoneyPerMonth.gql';
 import Card from '@/components/room/playground/cardsList/Card.vue';
 import WriteTurnPanel from '@/components/room/playground/cardsList/WriteTurnPanel.vue';
 
@@ -34,6 +43,14 @@ export default {
     WriteTurnPanel,
   },
   apollo: {
+    roomByCode: {
+      query: roomByCode,
+      variables() {
+        return {
+          code: this.roomCode,
+        };
+      },
+    },
     cardsByCode: {
       query: cardsByCode,
       variables() {
@@ -50,34 +67,77 @@ export default {
         };
       },
     },
+    getMoneyPerMonth: {
+      query: getMoneyPerMonth,
+      variables() {
+        return {
+          code: this.roomCode,
+        };
+      },
+    },
   },
   data() {
     return {
       selectedCardsId: [],
+      balance: 0,
+      balanceIsPositive: true,
+      waitingForOthers: false,
     };
   },
   computed: {
     roomCode() {
       return this.$route.params.roomCode;
     },
+    moneyPerMonth() {
+      if (this.getMoneyPerMonth != undefined) {
+        return this.getMoneyPerMonth;
+      }
+      return 0;
+    },
   },
   methods: {
     addChoice(cardId) {
       if (!this.isSelected(cardId)) {
         this.selectedCardsId.push(+cardId);
+        this.countBalance();
       }
     },
     removeChoice(cardId) {
       if (this.isSelected(cardId)) {
         this.selectedCardsId = this.selectedCardsId.filter(
-          (el) => +el !== +cardId
+          (el) => {
+            return el != cardId;
+          }
         );
+        this.countBalance();
       }
     },
     isSelected(cardId) {
       return +this.selectedCardsId.findIndex((el) => +el == +cardId) !== -1;
     },
+    countBalance() {
+      var expenses = 0;
+      this.selectedCardsId.forEach(id => {
+        this.cardsByCode.forEach(card => {
+          if(card.id == id) {
+            expenses = expenses + card.cost;
+          };
+        });
+      });
+      this.balance = this.moneyPerMonth - expenses;
+    },
   },
+  updated() {
+    this.countBalance();
+    this.checkBalance();
+  },
+  mounted() {
+    this.$root.$on('awaitIsOver', () => {
+      this.waitingForOthers = false;
+      this.$apollo.queries.canDoStepNowByCode.refresh();
+      this.$apollo.queries.getMoneyPerMonth.refresh();
+    })
+  }
 };
 </script>
 
@@ -86,6 +146,19 @@ export default {
   display: flex;
   flex-direction: column;
   min-height: 300px;
+
+  & .cards-context {
+    display: flex;
+  }
+
+  & .cards-title {
+    width: 50%;
+  }
+
+  & .current-budget {
+    width: 50%;
+    text-align: right;
+  }
 
   & .cards-list {
     width: 100%;
@@ -99,6 +172,10 @@ export default {
 
   & .write-turn-panel {
     margin: 0 0 0.5rem 0;
+  }
+  .waiting-title {
+    font-family: "PT Sans", sans-serif;
+    font-size: 1.17em;
   }
 }
 @media screen and (max-width: 610px) {

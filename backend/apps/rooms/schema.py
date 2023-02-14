@@ -1,11 +1,12 @@
 import graphene
 from graphene_django.debug import DjangoDebug
-from apps.rooms.mutations import CreateRoom, WriteTurn, StartRound, ReStartRound, ConnectRoom
-from apps.rooms.types import RoomType, RoundType, RoomParticipantType, TurnType, WinnerType
-from apps.rooms.models import Month, Room, Turn, Round, RoomParticipant, Winner
+from apps.rooms.mutations import CreateRoom, WriteTurn, StartRound, ReStartRound, ConnectRoom, SendMessage
+from apps.rooms.types import RoomType, RoundType, RoomParticipantType, TurnType, WinnerType, MessageType,  MonthType
+from apps.rooms.models import Month, Room, Turn, Round, RoomParticipant, Winner, Message, CardChoice
 from apps.organizations.models import Organization
 from graphene_subscriptions.events import CREATED, UPDATED, DELETED
 from apps.rooms.tasks import MONTH_EVENT
+import asyncio
 
 
 class Query(graphene.ObjectType):
@@ -17,6 +18,8 @@ class Query(graphene.ObjectType):
         RoomType, subdomain=graphene.String(), description='Список комнат в организации')
     can_do_step_now_by_code = graphene.Boolean(
         code=graphene.String(), description='Может ли пользователь делать ход в данный момент')
+    get_money_per_month = graphene.Int(
+        code=graphene.String(), description='Бюджет на текущий месяц')
     current_round_by_code = graphene.Field(
         RoundType, code=graphene.String(), description='Информация о текущем раунде по коду комнаты')
     is_room_owner = graphene.Boolean(
@@ -27,6 +30,7 @@ class Query(graphene.ObjectType):
     ), description='Список ходов пользователя в комнате за текущий раунд')
     winners_from_current_round = graphene.List(WinnerType, code=graphene.String(
     ), description='Список победителей в комнате за текущий раунд')
+    get_chat_by_room_code = graphene.List(MessageType, code=graphene.String(), description='Сообщения чата комнаты')
 
     def resolve_room_participants(self, info, code):
         try:
@@ -40,6 +44,7 @@ class Query(graphene.ObjectType):
                 return RoomParticipant.objects.filter(room=room)
         except Exception as e:
             return None
+
 
     def resolve_can_do_step_now_by_code(self, info, code):
         try:
@@ -59,11 +64,55 @@ class Query(graphene.ObjectType):
                 raise Exception('Error code')
         except Exception as e:
             return None
+        
+    def resolve_get_money_per_month(self, info, code):
+        try:
+            code_array = str(code).split('-')
+            if len(code_array) > 1:
+                user = info.context.user
+                organization = Organization.objects.get(
+                    prefix__iexact=code_array[0])
+                room = Room.objects.get(
+                    key=code_array[1], organization=organization)
+                current_round = room.current_round
+                current_month = current_round.current_month
+                months = Month.objects.filter(round=current_round)
+                turns = []
+                expenses = 0
+                for month in months:
+                    turns += Turn.objects.filter(user=user, month=month)
+                for turn in turns:
+                    choices = CardChoice.objects.filter(turn=turn)
+                    for choice in choices:
+                        card = choice.card
+                        expense = card.cost
+                        expenses += expense
+                months_passed = current_month.key
+                
+                if months_passed == 0:
+                    balance = room.money_per_month
+                    return balance
+                
+                balance = room.money_per_month * (months_passed + 1)
+                balance = balance - expenses
+                return balance
+            else:
+                raise Exception('Error code')
+        except Exception as e:
+            print(e)
+            return None
+        
 
     def resolve_rooms_in_organization(self, info, subdomain):
         try:
+            user = info.context.user
             organization = Organization.objects.get(subdomain=subdomain)
-            return Room.objects.filter(organization=organization).order_by('-key')
+            participants = RoomParticipant.objects.filter(user=user).order_by('-room__key')
+            rooms = []
+            for participant in participants:
+                if participant.room.organization == organization:
+                    rooms += [participant.room]
+            return rooms
         except Exception as e:
             return None
 
@@ -144,11 +193,26 @@ class Query(graphene.ObjectType):
         except Exception as e:
             return None
 
+    def resolve_get_chat_by_room_code(self, info, code):
+        try:
+            code_array = str(code).split('-')
+            if len(code_array) > 1:
+                user = info.context.user
+                organization = Organization.objects.get(
+                    prefix__iexact=code_array[0])
+                room = Room.objects.get(
+                    key=code_array[1], organization=organization)
+                messages = Message.objects.filter(room=room).order_by("created_at")
+            return messages
+        except Exception as e:
+            print(e)
+            return None
 
 class Mutation(graphene.ObjectType):
     create_room = CreateRoom.Field()
     write_turn = WriteTurn.Field()
     start_round = StartRound.Field()
+    send_message = SendMessage.Field()
     re_start_round = ReStartRound.Field()
     connect_room = ConnectRoom.Field()
 
@@ -181,15 +245,37 @@ def filter_round_events(event, current_round):
     except Exception as e:
         return False
 
+def filter_chat_updated_events(event, room):
+    try:
+        return isinstance(event.instance, Message) and (event.instance.room.pk == int(room.id))
+    except Exception as e:
+        return False
+
 
 class Subscription(graphene.ObjectType):
     room_updated = graphene.Field(RoomType, code=graphene.String())
+    chat_updated = graphene.Field(MessageType, code=graphene.String())
     current_round_updated = graphene.Field(RoundType, code=graphene.String())
-    room_participants_updated = graphene.Field(
-        RoomParticipantType, code=graphene.String())
+    room_participants_updated = graphene.Field(RoomParticipantType, code=graphene.String())
 
     # Подписка на обновления списка участников комнаты по коду
     def resolve_room_participants_updated(self, info, code):
+        try:
+            code_array = str(code).split('-')
+            if len(code_array) > 1:
+                organization = Organization.objects.get(
+                    prefix__iexact=code_array[0])
+                room = Room.objects.get(
+                    key=code_array[1], organization=organization)
+                return self.filter(lambda event: filter_room_participants_events(event, room)).map(lambda event: event.instance)
+            else:
+                raise Exception('Error code')
+        except Exception as e:
+            return None
+
+
+    # Подписка на обновление чата
+    def resolve_chat_updated(self, info, code):
         try:
             code_array = str(code).split('-')
             if len(code_array) > 1:
@@ -198,9 +284,7 @@ class Subscription(graphene.ObjectType):
                     prefix__iexact=code_array[0])
                 room = Room.objects.get(
                     key=code_array[1], organization=organization)
-                return self.filter(lambda event: filter_room_participants_events(event, room)).map(lambda event: event.instance)
-            else:
-                raise Exception('Error code')
+                return self.filter(lambda event: filter_chat_updated_events(event, room)).map(lambda event: event.instance)
         except Exception as e:
             return None
 

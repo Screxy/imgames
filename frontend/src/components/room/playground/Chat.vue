@@ -1,6 +1,9 @@
 <template>
   <div class="chat-box">
-    <h3>{{ $t('room.player.chat') }}</h3>
+    <div class="chat-box__head">
+      <h3>{{ $t('room.player.chat') }}</h3>
+      <SubmitButton type="bg-blue" @click="collapse">Закрыть</SubmitButton>
+    </div>
     <div class="messages-box scrollable" ref="messagesBox">
       <template v-if="messages.length == 0">
         <p>Напишите первое сообщение!</p>
@@ -13,7 +16,7 @@
         >
           <div class="message normal-border-box">
             <small>{{ $t('room.player.you') }}</small>
-            {{ message.text }}
+            {{ message.text }} 
           </div>
           <div class="avatar">
             <img
@@ -33,8 +36,8 @@
           </div>
           <div class="message normal-border-box">
             <small>{{
-              message.user.name
-                ? message.user.name
+              message.user
+                ? (message.user.firstName + " " + message.user.lastName)
                 : $t('room.player.player') + ' #' + message.user.id
             }}</small>
             {{ message.text }}
@@ -58,18 +61,23 @@
 import TextInput from '@/components/ui/TextInput.vue';
 import SubmitButton from '@/components/ui/SubmitButton.vue';
 
+import sendMessage from '@/graphql/mutations/rooms/sendMessage.gql';
+  
 export default {
   name: 'Chat',
   components: {
     TextInput,
     SubmitButton,
   },
+  props: {
+    messages: {type: Array},
+  },
   computed: {
     userId() {
       return this.$store.state.userId;
     },
-    messages() {
-      return this.$store.state.messages;
+    roomCode() {
+      return this.$route.params.roomCode;
     },
   },
   data() {
@@ -83,29 +91,28 @@ export default {
     },
     sendMessage() {
       if (this.newMessageText != '') {
-        let message = {
-          text: this.newMessageText,
-          user: {
-            id: this.userId,
+        this.$apollo
+        .mutate({
+          mutation: sendMessage,
+          variables: {
+            text: this.newMessageText,
+            code: this.roomCode
           },
-        };
-        this.$store.commit('ADD_MESSAGE', message);
+        });
         this.newMessageText = '';
-        setTimeout(() => {
-          this.$refs.messagesBox.scrollTop =
-            this.$refs.messagesBox.scrollHeight;
-        }, 100);
       }
     },
+    collapse() {
+      this.$emit('closeMenu');
+    }
   },
-};
+}
 </script>
 
 <style lang="scss" scoped>
 .chat-box {
   display: flex;
   flex-direction: column;
-
   & .messages-box {
     height: 100%;
     min-height: 200px;
@@ -133,6 +140,13 @@ export default {
         margin-bottom: 0.25rem;
       }
     }
+  }
+  &__head {
+    display: flex;
+    width: 100%;
+    padding-top: 16px;
+    padding-bottom: 16px;
+    justify-content: space-between;
   }
 
   & .input-box {

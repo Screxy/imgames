@@ -2,10 +2,10 @@ from decimal import Decimal
 import graphene
 from graphene_django.debug import DjangoDebug
 from .types import ComputedGameDataType
-from .models import ChannelComputed, StageComputed
+from .models import ChannelComputed, StageComputed, StageOfChannelComputed
 from apps.organizations.models import Organization
 from apps.rooms.models import Room, Turn, Month
-from apps.flows.models import Channel, Stage
+from apps.flows.models import Channel, Stage, StageOfChannel
 from apps.users.models import User
 from graphene_subscriptions.events import CREATED, UPDATED, DELETED
 from math import ceil
@@ -24,8 +24,7 @@ def prepare_computed_game_data_array(room, user, current_month=None):
     channels = Channel.objects.filter(flow=flow)
 
     # Находим данные о этапах воронки по умолчанию
-    stages = Stage.objects.filter(flow=flow)
-
+    stages = Stage.objects.filter(flow=flow).order_by('id')
     answer_array = []
     # Если начальный месяц
     if current_month.key == 0:
@@ -44,19 +43,25 @@ def prepare_computed_game_data_array(room, user, current_month=None):
             channel_next = channel_start_value
             for i, stage in enumerate(stages, start=0):
 
+                try: # Если есть определенная конверсия у данного канала, то используем ее
+                    certain_stage = StageOfChannel.objects.get(channels=channel, stage=stage)
+                    stage_conversion = certain_stage.conversion
+                    
+                except: # Если нет, то используем стандартную конверсию канала
+                    stage_conversion = stage.conversion
+                
                 # Высчитываем значение после конверсии
-                channel_next = ceil(channel_next * stage.conversion)
+                channel_next = ceil(channel_next * stage_conversion)
 
-                #
-                total_data[1+(2*i)] = '{0:.2f}'.format(
+                total_data[1+(2*i)] = '{0:.4f}'.format(
                     Decimal(total_data[1+(2*i)])+Decimal(0))
                 total_data[2+(2*i)] = '{0:.2f}'.format(
                     Decimal(channel_next)+Decimal(total_data[2+(2*i)]))
 
                 # Форматируем данные для ответа
-                data += ['{0:.2f}'.format(stage.conversion),
+                data += ['{0:.4f}'.format(stage_conversion),
                          '{0:.2f}'.format(channel_next)]
-
+            print(data)
             # Добавляем данные в массив возвращаемых значений
             answer_array += [ComputedGameDataType(
                 data=data, channel=channel, is_total=False)]
@@ -64,7 +69,7 @@ def prepare_computed_game_data_array(room, user, current_month=None):
         # Добавляем значение ИТОГО
         answer_array += [ComputedGameDataType(
             data=total_data, channel=None, is_total=True)]
-
+        
         return answer_array
 
     # Если не начальный месяц
@@ -80,7 +85,7 @@ def prepare_computed_game_data_array(room, user, current_month=None):
 
         # Получаем вычисленные этапы по шагу
         computed_stages = StageComputed.objects.filter(
-            turn=user_turn)
+            turn=user_turn).order_by("stage")
 
         # Получаем вычисленные каналы по шагу
         computed_channels = ChannelComputed.objects.filter(
@@ -103,19 +108,28 @@ def prepare_computed_game_data_array(room, user, current_month=None):
             channel_next = channel_start_value
             for i, stage in enumerate(computed_stages, start=0):
 
-                # Высчитываем значение после конверсии
-                channel_next = ceil(channel_next * stage.conversion)
+                try: # Если есть определенная конверсия у данного канала, то используем ее
+                    certain_stage = StageOfChannel.objects.get(channels=computed_channel.channel, stage=stage.stage)
+                    print(certain_stage.conversion)
+                    certain_computed_stage = StageOfChannelComputed.objects.get(turn=user_turn, stage_of_channel=certain_stage)
+                    print(certain_computed_stage.id)
+                    stage_conversion = certain_computed_stage.conversion
+                except: # Если нет, то используем стандартную конверсию канала
+                    stage_conversion = stage.conversion
 
-                #
-                total_data[1+(2*i)] = '{0:.2f}'.format(
+                # Высчитываем значение после конверсии
+                channel_next = ceil(channel_next * stage_conversion)
+
+                total_data[1+(2*i)] = '{0:.4f}'.format(
                     Decimal(total_data[1+(2*i)])+Decimal(0))
                 total_data[2+(2*i)] = '{0:.2f}'.format(
                     Decimal(channel_next)+Decimal(total_data[2+(2*i)]))
 
                 # Форматируем данные для ответа
-                data += ['{0:.2f}'.format(stage.conversion),
+                print(stage_conversion)
+                data += ['{0:.4f}'.format(stage_conversion),
                          '{0:.2f}'.format(channel_next)]
-
+            print(data)
             # Добавляем данные в массив возвращаемых значений
             answer_array += [ComputedGameDataType(
                 data=data, channel=computed_channel.channel, is_total=False, month_key=current_month.key)]
@@ -123,7 +137,7 @@ def prepare_computed_game_data_array(room, user, current_month=None):
         # Добавляем значение ИТОГО
         answer_array += [ComputedGameDataType(
             data=total_data, channel=None, is_total=True, month_key=current_month.key)]
-
+        
         return answer_array
 
 
@@ -133,6 +147,8 @@ class Query(graphene.ObjectType):
     ), description='Игровые данные пользователя на текущий месяц по коду комнаты')
     all_computed_months_by_code = graphene.List(ComputedGameDataType, code=graphene.String(
     ), description='Игровые данные пользователя на текущий месяц по коду комнаты')
+    all_computed_months_by_code_total = graphene.Int(code=graphene.String(
+    ), description='Всего очков набрано пользователем')
 
     def resolve_computed_channels_by_code(root, info, code):
         try:
@@ -166,6 +182,31 @@ class Query(graphene.ObjectType):
                     computed_data += prepare_computed_game_data_array(
                         room=room, user=user, current_month=month)
                 return computed_data
+            else:
+                raise Exception('Error code')
+        except Exception as e:
+            print(e)
+            return None
+    
+    def resolve_all_computed_months_by_code_total(root, info, code):
+        try:
+            code_array = str(code).split('-')
+            if len(code_array) > 1:
+                user = info.context.user
+                organization = Organization.objects.get(
+                    prefix__iexact=code_array[0])
+                room = Room.objects.get(
+                    key=code_array[1], organization=organization)
+                current_round = room.current_round
+                months = Month.objects.filter(round=current_round)
+                total = 0
+                for month in months:
+                    if month.key == 0:
+                        continue
+                    for channel in prepare_computed_game_data_array(room=room, user=user, current_month=month):
+                        if channel.is_total == True:
+                            total += int(float(channel.data[-1]))
+                return total
             else:
                 raise Exception('Error code')
         except Exception as e:

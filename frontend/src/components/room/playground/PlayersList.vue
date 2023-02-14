@@ -1,6 +1,9 @@
 <template>
   <div>
-    <h3>{{ $t('room.player.playersList') }}</h3>
+    <div class="head">
+      <h3>{{ $t('room.player.playersList') }}</h3>
+      <SubmitButton type="bg-blue" @click="collapse">Закрыть</SubmitButton>
+    </div>
     <div class="players-list-wrapper">
       <PlayersListItem
         v-for="player in players"
@@ -14,11 +17,13 @@
 
 <script>
 import PlayersListItem from '@/components/room/playground/PlayersListItem.vue';
+import SubmitButton from '@/components/ui/SubmitButton.vue';
 
 export default {
   name: 'PlayersList',
   components: {
     PlayersListItem,
+    SubmitButton,
   },
   props: {
     players: {
@@ -32,13 +37,16 @@ export default {
   },
   computed: {
     roomOwnerId() {
-      if (this.room.roomOwner != undefined) {
-        if (this.room.roomOwner.id != undefined) {
-          return +this.room.roomOwner.id;
-        }
+      if (this.room.roomOwnerId != undefined) {
+        return this.room.roomOwnerId
       }
-      return {};
+      return 0;
     },
+  },
+  methods: {
+    collapse() {
+      this.$emit('closeMenu');
+    }
   },
 };
 </script>
@@ -48,5 +56,12 @@ export default {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
   column-gap: 8px;
+}
+.head {
+    display: flex;
+    width: 100%;
+    padding-top: 16px;
+    padding-bottom: 16px;
+    justify-content: space-between;
 }
 </style>

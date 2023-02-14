@@ -20,7 +20,7 @@ export default {
   },
   computed: {
     intValue() {
-      return this.value * 100;
+      return (this.value * 100).toFixed(2);;
     },
   },
 };

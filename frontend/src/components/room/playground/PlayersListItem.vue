@@ -1,11 +1,16 @@
 <template>
-  <div class="players-list-item normal-border-box">
+  <div class="players-list-item normal-border-box" :class="{ userMadeTurn: player.isTurnMade }">
     <div v-if="ownerId == player.user.id" class="room-owner-icon">
       <img src="@/assets/icons/inner-star.svg" />
     </div>
     <img class="player-avatar" src="@/assets/no_avatar.svg" alt="Аватар" />
-    {{ player.user.firstName }}
-    {{ player.user.lastName }}
+    <div v-if="userId == player.user.id">
+      {{ $t('room.player.you') }}
+    </div>
+    <div v-else>
+      {{ player.user.firstName }}
+      {{ player.user.lastName }}
+    </div>
   </div>
 </template>
 
@@ -22,6 +27,11 @@ export default {
       required: true,
     },
   },
+  computed: {
+    userId() {
+      return this.$store.state.userId;
+    },
+  }
 };
 </script>
 
@@ -51,5 +61,8 @@ export default {
   .player-avatar {
     height: 38px;
   }
+}
+.userMadeTurn {
+  background: linear-gradient(135deg, #4fcd33 0%, #2d9c8c 100%);
 }
 </style>

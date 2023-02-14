@@ -1,6 +1,11 @@
 import Vue from 'vue';
 import store from '@/store';
 import router from '@/router';
+import Pusher from 'pusher-js';
+
+window.pusher = new Pusher(process.env.VUE_APP_PUSHER_KEY, {
+  cluster: process.env.VUE_APP_PUSHER_CLUSTER
+});
 
 import { createProvider } from '@/apollo';
 

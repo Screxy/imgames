@@ -4,10 +4,11 @@
     <div class="menu-block" v-if="type == 'playground'">
       <div class="left-block">
         <div class="menu-link menu-link-bold room-data">
-          {{ $t('room.room') }} {{ roomCode }} / {{ $t('room.round') }} R{{
+          {{ $t('room.room') }} {{ roomCode }} / {{ $t('room.round') }} {{
             roomRound
           }}
-          / {{ $t('room.month') }} M{{ roomMonth }}
+          /
+          <span style='margin-left:0.25em; display:inline-block;' v-bind:class="{ highlight : highlight }">{{ $t('room.monthNumber.'+(roomMonth)) }} ({{ $t('room.periodIs') }} {{ roomTotalMonths }} {{ $t('room.numberOfMonths') }}) </span>
         </div>
       </div>
       <div class="right-block">
@@ -35,7 +36,7 @@
         <SubmitButton
           class="menu-link"
           :type="'light-text'"
-          @click="$router.push(authPath)"
+          @click="$router.push(authPath);"
           >{{ $t('auth.enterButton') }}</SubmitButton
         >
       </div>
@@ -44,6 +45,7 @@
       <div class="left-block"></div>
       <div class="right-block">
         <LocaleSwitcher></LocaleSwitcher>
+        <p class='userName'> {{ this.$store.state.userName }} </p>
         <LogOutButton class="menu-link"></LogOutButton>
       </div>
     </div>
@@ -72,6 +74,12 @@ export default {
     },
     roomMonth: {
       type: Number,
+    },
+    roomTotalMonths: {
+      type: Number,
+    },
+    highlight: {
+      type: Boolean,
     },
   },
   data() {
@@ -122,11 +130,40 @@ export default {
         }
       }
     }
-
     .room-data-short {
       display: none;
     }
   }
+}
+.highlight {
+  color: $light_text_color;
+  animation: blink 2s 3 linear ;
+}
+
+.userName {
+  background-color: transparent;
+  color: $light_text_color;
+  border: 0px;
+  margin-top: 6px;
+  padding-left: 30px;
+  padding-right: 20px;
+  & option {
+    color: $dark_text_color;
+  }
+}
+
+@media (max-width: 768px) {
+  .userName {
+    display: none;
+  }
+}
+
+@keyframes blink {  
+	0% { color: $light_text_color; }
+	25% { color: #FBB; }
+	50% { color: #F00; } 
+  75% { color: #FBB; }
+  100% { color: $light_text_color; }
 }
 
 @media screen and (max-width: 600px) {
