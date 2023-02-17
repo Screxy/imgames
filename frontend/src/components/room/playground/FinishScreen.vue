@@ -1,12 +1,12 @@
 <template>
   <div class="finish-screen scrollable">
     <div>
-      <h2>{{ $t('room.roundFinishedHeader', { round: `R${roundKey}` }) }}</h2>
+      <h2>{{ $t('room.roundFinishedHeader', { round: "" }) }}</h2>
 
       <template v-if="isRoomOwner">
         <div class="next-round-btn">
           <SubmitButton :type="'bg-green'" @click="reStartRound">{{
-            $t('room.reStartRoundButton', { nextRound: `R${roundKey + 1}` })
+            $t('room.reStartRoundButton', { nextRound: "" })
           }}</SubmitButton>
         </div>
       </template>
@@ -55,12 +55,12 @@
     <div class="history-row">
       <template v-for="(monthKey, index) in monthKeys">
         <div class="history-row-item" :key="monthKey + '-' + index + '!div'">
-          <small v-if="monthKey == null" :key="monthKey + '-' + index + '!'">{{
-            $t('room.startMonth')
-          }}</small>
-          <small v-if="monthKey != null" :key="monthKey + '-' + index + '!!'"
-            >{{ $t('room.month') }} №{{ monthKey }}</small
-          >
+          <small v-if="!(monthKey == monthKeys.length-1)" :key="monthKey + '-' + index + '!!'">
+            {{ $t('room.month') }} №{{ monthKey+1 }}
+          </small>
+          <small v-else :key="monthKey + '-' + index + '!'">
+            {{ $t('room.result') }}
+          </small>
           <FinishFunnelTable
             :computedChannelsByCode="computedDataForMonth(monthKey)"
             :channelsByCode="channelsByCode"
@@ -281,6 +281,7 @@ export default {
   grid-row-start: 1;
   grid-row-end: 3;
   overflow-y: auto;
+  padding-right: 10px;
 }
 
 .next-round-btn {
@@ -290,6 +291,11 @@ export default {
   top: 1rem;
   z-index: 1000;
 }
+.history-row-item > small {
+  display: block;
+  margin-bottom: 10px;
+}
+
 .history-row {
   display: flex;
   flex-direction: column;

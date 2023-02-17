@@ -105,7 +105,7 @@ export default {
 @import '@/scss/_variables.scss';
 
 table.funnel-table {
-  padding: 8px;
+  margin-right: 8px;
 
   & tr {
     border: 0px;

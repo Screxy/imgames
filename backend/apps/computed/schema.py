@@ -61,7 +61,7 @@ def prepare_computed_game_data_array(room, user, current_month=None):
                 # Форматируем данные для ответа
                 data += ['{0:.4f}'.format(stage_conversion),
                          '{0:.2f}'.format(channel_next)]
-            print(data)
+            
             # Добавляем данные в массив возвращаемых значений
             answer_array += [ComputedGameDataType(
                 data=data, channel=channel, is_total=False)]
@@ -110,9 +110,7 @@ def prepare_computed_game_data_array(room, user, current_month=None):
 
                 try: # Если есть определенная конверсия у данного канала, то используем ее
                     certain_stage = StageOfChannel.objects.get(channels=computed_channel.channel, stage=stage.stage)
-                    print(certain_stage.conversion)
                     certain_computed_stage = StageOfChannelComputed.objects.get(turn=user_turn, stage_of_channel=certain_stage)
-                    print(certain_computed_stage.id)
                     stage_conversion = certain_computed_stage.conversion
                 except: # Если нет, то используем стандартную конверсию канала
                     stage_conversion = stage.conversion
@@ -126,10 +124,8 @@ def prepare_computed_game_data_array(room, user, current_month=None):
                     Decimal(channel_next)+Decimal(total_data[2+(2*i)]))
 
                 # Форматируем данные для ответа
-                print(stage_conversion)
                 data += ['{0:.4f}'.format(stage_conversion),
                          '{0:.2f}'.format(channel_next)]
-            print(data)
             # Добавляем данные в массив возвращаемых значений
             answer_array += [ComputedGameDataType(
                 data=data, channel=computed_channel.channel, is_total=False, month_key=current_month.key)]
@@ -185,7 +181,8 @@ class Query(graphene.ObjectType):
             else:
                 raise Exception('Error code')
         except Exception as e:
-            print(e)
+            if not(str(e) == "Turn matching query does not exist."):
+                print(e)
             return None
     
     def resolve_all_computed_months_by_code_total(root, info, code):
@@ -210,7 +207,8 @@ class Query(graphene.ObjectType):
             else:
                 raise Exception('Error code')
         except Exception as e:
-            print(e)
+            if not(str(e) == "Turn matching query does not exist."):
+                print(e)
             return None
 
 

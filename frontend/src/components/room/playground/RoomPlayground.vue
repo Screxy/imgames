@@ -3,10 +3,11 @@
     <TopBar
       type="playground"
       :roomCode="roomCode"
-      :roomRound="currentRoundKey"
+      :roomRound="currentRoundByCode"
       :roomMonth="currentMonthKey"
       :roomTotalMonths="roomTotalMonthsNumber"
       :highlight="highlight"
+      :width="windowWidth"
     ></TopBar>
     <div class="playField" v-bind:class="{ playField_fullScreen: !isAnyMenuShown }">
       <div
@@ -40,6 +41,7 @@
               :class="{
                 'first-column-bottom': isCardsListOpened,
               }"
+              :isFull=!isAnyMenuShown
             ></CardsList>
           </transition>
         </template>
@@ -109,15 +111,15 @@
         ></FinishScreen>
       </template>
       <div class="navigation" v-bind:class="{ navigation_fullScreen: !isAnyMenuShown }">
-        <div class="nav-btn" @click="openPlayersMenu">
+        <div class="nav-btn" @click="togglePlayersMenu">
           <img src="@/assets/icons/players.svg" alt="" />
           <p>{{ $t('room.navigation.players') }}</p>
         </div>
-        <div class="nav-btn" @click="openEffectsMenu">
+        <div class="nav-btn" @click="toggleEffectsMenu">
           <img src="@/assets/icons/star.svg" alt="" />
           <p>{{ $t('room.navigation.effects') }}</p>
         </div>
-        <div class="nav-btn" @click="openChat">
+        <div class="nav-btn" @click="toggleChat">
           <img src="@/assets/icons/chat.svg" alt="" />
           <p>{{ $t('room.navigation.chat') }}</p>
         </div>
@@ -165,8 +167,8 @@ export default {
   data() {
     return {
       skip: false,
-      isPlayersMenuOpened: !(window.innerWidth <= 610),
-      isEffectsMenuOpened: !(window.innerWidth <= 610),
+      isPlayersMenuOpened: !(window.innerWidth <= 1150),
+      isEffectsMenuOpened: !(window.innerWidth <= 1150),
       isChatOpened: false,
       isCardsListOpened: true,
       windowWidth: window.innerWidth,
@@ -237,7 +239,7 @@ export default {
       return false;
     },
     isMobileScreen() {
-      return this.windowWidth <= 610;
+      return this.windowWidth <= 1150;
     },
     isAnyMenuShown() {
       return this.isPlayersMenuOpened || this.isEffectsMenuOpened || this.isChatOpened;
@@ -294,29 +296,40 @@ export default {
       this.isEffectsMenuOpened = false;
       this.isChatOpened = false;
     },
-    openPlayersMenu() {
+    togglePlayersMenu() {
+      let closing = this.isPlayersMenuOpened;
       this.closeMenuOpened();
-      this.isPlayersMenuOpened = true;
-      if (!this.isMobileScreen) {
-        this.isEffectsMenuOpened = true;
-      }
-    },
-    openEffectsMenu() {
-      this.closeMenuOpened();
-      this.isEffectsMenuOpened = true;
-      if (!this.isMobileScreen) {
+      if (!closing) {
         this.isPlayersMenuOpened = true;
+        if (!this.isMobileScreen) {
+          this.isEffectsMenuOpened = true;
+        }
       }
     },
-    openChat() {
+    toggleEffectsMenu() {
+      let closing = this.isEffectsMenuOpened;
       this.closeMenuOpened();
-      this.isChatOpened = true;
+      if (!closing) {
+        this.isEffectsMenuOpened = true;
+        if (!this.isMobileScreen) {
+          this.isPlayersMenuOpened = true;
+        }
+      }
+    },
+    toggleChat() {
+      let closing = this.isChatOpened;
+      this.closeMenuOpened();
+      if (!closing) {
+        this.isChatOpened = true;
+      }
     },
     onResize() {
       this.windowWidth = window.innerWidth;
+      if (this.windowWidth < 1150) {
+        this.closeMenuOpened();
+      }
     },
     toggleCards() {
-      this.closeMenuOpened();
       this.isCardsListOpened = !this.isCardsListOpened;
     },
     awaitIsOver() {
@@ -326,7 +339,7 @@ export default {
   },
   mounted() {
     this.$nextTick(() => {
-      this.window.addEventListener('resize', this.onResize);
+      window.addEventListener('resize', this.onResize);
     });
     this.$apollo
       .mutate({
@@ -425,8 +438,15 @@ export default {
       grid-row-start: 1;
       grid-row-end: 2;
       display: flex;
-      flex-direction: column;
-      justify-content: center;
+      flex-direction: row;
+      flex-wrap: wrap;
+      align-items: flex-start;
+      gap: 1px;
+      justify-content: flex-start;
+      h3 {
+        text-align: left;
+        width: 100%;
+      }
     }
     & .first-column-bottom {
       grid-column-start: 1;
@@ -434,6 +454,7 @@ export default {
       grid-row-start: 2;
       grid-row-end: 3;
       padding-right: 18px;
+      padding-bottom: 15px;
     }
     & .first-column-full {
       grid-column-start: 1;
@@ -528,7 +549,7 @@ export default {
   display: flex !important;
 }
 
-@media screen and (max-width: 610px) {
+@media screen and (max-width: 1150px) {
   #playground {
     .playField {
       padding: 0px 10px;
@@ -545,6 +566,7 @@ export default {
         grid-row-start: 1;
         grid-row-end: 2;
         overflow-x: scroll;
+        margin-top: 10px;
         width: calc(100vw - 20px);
       }
       & .first-column-bottom {
@@ -553,6 +575,7 @@ export default {
         grid-row-start: 2;
         grid-row-end: 3;
         width: calc(100vw - 20px);
+        padding-right: 0;
       }
       & .navigation {
         border-left: none;
@@ -560,7 +583,7 @@ export default {
         grid-column-end: 2;
         grid-row-start: 3;
         grid-row-end: 4;
-        width: 100%;
+        width: 97%;
         display: flex;
         justify-content: space-around;
       }

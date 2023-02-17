@@ -47,7 +47,7 @@ export default {
     }
   }
 }
-@media screen and (max-width: 610px) {
+@media screen and (max-width: 1150px) {
   .effects-box {
     & .effects-list {
       height: 294px;

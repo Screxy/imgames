@@ -21,7 +21,6 @@
     "numberOfMonths": "months",
     "month": "Month",
     "monthNumber": {
-      "0": "beginning of period",
       "1": "FIRST month of the period",
       "2": "SECOND month of the period",
       "3": "THIRD month of the period",
@@ -33,13 +32,17 @@
       "9": "NINTH month of the periond",
       "10": "TENTH month of the periond"
     },
+    "of": "of",
+    "ofMonths": "Months",
+    "waitingForRound": "Waiting for the start of the round",
+    "roundEnded": "End of the round",
     "roomsList": "Rooms list",
     "room": "Room",
     "goToRoom": "Jump into the room",
     "round": "Round",
     "scores": "Total scores: ",
     "player": {
-      "playersList": "List of players",
+      "playersList": "Players",
       "player": "Player",
       "roomOwner": "Room owner",
       "effectsList": "Effects",
@@ -62,7 +65,8 @@
       "chooseCard": "Select",
       "selectedCard": "Selected card",
       "deselectCard": "Deselect",
-      "send": "Send"
+      "send": "Send",
+      "notEnoughMoney": "Not enough menoy!"
     },
     "waitingHeader": "Waiting for players to join...",
     "waitingTextForOwner": "When all invited players enter the room, you can start the game",
@@ -78,7 +82,7 @@
     "flow": "Game mechanics",
     "connectRoom": "Join the room",
     "roomCode": "Room code",
-    "startMonth": "Start month",
+    "result": "Result",
     "step": "Step",
     "passStep": "Skip a turn",
     "firstPlace": "1st place",

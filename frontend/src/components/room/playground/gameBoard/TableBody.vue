@@ -27,7 +27,7 @@ export default {
       type: Array,
     },
     data: {
-      type: Array,
+      types: [Object, Array],
     },
     monthKey: {
       type: undefined,

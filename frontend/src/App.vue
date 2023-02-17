@@ -75,14 +75,15 @@ a {
   }
   &::-webkit-scrollbar-track {
     width: 16px;
-    background-color: rgba(0,0,0,.1);
+    background-color: rgba(92, 92, 92, 0.3);
+    background:rgba(212, 185, 143, 0.25);
   }
   &::-webkit-scrollbar-thumb {
     backdrop-filter: blur(12px) saturate(100%);
     -webkit-backdrop-filter: blur(12px) saturate(100%);
-    background-color: rgba(255, 255, 255, 0.5);
-    border-radius: 12px;
-    border: 1px solid rgba(209, 213, 219, 0.3);
+    background-color: rgba(255, 255, 255, 0.3);
+    border-radius: 10px;
+    border: 1px solid rgba(109, 109, 109, 0.4);
   }
 }
 

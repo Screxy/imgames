@@ -16,15 +16,23 @@
       <SubmitButton
         class="w-100"
         :type="'bg-blue'"
-        :disabled="canNotChoose()"
+        :disabled=disabled
         @click="emitSelection()"
-        v-if="!selected"
+        v-if="!selected && !notEnoughMoney"
         >{{ $t('room.card.chooseCard') }}</SubmitButton
       >
       <SubmitButton
         class="w-100"
         :type="'bg-blue'"
-        :disabled="canNotChoose()"
+        :disabled=true
+        @click="emitSelection()"
+        v-else-if="!selected && notEnoughMoney"
+        >{{ $t('room.card.notEnoughMoney') }}</SubmitButton
+      >
+      <SubmitButton
+        class="w-100"
+        :disabled=disabled
+        :type="'bg-blue'"
         @click="emitDeselect()"
         v-else
         >{{ $t('room.card.deselectCard') }}</SubmitButton
@@ -41,6 +49,11 @@ export default {
   components: {
     SubmitButton,
   },
+  computed: {
+    notEnoughMoney() {
+      return this.data.cost > this.balance;
+    }
+  },
   props: {
     data: {
       type: Object,
@@ -54,6 +67,9 @@ export default {
       type: Boolean,
       default: false,
     },
+    balance: {
+      type: Number,
+    }
   },
   methods: {
     emitSelection() {
@@ -62,10 +78,10 @@ export default {
     emitDeselect() {
       this.$emit('deselect', this.data.id);
     },
-    canNotChoose() {
-      return this.disabled;
-    },
   },
+  mounted() {
+    this.$parent.checkOverFlow();
+  }
 };
 </script>
 
@@ -82,12 +98,13 @@ export default {
   flex-direction: column;
   justify-content: space-between;
   padding: 16px;
-  width: 190px;
-  min-width: 190px;
-  // height: 230px;
+  // width: 200px;
+  width: fit-content;
+  max-width: 700px;
+  min-width: 250px;
+  height: 250px;
   margin-right: 10px;
   position: relative;
-
   & .selected-icon {
     position: absolute;
     right: 8px;
@@ -117,13 +134,11 @@ p.cost {
   font-size: 16px;
   margin-bottom: 8px;
 }
-
-.card-header,
 .card-description {
-  margin-bottom: 8px;
+  margin-bottom: 4px;
+  max-height: 120px;
 }
 .card-header {
-  height: 70px;
   display: flex;
   justify-content: flex-start;
   align-items: center;

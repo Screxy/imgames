@@ -147,8 +147,7 @@ class WriteTurn(graphene.Mutation):
                         current_round_update.save()
                     
                     # Меняем месяц
-                    task = change_month_in_room.delay(room.id)
-                    pusher_client.trigger(room.code, 'roundUpdate', {})
+                    change_month_in_room.delay(room.id)
 
                 # Если не все, то записываем, что текущий участник сделал ход
                 else:

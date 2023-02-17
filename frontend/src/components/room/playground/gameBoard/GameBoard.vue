@@ -1,7 +1,7 @@
 <template>
   <div>
     <h3>{{ $t('room.gameBoard.gameBoard') }}</h3>
-    <FunnelTable @awaitIsOver="awaitIsOver"></FunnelTable>
+    <FunnelTable></FunnelTable>
   </div>
 </template>
 
@@ -13,11 +13,6 @@ export default {
   components: {
     FunnelTable,
   },
-  methods: {
-    awaitIsOver() {
-      this.$emit("awaitIsOver");
-    },
-  }
 };
 </script>
 

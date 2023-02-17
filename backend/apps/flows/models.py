@@ -77,8 +77,6 @@ class Stage(models.Model):
 
     def save(self, *args, **kwargs):
         stages_in_flow = Stage.objects.filter(flow=self.flow)
-        print('stages_in_flow', stages_in_flow)
-
 
         if self not in stages_in_flow:
             new_place = 1
@@ -87,12 +85,9 @@ class Stage(models.Model):
                 for stage in stages_in_flow:
                     stage_in_sequence = StageInSequence.objects.filter(
                         stage=stage).first()
-                    print('stage_in_sequence', stage_in_sequence)
                     if stage_in_sequence is not None:
-                        print('stage_in_sequence is not None')
                         if stage_in_sequence.place >= new_place:
                             new_place = stage_in_sequence.place+1
-                            print('stage_in_sequence.place+1', new_place)
             super(Stage, self).save(*args, **kwargs)
             StageInSequence.objects.get_or_create(
                 stage=self, place=new_place)
@@ -174,23 +169,13 @@ class StageOfChannelForm(forms.ModelForm):
         for channel_id in channels_id:
 
             channel= Channel.objects.get(id=channel_id)
-            print(channel)
             stage_of_channel = stages_of_channels.filter(channels=channel)
             if len(stage_of_channel) > 0:
                 if stage_of_channel[0] == self.instance:
-                    print("Hi me")
                     continue
             if stage_of_channel.exists():
                 raise ValidationError("Для выбранного вами канала на выбранной вами стадии конвервия уже была определена")
 
-        # for stage_of_channel in stages_of_channels:
-        #     if self.instance == stage_of_channel:
-        #         pass
-        #     for channel_id in channels_id:
-        #         print(stage_of_channel.channels.all())
-        # for stage in stages:
-
-        # print(others)
 
 # Проверяем, чтобы имя у этапа было уникальным среди этапов определенной механики
 class StageForm(forms.ModelForm):

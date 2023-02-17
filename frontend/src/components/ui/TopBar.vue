@@ -2,16 +2,60 @@
   <div id="top-bar">
     <Logo></Logo>
     <div class="menu-block" v-if="type == 'playground'">
-      <div class="left-block">
-        <div class="menu-link menu-link-bold room-data">
+      <div class="left-block" v-if='wide'>
+        <div v-if='roomRound.isActive && !roomRound.isFinished' class="menu-link menu-link-bold room-data">
           {{ $t('room.room') }} {{ roomCode }} / {{ $t('room.round') }} {{
-            roomRound
+            roomRound.key
           }}
           /
-          <span style='margin-left:0.25em; display:inline-block;' v-bind:class="{ highlight : highlight }">{{ $t('room.monthNumber.'+(roomMonth)) }} ({{ $t('room.periodIs') }} {{ roomTotalMonths }} {{ $t('room.numberOfMonths') }}) </span>
+          <span style='margin-left:0.25em; display:inline-block;' v-bind:class="{ highlight : highlight }">
+            {{ $t('room.monthNumber.'+(roomMonth+1)) }} ({{ $t('room.periodIs') }} {{ roomTotalMonths }} {{ $t('room.numberOfMonths') }})
+          </span>
+        </div>
+        <div v-else-if='roomRound.isActive && roomRound.isFinished' class="menu-link menu-link-bold room-data">
+          {{ $t('room.room') }} {{ roomCode }} / {{ $t('room.round') }} {{
+            roomRound.key
+          }}
+          /
+          <span style='margin-left:0.25em; display:inline-block;' v-bind:class="{ highlight : highlight }">
+            {{ $t('room.roundEnded') }}
+          </span>
+        </div>
+        <div v-else class="menu-link menu-link-bold room-data">
+          {{ $t('room.room') }} {{ roomCode }} / {{ $t('room.round') }} {{
+            roomRound.key
+          }}
+          / {{ $t('room.waitingForRound') }}
+        </div>
+      </div>
+      <div class="left-block" v-else>
+        <div v-if='roomRound.isActive && !roomRound.isFinished' class="menu-link menu-link-bold room-data">
+          {{ roomCode }} / {{ $t('room.round') }} {{
+            roomRound.key
+          }}
+          /
+          <span style='margin-left:0.25em; display:inline-block;' v-bind:class="{ highlight : highlight }">
+            {{ roomMonth+1 }} {{ $t('room.of') }} {{ roomTotalMonths }} {{ $t('room.ofMonths') }}
+          </span>
+        </div>
+        <div v-else-if='roomRound.isActive && roomRound.isFinished' class="menu-link menu-link-bold room-data">
+          {{ $t('room.room') }} {{ roomCode }} / {{ $t('room.round') }} {{
+            roomRound.key
+          }}
+          /
+          <span style='margin-left:0.25em; display:inline-block;' v-bind:class="{ highlight : highlight }">
+            {{ $t('room.roundEnded') }}
+          </span>
+        </div>
+        <div v-else class="menu-link menu-link-bold room-data">
+          {{ $t('room.room') }} {{ roomCode }} / {{ $t('room.round') }} {{
+            roomRound.key
+          }}
+          / {{ $t('room.waitingForRound') }}
         </div>
       </div>
       <div class="right-block">
+        <p class='userName'> {{ this.$store.state.userName }} </p>
         <router-link class="menu-link" :to="mainPath"
           >{{ $t('buttons.toMainPage') }} →</router-link
         >
@@ -58,6 +102,7 @@ import Logo from '@/components/ui/Logo.vue';
 import LogOutButton from '@/components/auth/LogOutButton.vue';
 import LocaleSwitcher from '@/components/locale/LocaleSwitcher.vue';
 import SubmitButton from '@/components/ui/SubmitButton.vue';
+import { integer } from 'vuelidate/lib/validators';
 
 export default {
   name: 'TopBar',
@@ -70,7 +115,7 @@ export default {
       type: String,
     },
     roomRound: {
-      type: Number,
+      type: Object,
     },
     roomMonth: {
       type: Number,
@@ -81,6 +126,14 @@ export default {
     highlight: {
       type: Boolean,
     },
+    width: {
+      type: Number,
+    }
+  },
+  computed: {
+    wide() {
+      return this.width > 1150;
+    }
   },
   data() {
     return {
