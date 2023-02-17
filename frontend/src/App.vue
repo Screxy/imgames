@@ -42,7 +42,7 @@ body {
   padding: 0;
   margin: 0;
   overflow-x: hidden;
-  overflow-y: hidden;
+  overflow-y: auto;
   font-family: $primary_font;
 }
 
@@ -69,7 +69,6 @@ a {
 
 .scrollable {
   overflow-y: auto;
-  scrollbar-gutter: stable;
   &::-webkit-scrollbar {
     width: 16px;
   }

@@ -1,5 +1,5 @@
 <template>
-  <div id="cards-panel">
+  <div id="cards-panel" :class='{fullScreen : isFull}'>
     <div class="cards-context">
       <h3 class="cards-title">{{ $t('room.card.moneyLeft') + ": " + balance}} </h3>
       <h3 class="waiting-for-players" v-if="!canDoStepNowByCode || waitingForOthers">
@@ -12,8 +12,7 @@
       :selectedCardsId="selectedCardsId"
       @cardsAreSend="waitingForOthers = true"
     ></WriteTurnPanel>
-    <div class="cards-list scrollable" ref='cardsList' :class='{fullScreen : isFull}'>
-      {{ counter }}
+    <div class="cards-list scrollable" ref='cardsList'>
       <Card
         v-for="card in cardsByCode"
         :key="card.id"
@@ -24,9 +23,6 @@
         @select="addChoice($event)"
         @deselect="removeChoice($event)"
       ></Card>
-      <div class="slider-arrow" @click="slideRight()" v-if='isOverflown'>
-        <img src="@/assets/arrow.svg" alt="" />
-      </div>
     </div>
   </div>
 </template>
@@ -89,8 +85,6 @@ export default {
       selectedCardsId: [],
       balanceIsPositive: true,
       waitingForOthers: false,
-      isOverflown: false,
-      counter: 0,
     };
   },
   computed: {
@@ -133,17 +127,12 @@ export default {
     isSelected(cardId) {
       return +this.selectedCardsId.findIndex((el) => +el == +cardId) !== -1;
     },
-    checkOverFlow() {
-      let list = this.$refs.cardsList;
-      if (list != undefined) {
-        this.isOverflown = list.scrollWidth > list.offsetWidth
-      }
-      else {
-        this.isOverflown = false
-      }
-      list.style.width = this.$el.offsetWidth + "px";
-      this.counter+=1;
-    },
+    // checkOverFlow() {
+    //   let list = this.$refs.cardsList;
+    //   if (list != undefined) {
+    //     list.style.width = (this.$el.offsetWidth-34) + "px";
+    //   }  
+    // },
   },
   mounted() {
     this.$root.$on('awaitIsOver', () => {
@@ -156,25 +145,30 @@ export default {
     this.$refs.cardsList.addEventListener("wheel", (e) => {
       e.preventDefault();
       this.$refs.cardsList.scrollLeft += (e.deltaY/1.5);
-      this.checkOverFlow();
     });
-    this.checkOverFlow();
-    window.onresize = this.checkOverFlow;
-  }
+    // this.checkOverFlow();
+    // window.onresize = this.checkOverFlow;
+  },
 };
 </script>
 
 <style lang="scss" scoped>
+
 #cards-panel {
   position: relative;
   display: flex;
   flex-direction: column;
   min-height: 300px;
-
+  width: 70vw;
+  
   & .cards-context {
     display: flex;
   }
 
+
+  &.fullScreen {
+    width: 91vw;
+  }
   & .cards-title {
     width: 50%;
   }
@@ -186,17 +180,12 @@ export default {
     overflow-x: auto;
     display: flex;
     padding-bottom: 0.5rem;
-    max-width: 70vw;
     box-shadow: inset 0px 0px 20px grey;
     height: fit-content;
     padding: 5px;
     background-color: lightgray;
-    border-radius: 5px;
   }
-  & .fullScreen {
-    max-width: 100%;
-    // max-width: 100%;
-  }
+
 
   & .write-turn-panel {
     margin: 0 0 0.5rem 0;
@@ -207,54 +196,18 @@ export default {
   }
 }
 @media screen and (max-width: 1150px) {
+  #cards-panel {
+    padding-right: 0;
+    margin-bottom: 72px;
+    &.fullScreen {
+      width: 92vw;
+    }
+  }
   h3 {
     display: none;
   }
-  #cards-panel {
-    & .cards-list {
-      max-width: 99vw;
-    }
-  }
   .write-turn-panel {
     margin-top: 0.5rem;
-  }
-}
-.slider-arrow {
-  position: absolute;
-  transition: all 0.25s;
-  border-radius: 32px;
-  top: 15px;
-  right: 10px;
-  z-index: 2;
-  width: 64px;
-  height: 64px;
-  img {
-    width: 100%;
-    transition: all 0.25s;
-    border-radius: 32px;
-  }
-}
-.slider-arrow:hover {
-  height: 72px;
-  width: 72px;
-  top: 11px;
-  right: 6px;
-  img {
-    border-radius: 36px;
-    cursor: pointer;
-    width: 72px;
-  }
-}
-.slider-arrow:active {
-  transition: all 0.1;
-  height: 54px;
-  width: 54px;
-  top: 20px;
-  right: 15px;
-  img {
-    border-radius: 27px;
-    cursor: pointer;
-    width: 54px;
   }
 }
 

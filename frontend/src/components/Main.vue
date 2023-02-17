@@ -67,7 +67,7 @@ h2 {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
   column-gap: 1rem;
-  height: calc(100vh - 48px);
+  height: calc(100vh - 112px);
   padding: 0 1rem;
   background: radial-gradient(
     52.5% 97.01% at 21.67% 20.17%,

@@ -106,7 +106,7 @@ export default {
 
 table.funnel-table {
   margin-right: 8px;
-
+  width: 100%;
   & tr {
     border: 0px;
 
@@ -122,6 +122,11 @@ table.funnel-table {
     & th:not(:first-child) {
       text-align: center;
     }
+  }
+}
+@media screen and (max-width: 1150px) {
+  table.funnel-table {
+    margin-right: 0px;
   }
 }
 </style>

@@ -36,6 +36,7 @@
           ></GameBoard>
           <transition name="slide-fade" mode="out-in">
             <CardsList
+              ref='cardsList'
               @clean="reloadRound()"
               v-if="isCardsListOpened"
               :class="{
@@ -555,7 +556,7 @@ export default {
       padding: 0px 10px;
       display: grid;
       grid-template-columns: 1fr;
-      grid-template-rows: 1.6fr auto 88px;
+      grid-template-rows: 1.6fr auto;
       height: 100%;
       max-height: calc(100vh - 48px);
       row-gap: 0px;
@@ -565,7 +566,7 @@ export default {
         grid-column-end: 2;
         grid-row-start: 1;
         grid-row-end: 2;
-        overflow-x: scroll;
+        overflow-x: auto;
         margin-top: 10px;
         width: calc(100vw - 20px);
       }
@@ -579,13 +580,15 @@ export default {
       }
       & .navigation {
         border-left: none;
-        grid-column-start: 1;
-        grid-column-end: 2;
-        grid-row-start: 3;
-        grid-row-end: 4;
-        width: 97%;
+        position: fixed;
         display: flex;
         justify-content: space-around;
+        bottom: 24px;
+        left: 0;
+        height: 64px;
+        width: 100%;
+        z-index: 5;
+        background-color: #FDF5E9;
       }
       & .second-column-top,
       & .second-column-bottom,
