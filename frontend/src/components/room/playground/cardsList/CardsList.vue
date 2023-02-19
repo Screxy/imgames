@@ -158,7 +158,6 @@ export default {
   position: relative;
   display: flex;
   flex-direction: column;
-  min-height: 300px;
   width: 70vw;
   
   & .cards-context {
@@ -176,12 +175,11 @@ export default {
 
   & .cards-list {
     padding-right: 18px;
-    overflow-y: auto;
+    overflow-y: hidden;
     overflow-x: auto;
     display: flex;
     padding-bottom: 0.5rem;
     box-shadow: inset 0px 0px 20px grey;
-    height: fit-content;
     padding: 5px;
     background-color: lightgray;
   }
@@ -198,7 +196,6 @@ export default {
 @media screen and (max-width: 1150px) {
   #cards-panel {
     padding-right: 0;
-    margin-bottom: 72px;
     &.fullScreen {
       width: 92vw;
     }
@@ -208,6 +205,11 @@ export default {
   }
   .write-turn-panel {
     margin-top: 0.5rem;
+  }
+}
+@media screen and (max-height: 540px) {
+  #cards-panel {
+    padding-bottom: 100px;
   }
 }
 

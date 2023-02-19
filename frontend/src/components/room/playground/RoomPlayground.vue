@@ -426,7 +426,7 @@ export default {
     grid-template-columns: 2.8fr 1fr 62px;
     grid-template-rows: 1.6fr auto;
     height: 100%;
-    max-height: calc(100vh - 48px);
+    // max-height: calc(100vh - 48px);
     column-gap: 20px;
     row-gap: 20px;
     &_fullScreen {
@@ -434,6 +434,7 @@ export default {
       column-gap: 0px;
     }
     & .first-column-top {
+      min-height: 150px;
       grid-column-start: 1;
       grid-column-end: 2;
       grid-row-start: 1;
@@ -558,16 +559,17 @@ export default {
       grid-template-columns: 1fr;
       grid-template-rows: 1.6fr auto;
       height: 100%;
-      max-height: calc(100vh - 48px);
+      // max-height: calc(100vh - 48px);
       row-gap: 0px;
-
+      padding-bottom: 84px;
       & .first-column-top {
         grid-column-start: 1;
         grid-column-end: 2;
         grid-row-start: 1;
         grid-row-end: 2;
         overflow-x: auto;
-        margin-top: 10px;
+        margin-top: 5px;
+        margin-bottom: 5px;
         width: calc(100vw - 20px);
       }
       & .first-column-bottom {
@@ -583,14 +585,14 @@ export default {
         position: fixed;
         display: flex;
         justify-content: space-around;
-        bottom: 24px;
+        bottom: 0px;
         left: 0;
-        height: 64px;
+        height: 84px;
         width: 100%;
         z-index: 5;
         background-color: #FDF5E9;
       }
-      & .second-column-top,
+      // & .second-column-top,
       & .second-column-bottom,
       & .second-column-full {
         position: absolute;
@@ -603,11 +605,13 @@ export default {
         height: 100vh;
         background: rgba(0, 0, 0, 0.3);
         position: absolute;
-        top: 0;
         left: 0;
+        top: 0;
         z-index: 1000;
       }
       & .mobile-popup {
+        bottom: 0;
+        left: 0;
         z-index: 10000;
         backdrop-filter: blur(12px) saturate(100%);
         -webkit-backdrop-filter: blur(12px) saturate(100%);
@@ -616,8 +620,23 @@ export default {
         padding: 1rem;
         box-sizing: border-box;
         width: 100%;
+        position: fixed;
       }
     }
   }
 }
+@media screen and (max-height: 540px) {
+  #playground {
+    height: auto;
+}
+@media screen and (max-height: 540px) and (max-width: 1150px){
+  .playField {
+      & .first-column-bottom {
+        padding-bottom: 75px;
+      }
+    }
+  }
+}
+
+
 </style>
