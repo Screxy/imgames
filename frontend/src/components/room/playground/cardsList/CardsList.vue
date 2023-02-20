@@ -207,11 +207,6 @@ export default {
     margin-top: 0.5rem;
   }
 }
-@media screen and (max-height: 540px) {
-  #cards-panel {
-    padding-bottom: 100px;
-  }
-}
 
 .waiting-for-players {
   width: 50%;

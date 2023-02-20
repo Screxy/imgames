@@ -625,15 +625,19 @@ export default {
     }
   }
 }
-@media screen and (max-height: 540px) {
+@media screen and (max-height: 690px) {
   #playground {
     height: auto;
+    .playField {
+      max-height: fit-content;
+    }
+  }
 }
 @media screen and (max-height: 540px) and (max-width: 1150px){
+  
   .playField {
-      & .first-column-bottom {
-        padding-bottom: 75px;
-      }
+    & .first-column-bottom {
+      padding-bottom: 75px;
     }
   }
 }
