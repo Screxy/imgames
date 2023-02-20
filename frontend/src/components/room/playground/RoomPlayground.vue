@@ -92,7 +92,7 @@
         </transition>
         <transition name="slide-fade" mode="out-in">
           <EffectsList
-            class="mobile-popup second-column-bottom"
+            class="mobile-popup second-column-bottom scrollable"
             v-if="isEffectsMenuShown"
           ></EffectsList>
         </transition>
@@ -426,7 +426,7 @@ export default {
     grid-template-columns: 2.8fr 1fr 62px;
     grid-template-rows: 1.6fr auto;
     height: 100%;
-    // max-height: calc(100vh - 48px);
+    max-height: calc(100vh - 48px);
     column-gap: 20px;
     row-gap: 20px;
     &_fullScreen {
