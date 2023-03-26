@@ -75,13 +75,7 @@
               >
             </form>
             {{ $t('auth.enterText') }}
-          </template>
-          <SubmitButton
-            class="enter-button"
-            :type="'dark-text'"
-            @click="$router.push(authPath)"
-            >{{ $t('auth.enterButton') }}</SubmitButton
-          >
+          </template> 
         </div>
       </div>
     </div>

@@ -15,11 +15,11 @@ class UserAdmin(BaseUserAdmin):
     # которые ссылаются на определенные поля в auth.User.
     list_display = ['full_name', 'email']
     fieldsets = [
-        ['Данные авторизации', {'fields': ['email', 'password']}],
+        ['Данные авторизации', {'fields': ['email', 'password', 'is_active']}],
         ['Личная информация', {'fields': [
             'last_name', 'first_name', 'avatar']}],
-        ['Настройки', {'fields': ['groups', 'is_admin',
-                                  'is_active', 'is_staff', 'is_superuser']}],
+        ['Разрешения', {'fields': ['groups', 'is_admin',
+                                   'is_staff', 'is_superuser']}],
         ['Важные отметки времени', {
             'fields': ['last_login', 'registered_at']}],
     ]

@@ -10,7 +10,7 @@ from django.core.mail import send_mail
 from django.template.loader import render_to_string
 
 from apps.users.models import User
-from graphql_jwt.decorators import login_required
+from graphql_jwt.decorators import login_required, jwt_cookie
 from datetime import datetime
 from config.settings import GRAPHQL_JWT
 
@@ -75,10 +75,45 @@ class Register(graphene.Mutation):
             email=email,
             last_name=last_name,
             first_name=first_name,
+            is_active=False
         )
+        
+        params = {
+            'user': user,
+            'DOMAIN': settings.DOMAIN,
+        }
+
+        send_mail(
+            subject='Подтверждение регистрации',
+            message=render_to_string('mail/confirmation_of_registration.txt', params),
+            from_email=settings.DEFAULT_FROM_EMAIL,
+            recipient_list=[email],
+        )
+        
         user.set_password(password)
         user.save()
         return Register(success=True)
+    
+
+    
+class ConfirmRegistrationMutation(graphene.Mutation):
+    """ Мутация для подтверждения регистрации """
+    success = graphene.Boolean()
+    errors = graphene.List(graphene.String)
+    
+    class Arguments:
+        token = graphene.String(required=True)
+
+    def mutate(self, info, token):
+        try:
+            user = User.objects.get(token=token)
+            user.is_active = True
+            user.token = uuid4()
+            user.save()
+            return ConfirmRegistrationMutation(success=True)
+        except User.DoesNotExist:
+            return ConfirmRegistrationMutation(success=False)
+
 
 
 class Logout(graphene.Mutation):
@@ -146,5 +181,6 @@ class Mutation(object):
     register = Register.Field()
     logout = Logout.Field()
     delete_token_cookie = graphql_jwt.DeleteJSONWebTokenCookie.Field()
+    confirm_registration = ConfirmRegistrationMutation.Field()
     reset_password = ResetPassword.Field()
     reset_password_confirm = ResetPasswordConfirm.Field()

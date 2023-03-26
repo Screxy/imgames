@@ -66,9 +66,8 @@ class User(AbstractBaseUser, PermissionsMixin):
         editable=False)
 
     is_admin = models.BooleanField(verbose_name='Администратор', default=False)
-    is_active = models.BooleanField(verbose_name='Активирован', default=True)
-    is_staff = models.BooleanField(
-        verbose_name='Работник компании', default=False)
+    is_active = models.BooleanField(verbose_name='Активирован', default=False)
+    is_staff = models.BooleanField(verbose_name='Работник компании', default=False)
     registered_at = models.DateTimeField(
         verbose_name='Зарегистрирован',
         auto_now_add=timezone.now)

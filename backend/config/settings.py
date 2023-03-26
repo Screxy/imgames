@@ -107,6 +107,10 @@ DOMAIN = env.str('DOMAIN')
 # ------------------------------------------------------------------------------
 EMAIL_PORT = env.int('EMAIL_PORT', default='1025')
 EMAIL_HOST = env.str('EMAIL_HOST', default='mailhog')
+EMAIL_USE_TLS = env.str('EMAIL_USE_TLS', default='False')
+EMAIL_HOST_USER = env.str('EMAIL_HOST_USER', default='mailhog')
+EMAIL_HOST_PASSWORD = env.str('EMAIL_HOST_PASSWORD', default='mailhog')
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
 # MANAGER CONFIGURATION
 # ------------------------------------------------------------------------------

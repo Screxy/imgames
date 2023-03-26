@@ -110,8 +110,11 @@
     "enterText": "Уже есть учётная запись?",
     "firstNameLabel": "Имя",
     "lastNameLabel": "Фамилия",
-    "signUpSuccessText": "Войдите в учётную запись, чтобы начать играть.",
-    "signUpSuccessHeader": "Вы успешно зарегистрированы!"
+    "signUpSuccessText": "На вашу почту было отправлено письмо с подтверждением регистрации.",
+    "signUpSuccessHeader": "Вы успешно зарегистрированы!",
+    "signUpConfirmText": "Войдите в учётную запись, чтобы начать играть.",
+    "signUpConfirmHeader": "Ваш аккаунт был активирован!",
+    "signUpConfirmErrorHeader": "Что-то пошло не так!"
   },
   "textInput": {
     "requiredError": "Обязательное поле!"

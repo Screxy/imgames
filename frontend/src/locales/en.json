@@ -110,8 +110,11 @@
     "enterText": "Already have an account?",
     "firstNameLabel": "First name",
     "lastNameLabel": "Last name",
-    "signUpSuccessText": "Sign in to your account to start playing.",
-    "signUpSuccessHeader": "You have successfully registered!"
+    "signUpSuccessText": "A confirmation email has been sent to your email address.",
+    "signUpSuccessHeader": "You have successfully registered!",
+    "signUpConfirmText": "Sign in to your account to start playing.",
+    "signUpConfirmHeader": "You account has been activated!",
+    "signUpConfirmErrorHeader": "Something went wrong!"
   },
   "textInput": {
     "requiredError": "Obligatory field!"
