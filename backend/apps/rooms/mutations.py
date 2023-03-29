@@ -5,7 +5,7 @@ from apps.flows.models import Flow, Card
 from apps.rooms.types import RoundType, RoomType, TurnType
 from apps.rooms.tasks import change_month_in_room
 from config.pusher import pusher_client
-from users.permissions import login_required, staff_required
+from apps.users.permissions import login_required, staff_required
 
 
 class CreateRoom(graphene.Mutation):

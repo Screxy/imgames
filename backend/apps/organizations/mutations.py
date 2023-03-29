@@ -1,7 +1,7 @@
 import graphene
 from .models import Organization, OrganizationSettings
 from .types import OrganizationType
-from users.permissions import login_required, admin_required
+from apps.users.permissions import login_required, admin_required
 
 
 class CreateOrganization(graphene.Mutation):
