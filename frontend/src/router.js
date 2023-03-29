@@ -8,6 +8,7 @@ import OrganizationCreateView from '@/components/organization/OrganizationCreate
 import RoomPlayground from '@/components/room/playground/RoomPlayground.vue';
 import SignUpView from '@/components/auth/SignUpView.vue';
 import SignUpConfirmView from '@/components/auth/SignUpCofirmView.vue';
+import EditProfile from '@/components/auth/EditProfile.vue';
 
 import store from '@/store.js';
 import {
@@ -17,6 +18,7 @@ import {
   ROOMS_ROOT_PATH,
   SIGN_UP_PATH,
   SIGN_UP_CONFIRM_PATH,
+  AUTH_EDIT_PROFILE_PATH,
 } from '@/pathVariables.js';
 
 import verifyToken from '@/graphql/mutations/verifyToken.gql';
@@ -104,6 +106,12 @@ const routes = [
     component: SignUpView,
     beforeEnter: ifNotAuthenticated,
     meta: { title: 'Зарегистрироваться - ImGames' },
+  },
+  {
+    path: AUTH_EDIT_PROFILE_PATH,
+    component: EditProfile,
+    beforeEnter: ifAuthenticated,
+    meta: { title: 'Редактировать профиль - ImGames' },
   },
   {
     path: NEW_ORGANIZATION_PATH,

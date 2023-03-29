@@ -118,5 +118,15 @@
   },
   "textInput": {
     "requiredError": "Obligatory field!"
+  },
+  "profile": {
+    "title": "Profile",
+    "email": "Email",
+    "firstName": "First Name",
+    "lastName": "Last Name",
+    "edit": "Edit profile",
+    "editHeader": "Edit your profile",
+    "save": "Save changes",
+    "discard": "Discard"
   }
 }

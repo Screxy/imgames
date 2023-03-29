@@ -10,8 +10,9 @@
         <CreateRoomView v-if='$store.state.isStaff'></CreateRoomView>
         <ConnectRoomView></ConnectRoomView>
       </div>
-      <div class="profile">ПРООООООООФИЛЬ<br>ПРОФИЛь</div>
-      <div class="organizations" v-if='$store.state.isAdmin'>
+      
+      <div class="profile-column" v-if='$store.state.isAdmin'>
+        <Profile></Profile>
         <h2>{{ $t('headers.organizationList') }}</h2>
         <SubmitButton
           class="new-organization-btn"
@@ -31,6 +32,7 @@ import { AUTH_PATH } from '@/pathVariables.js';
 import OrganizationList from '@/components/organization/OrganizationList.vue';
 import CreateRoomView from '@/components/room/CreateRoomView.vue';
 import ConnectRoomView from '@/components/room/ConnectRoomView.vue';
+import Profile from '@/components/profile/ProfileView.vue';
 import RoomList from '@/components/room/RoomsList.vue';
 import TopBar from '@/components/ui/TopBar.vue';
 import SubmitButton from '@/components/ui/SubmitButton.vue';
@@ -44,6 +46,7 @@ export default {
     RoomList,
     TopBar,
     SubmitButton,
+    Profile,
   },
   data() {
     return {
@@ -69,22 +72,13 @@ h2 {
   grid-template-columns: 1fr 1fr 1fr;
   column-gap: 1rem;
   height: calc(100vh - 48px);
-  grid-template-rows: calc(50vh - 48px) 50vh;
   padding: 0 1rem;
   background: radial-gradient(
     52.5% 97.01% at 21.67% 20.17%,
     rgba(82, 110, 255, 0.25) 0%,
     rgba(249, 216, 167, 0.25) 89.06%
   );
-  & .profile {
-    grid-row-start: 1;
-    grid-row-end: 2;
-    grid-column-start: 3;
-    grid-column-end: 4;
-  }
-  & .organizations {
-      grid-row-start: 2;
-      grid-row-end: 3;
+  & .profile-column {
       grid-column-start: 3;
       grid-column-end: 4;
     }
