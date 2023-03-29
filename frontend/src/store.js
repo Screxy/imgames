@@ -28,6 +28,8 @@ const store = new Vuex.Store({
   state: {
     userId: false,
     isAuthenticated: false,
+    isAdmin: false,
+    isStaff: false,
     isLoading: false,
     gotVerifiedAuth: false,
     subdomain: getSubdomain(window.location.host),
@@ -45,6 +47,10 @@ const store = new Vuex.Store({
     },
     SET_IS_AUTHENTICATED(state, boolean) {
       state.isAuthenticated = boolean;
+    },
+    SET_PERMISSIONS(state, data) {
+      state.isStaff = data.isStaff;
+      state.isAdmin = data.isAdmin;
     },
     SET_GOT_VERIFIED_AUTH(state, boolean) {
       state.gotVerifiedAuth = boolean;

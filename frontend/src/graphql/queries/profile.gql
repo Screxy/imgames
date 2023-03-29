@@ -4,5 +4,7 @@ query profile {
     email
     firstName
     lastName
+    isStaff
+    isAdmin
   }
 }

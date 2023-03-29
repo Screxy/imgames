@@ -5,6 +5,7 @@ from apps.flows.models import Flow, Card
 from apps.rooms.types import RoundType, RoomType, TurnType
 from apps.rooms.tasks import change_month_in_room
 from config.pusher import pusher_client
+from users.permissions import login_required, staff_required
 
 
 class CreateRoom(graphene.Mutation):
@@ -21,6 +22,8 @@ class CreateRoom(graphene.Mutation):
         money_per_month = graphene.Int(required=True)
         flow_id = graphene.ID(required=True)
 
+    @login_required
+    @staff_required
     def mutate(self, info, subdomain, number_of_turns, money_per_month, flow_id):
         try:
             organization = Organization.objects.get(subdomain=subdomain)

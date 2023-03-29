@@ -3,6 +3,7 @@ import graphql_jwt
 from datetime import timezone
 from graphene_django import DjangoObjectType
 from uuid import uuid4
+from .permissions import login_required
 
 from django.contrib.auth import logout
 from django.conf import settings
@@ -10,7 +11,6 @@ from django.core.mail import send_mail
 from django.template.loader import render_to_string
 
 from apps.users.models import User
-from graphql_jwt.decorators import login_required, jwt_cookie
 from datetime import datetime
 from config.settings import GRAPHQL_JWT
 
@@ -30,6 +30,8 @@ class UserType(DjangoObjectType):
             'email',
             'first_name',
             'last_name',
+            'is_staff',
+            'is_admin',
             'registered_at',
         ]
 
@@ -41,17 +43,14 @@ class Query(object):
 
     @staticmethod
     @login_required
-    def resolve_user(cls, info, **kwargs):
-        return User.objects.get(id=kwargs.get('id'))
-
+    def resolve_profile(cls, info, **kwargs):
+        return info.context.user
+    
     @staticmethod
+    @login_required
     def resolve_users(cls, info, **kwargs):
         return User.objects.all()
 
-    @staticmethod
-    def resolve_profile(cls, info, **kwargs):
-        if info.context.user.is_authenticated:
-            return info.context.user
 
 
 class Register(graphene.Mutation):

@@ -52,7 +52,7 @@ h2 {
 }
 
 .organizations-list-column {
-  height: calc(100vh - 139px);
+  height: calc(45vh - 139px);
   overflow-y: auto;
 }
 

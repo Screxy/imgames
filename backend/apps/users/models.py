@@ -65,7 +65,7 @@ class User(AbstractBaseUser, PermissionsMixin):
         default=uuid4,
         editable=False)
 
-    is_admin = models.BooleanField(verbose_name='Администратор', default=False)
+    is_admin = models.BooleanField(verbose_name='Администратор организации', default=False)
     is_active = models.BooleanField(verbose_name='Активирован', default=False)
     is_staff = models.BooleanField(verbose_name='Работник компании', default=False)
     registered_at = models.DateTimeField(

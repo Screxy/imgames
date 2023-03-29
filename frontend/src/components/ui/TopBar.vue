@@ -86,7 +86,9 @@
       </div>
     </div>
     <div class="menu-block" v-else>
-      <div class="left-block"></div>
+      <div class="left-block">
+        <a href="https://t.me/imgamessupport" class='menu-link'>Техническая поддержка</a>
+      </div>
       <div class="right-block">
         <LocaleSwitcher></LocaleSwitcher>
         <p class='userName'> {{ this.$store.state.userName }} </p>

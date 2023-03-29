@@ -51,6 +51,7 @@ async function setProfile(provider, userId) {
       .mutate({ mutation: profile })
       .then((result) => {
         store.commit('SET_USER_NAME', result.data.profile.firstName + " " + result.data.profile.lastName);
+        store.commit('SET_PERMISSIONS', { isStaff: result.data.profile.isStaff, isAdmin: result.data.profile.isAdmin });
       })
   });
 }

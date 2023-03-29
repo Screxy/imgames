@@ -1,7 +1,7 @@
 import graphene
 from .models import Organization, OrganizationSettings
 from .types import OrganizationType
-from graphql_jwt.decorators import login_required
+from users.permissions import login_required, admin_required
 
 
 class CreateOrganization(graphene.Mutation):
@@ -16,9 +16,10 @@ class CreateOrganization(graphene.Mutation):
         prefix = graphene.String(required=True)
 
     @login_required
+    @admin_required
     def mutate(self, info, name, subdomain, prefix):
         try:
-            user = info.context.user
+            user = info.context.user         
             check_organization = Organization.objects.filter(
                 subdomain=subdomain).count()
 

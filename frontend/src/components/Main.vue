@@ -7,10 +7,11 @@
         <RoomList></RoomList>
       </div>
       <div class="create-room">
-        <CreateRoomView></CreateRoomView>
+        <CreateRoomView v-if='$store.state.isStaff'></CreateRoomView>
         <ConnectRoomView></ConnectRoomView>
       </div>
-      <div class="organizations">
+      <div class="profile">ПРООООООООФИЛЬ<br>ПРОФИЛь</div>
+      <div class="organizations" v-if='$store.state.isAdmin'>
         <h2>{{ $t('headers.organizationList') }}</h2>
         <SubmitButton
           class="new-organization-btn"
@@ -67,13 +68,26 @@ h2 {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
   column-gap: 1rem;
-  height: calc(100vh - 112px);
+  height: calc(100vh - 48px);
+  grid-template-rows: calc(50vh - 48px) 50vh;
   padding: 0 1rem;
   background: radial-gradient(
     52.5% 97.01% at 21.67% 20.17%,
     rgba(82, 110, 255, 0.25) 0%,
     rgba(249, 216, 167, 0.25) 89.06%
   );
+  & .profile {
+    grid-row-start: 1;
+    grid-row-end: 2;
+    grid-column-start: 3;
+    grid-column-end: 4;
+  }
+  & .organizations {
+      grid-row-start: 2;
+      grid-row-end: 3;
+      grid-column-start: 3;
+      grid-column-end: 4;
+    }
 }
 
 @media screen and (max-width: 810px) {
