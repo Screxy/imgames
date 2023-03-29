@@ -4,7 +4,8 @@
     "create": "Create",
     "logOut": "Log out",
     "toMainPage": "To the main",
-    "connect": "Join"
+    "connect": "Join",
+    "techSupport": "Technical support"
   },
   "organization": {
     "organization": "Organization",
@@ -127,6 +128,6 @@
     "edit": "Edit profile",
     "editHeader": "Edit your profile",
     "save": "Save changes",
-    "discard": "Discard"
+    "discard": "Cancel"
   }
 }

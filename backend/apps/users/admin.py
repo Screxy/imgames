@@ -21,7 +21,7 @@ class UserAdmin(BaseUserAdmin):
         ['Разрешения', {'fields': ['groups', 'is_admin',
                                    'is_staff', 'is_superuser']}],
         ['Важные отметки времени', {
-            'fields': ['last_login', 'registered_at']}],
+            'fields': ['last_login', 'registered_at', 'expiration_date']}],
     ]
     # add_fieldsets не является стандартным атрибутом ModelAdmin. UserAdmin
     # переопределяет get_fieldsets для использования этого атрибута при создании пользователя.

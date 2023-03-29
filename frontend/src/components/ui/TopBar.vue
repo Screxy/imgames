@@ -62,7 +62,9 @@
       </div>
     </div>
     <div class="menu-block" v-else-if="type == 'auth'">
-      <div class="left-block"></div>
+      <div class="left-block">
+        <a href="https://t.me/imgamessupport" class='menu-link'>{{ $t('buttons.techSupport') }}</a>
+      </div>
       <div class="right-block">
         <LocaleSwitcher></LocaleSwitcher>
         <SubmitButton
@@ -74,7 +76,9 @@
       </div>
     </div>
     <div class="menu-block" v-else-if="type == 'sign-up'">
-      <div class="left-block"></div>
+      <div class="left-block">
+        <a href="https://t.me/imgamessupport" class='menu-link'>{{ $t('buttons.techSupport') }}</a>
+      </div>
       <div class="right-block">
         <LocaleSwitcher></LocaleSwitcher>
         <SubmitButton
@@ -87,7 +91,7 @@
     </div>
     <div class="menu-block" v-else>
       <div class="left-block">
-        <a href="https://t.me/imgamessupport" class='menu-link'>Техническая поддержка</a>
+        <a href="https://t.me/imgamessupport" class='menu-link'>{{ $t('buttons.techSupport') }}</a>
       </div>
       <div class="right-block">
         <LocaleSwitcher></LocaleSwitcher>

@@ -3,6 +3,7 @@ from uuid import uuid4
 from django.contrib.auth.models import BaseUserManager, AbstractBaseUser, PermissionsMixin
 from django.db import models
 from django.utils import timezone
+import datetime
 
 
 class UserManager(BaseUserManager):
@@ -71,7 +72,10 @@ class User(AbstractBaseUser, PermissionsMixin):
     registered_at = models.DateTimeField(
         verbose_name='Зарегистрирован',
         auto_now_add=timezone.now)
-
+    expiration_date = models.DateTimeField(
+        verbose_name='Дата окончания подписки',
+        default=timezone.now() + datetime.timedelta(days=30))
+    
     # Настройки полей
     EMAIL_FIELD = 'email'
     USERNAME_FIELD = 'email'

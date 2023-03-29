@@ -112,7 +112,33 @@ class ConfirmRegistrationMutation(graphene.Mutation):
             return ConfirmRegistrationMutation(success=True)
         except User.DoesNotExist:
             return ConfirmRegistrationMutation(success=False)
+        
+        
+class EditProfile(graphene.Mutation):
+    """ Редактирования профиля """
+    success = graphene.Boolean()
+    errors = graphene.List(graphene.String)
+    
+    class Arguments:
+        email = graphene.String(required=True)
+        first_name = graphene.String(required=True)
+        last_name = graphene.String(required=True)
 
+    def mutate(self, info, email, first_name, last_name):
+        user = info.context.user
+
+        # обновляем данные у пользователя
+        try: 
+            user.email = email
+            user.first_name = first_name
+            user.last_name = last_name
+            user.save()    
+        
+        except Exception as e:
+            errors = [str(e.text)]
+            return EditProfile(success=False, errors=errors)
+        
+        return EditProfile(success=True)
 
 
 class Logout(graphene.Mutation):
@@ -177,6 +203,7 @@ class Mutation(object):
     login = graphql_jwt.ObtainJSONWebToken.Field()
     verify_token = graphql_jwt.Verify.Field()
     refresh_token = graphql_jwt.Refresh.Field()
+    editProfile = EditProfile.Field()
     register = Register.Field()
     logout = Logout.Field()
     delete_token_cookie = graphql_jwt.DeleteJSONWebTokenCookie.Field()

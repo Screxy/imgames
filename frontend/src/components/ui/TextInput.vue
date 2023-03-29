@@ -28,13 +28,17 @@ export default {
   name: 'TextInput',
   data() {
     return {
-      inputModel: '',
+      inputModel: this.value || '',
     };
   },
   props: {
     placeholder: {
       type: String,
       required: true,
+    },
+    value: {
+      type: String,
+      required: false,
     },
     autocomplete: {
       type: String,
