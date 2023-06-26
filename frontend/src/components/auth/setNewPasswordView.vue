@@ -26,7 +26,7 @@
         </form>
       </div>
     </div>
-    <div v-else>
+    <div class="auth-view default-background" v-else>
       <div class="normal-border-box auth-box">
         <h1>Ваш пароль был успешно изменен</h1>
         <SubmitButton
