@@ -5,4 +5,4 @@
 
 Чтобы продолжить регистрацию, просто нажмите на ссылку ниже.
 
-{{ DOMAIN }}/confirm/{{ user.token }}
+{{ DOMAIN }}confirm/{{ user.token }}

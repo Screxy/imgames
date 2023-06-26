@@ -1,16 +1,10 @@
 <template>
   <div class="auth-page">
     <TopBar :type="'auth'"></TopBar>
-    <div class="auth-view default-background">
+    <div class="auth-view default-background" v-if='!success'>
       <div class="normal-border-box auth-box">
-        <h1>{{ $t('auth.authHeader') }}</h1>
+        <h1>{{ $t('auth.setPasswordHeader') }}</h1>
         <form @submit.prevent>
-          <TextInput
-            :label="$t('auth.emailLabel')"
-            :placeholder="$t('auth.emailLabel')"
-            :autocomplete="'email'"
-            @input="email = $event"
-          ></TextInput>
           <TextInput
             :label="$t('auth.passwordLabel')"
             :placeholder="$t('auth.passwordLabel')"
@@ -18,23 +12,28 @@
             :autocomplete="'current-password'"
             @input="password = $event"
           ></TextInput>
-          <SubmitButton class="enter-button" @click="tryLogIn">{{
-            $t('auth.enterButton')
+          <TextInput
+            :label="$t('auth.passwordRepeatLabel')"
+            :placeholder="$t('auth.passwordRepeatLabel')"
+            :type="'password'"
+            :autocomplete="'current-password'"
+            @input="password2 = $event"
+          ></TextInput>
+          <p v-if=errors>Пароли должны совпадать</p>
+          <SubmitButton class="enter-button" @click="setPassword">{{
+            $t('auth.setNewPasswordSendButton')
           }}</SubmitButton>
         </form>
-        <p style="color: red" v-if='errors'>{{ $t('auth.wrongCredentialsText') }} </p>
-        {{ $t('auth.signUpText') }}
+      </div>
+    </div>
+    <div v-else>
+      <div class="normal-border-box auth-box">
+        <h1>Ваш пароль был успешно изменен</h1>
         <SubmitButton
-          class="sign-up-button"
-          :type="'dark-text'"
-          @click="$router.push(SIGN_UP_PATH)"
-          >{{ $t('auth.signUpButton') }}</SubmitButton
-        >
-        <SubmitButton
-          class="sign-up-button"
-          :type="'dark-text'"
-          @click="$router.push(RESET_PASSWORD_PATH)"
-          >{{ $t('auth.resetPasswordButton') }}</SubmitButton
+            class="sign-up-button"
+            :type="'dark-text'"
+            @click="$router.push(authPath)"
+            >Вернуться на главную</SubmitButton
         >
       </div>
     </div>
@@ -42,15 +41,14 @@
 </template>
 
 <script>
-import { MAIN_PATH, SIGN_UP_PATH, RESET_PASSWORD_PATH } from '@/pathVariables.js';
+import { AUTH_PATH } from '@/pathVariables.js';
 import TextInput from '@/components/ui/TextInput.vue';
 import SubmitButton from '@/components/ui/SubmitButton.vue';
 import TopBar from '@/components/ui/TopBar.vue';
-import login from '@/graphql/mutations/login.gql';
-import { verifyAuth } from '@/router';
+import resetPasswordConfirm from "@/graphql/mutations/resetPasswordConfirm.gql";
 
 export default {
-  name: 'AuthView',
+  name: 'SetNewPassword',
   components: {
     TextInput,
     SubmitButton,
@@ -58,39 +56,41 @@ export default {
   },
   data() {
     return {
-      email: '',
       password: '',
-      SIGN_UP_PATH,
-      RESET_PASSWORD_PATH,
+      password2: '',
+      authPath: AUTH_PATH,
+      success: false,
       errors: false,
     };
   },
   methods: {
-    tryLogIn() {
-      this.$store.commit('START_LOADING');
-      this.$apollo
+    setPassword() {
+      console.log(1)
+      if (this.password == this.password2) {
+        this.$store.commit('START_LOADING');
+        this.$apollo
         .mutate({
-          mutation: login,
+          mutation: resetPasswordConfirm,
           variables: {
-            email: this.email,
-            password: this.password,
+            token: this.$route.params.token,
+            password: this.password
           },
         })
         .then((data) => {
-          this.$store.commit('SET_IS_AUTHENTICATED', true);
-          this.$store.commit('SET_GOT_VERIFIED_AUTH', true);
-          verifyAuth();
-          this.$router.push(MAIN_PATH).catch((err) => {
-            console.log(err);
-          });
+          console.log(data);
         })
         .catch((error) => {
-          console.error(error)
-          this.errors = true
+          console.error(error);
         })
         .finally(() => {
+          this.success = true
+          this.errors = false
           this.$store.commit('STOP_LOADING');
         });
+      }
+      else {
+        this.errors = true
+      }
     },
   },
 };

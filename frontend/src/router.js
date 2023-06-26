@@ -9,6 +9,8 @@ import RoomPlayground from '@/components/room/playground/RoomPlayground.vue';
 import SignUpView from '@/components/auth/SignUpView.vue';
 import SignUpConfirmView from '@/components/auth/SignUpCofirmView.vue';
 import EditProfile from '@/components/auth/EditProfile.vue';
+import ResetPasswordView from '@/components/auth/ResetPasswordView.vue';
+import setNewPasswordView from '@/components/auth/setNewPasswordView.vue';
 
 import store from '@/store.js';
 import {
@@ -19,6 +21,8 @@ import {
   SIGN_UP_PATH,
   SIGN_UP_CONFIRM_PATH,
   AUTH_EDIT_PROFILE_PATH,
+  RESET_PASSWORD_PATH,
+  SET_NEW_PASSWORD_PATH,
 } from '@/pathVariables.js';
 
 import verifyToken from '@/graphql/mutations/verifyToken.gql';
@@ -130,6 +134,18 @@ const routes = [
     component: SignUpConfirmView,
     beforeEnter: ifNotAuthenticated,
     meta: { title: 'Подтверждение регистрации' },
+  },
+  {
+    path: RESET_PASSWORD_PATH,
+    component: ResetPasswordView,
+    beforeEnter: ifNotAuthenticated,
+    meta: { title: 'Восстановление пароля' },
+  },
+  {
+    path: SET_NEW_PASSWORD_PATH,
+    component: setNewPasswordView,
+    beforeEnter: ifNotAuthenticated,
+    meta: { title: 'Восстановление пароля' },
   },
 ];
 

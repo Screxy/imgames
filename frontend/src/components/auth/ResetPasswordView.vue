@@ -1,9 +1,9 @@
 <template>
   <div class="auth-page">
     <TopBar :type="'auth'"></TopBar>
-    <div class="auth-view default-background">
+    <div class="auth-view default-background" v-if='!success'>
       <div class="normal-border-box auth-box">
-        <h1>{{ $t('auth.authHeader') }}</h1>
+        <h1>{{ $t('auth.resetPasswordHeader') }}</h1>
         <form @submit.prevent>
           <TextInput
             :label="$t('auth.emailLabel')"
@@ -11,30 +11,20 @@
             :autocomplete="'email'"
             @input="email = $event"
           ></TextInput>
-          <TextInput
-            :label="$t('auth.passwordLabel')"
-            :placeholder="$t('auth.passwordLabel')"
-            :type="'password'"
-            :autocomplete="'current-password'"
-            @input="password = $event"
-          ></TextInput>
-          <SubmitButton class="enter-button" @click="tryLogIn">{{
-            $t('auth.enterButton')
+          <SubmitButton class="enter-button" @click="resetPassword">{{
+            $t('auth.resetPasswordSendButton')
           }}</SubmitButton>
         </form>
-        <p style="color: red" v-if='errors'>{{ $t('auth.wrongCredentialsText') }} </p>
-        {{ $t('auth.signUpText') }}
+      </div>
+    </div>
+    <div class="auth-view default-background" v-else>
+      <div class="normal-border-box auth-box">
+        <h1>Вам на почту было отправлено письмо для восстановления пароля</h1>
         <SubmitButton
-          class="sign-up-button"
-          :type="'dark-text'"
-          @click="$router.push(SIGN_UP_PATH)"
-          >{{ $t('auth.signUpButton') }}</SubmitButton
-        >
-        <SubmitButton
-          class="sign-up-button"
-          :type="'dark-text'"
-          @click="$router.push(RESET_PASSWORD_PATH)"
-          >{{ $t('auth.resetPasswordButton') }}</SubmitButton
+            class="sign-up-button"
+            :type="'dark-text'"
+            @click="$router.push(authPath)"
+            >Вернуться на главную</SubmitButton
         >
       </div>
     </div>
@@ -42,15 +32,14 @@
 </template>
 
 <script>
-import { MAIN_PATH, SIGN_UP_PATH, RESET_PASSWORD_PATH } from '@/pathVariables.js';
+import { MAIN_PATH, AUTH_PATH } from '@/pathVariables.js';
 import TextInput from '@/components/ui/TextInput.vue';
 import SubmitButton from '@/components/ui/SubmitButton.vue';
 import TopBar from '@/components/ui/TopBar.vue';
-import login from '@/graphql/mutations/login.gql';
-import { verifyAuth } from '@/router';
+import resetPassword from '@/graphql/mutations/resetPassword.gql';
 
 export default {
-  name: 'AuthView',
+  name: 'ResetPassword',
   components: {
     TextInput,
     SubmitButton,
@@ -59,36 +48,28 @@ export default {
   data() {
     return {
       email: '',
-      password: '',
-      SIGN_UP_PATH,
-      RESET_PASSWORD_PATH,
-      errors: false,
+      authPath: AUTH_PATH,
+      success: false,
     };
   },
   methods: {
-    tryLogIn() {
+    resetPassword() {
       this.$store.commit('START_LOADING');
       this.$apollo
         .mutate({
-          mutation: login,
+          mutation: resetPassword,
           variables: {
             email: this.email,
-            password: this.password,
           },
         })
         .then((data) => {
-          this.$store.commit('SET_IS_AUTHENTICATED', true);
-          this.$store.commit('SET_GOT_VERIFIED_AUTH', true);
-          verifyAuth();
-          this.$router.push(MAIN_PATH).catch((err) => {
-            console.log(err);
-          });
+          console.log(data);
         })
         .catch((error) => {
-          console.error(error)
-          this.errors = true
+          console.error(error);
         })
         .finally(() => {
+          this.success = true
           this.$store.commit('STOP_LOADING');
         });
     },

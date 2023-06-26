@@ -11,16 +11,19 @@
         <ConnectRoomView></ConnectRoomView>
       </div>
       
-      <div class="profile-column" v-if='$store.state.isAdmin'>
+      <div class="profile-column" >
         <Profile></Profile>
-        <h2>{{ $t('headers.organizationList') }}</h2>
+        <h2 v-if='$store.state.isAdmin'>{{ $t('headers.organizationList') }}</h2>
         <SubmitButton
+          v-if='$store.state.isAdmin'
           class="new-organization-btn"
           :type="'bg-outline'"
           @click="$router.push('/new')"
           >{{ $t('headers.newOrganizationBtn') }}</SubmitButton
         >
-        <OrganizationList class="organizations-list"></OrganizationList>
+        <OrganizationList 
+          v-if='$store.state.isAdmin'
+          class="organizations-list"></OrganizationList>
       </div>
     </div>
   </div>
