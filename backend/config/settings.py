@@ -111,6 +111,7 @@ EMAIL_USE_TLS = env.str('EMAIL_USE_TLS', default='False')
 EMAIL_HOST_USER = env.str('EMAIL_HOST_USER', default='mailhog')
 EMAIL_HOST_PASSWORD = env.str('EMAIL_HOST_PASSWORD', default='mailhog')
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+DEFAULT_FROM_EMAIL = env.str('EMAIL_HOST_USER', default='mailhog')
 
 # MANAGER CONFIGURATION
 # ------------------------------------------------------------------------------

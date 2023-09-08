@@ -169,7 +169,7 @@ class ResetPassword(graphene.Mutation):
             'DOMAIN': settings.DOMAIN,
         }
         send_mail(
-            subject='Password reset',
+            subject='Сброс пароля',
             message=render_to_string('mail/password_reset.txt', params),
             from_email=settings.DEFAULT_FROM_EMAIL,
             recipient_list=[email],
