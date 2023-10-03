@@ -1,3 +1,0 @@
-query ($code: String!) {
-  getMoneyPerMonth(code: $code)
-}

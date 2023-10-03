@@ -1,8 +1,0 @@
-mutation logout {
-  logout {
-    success
-  }
-  deleteTokenCookie {
-    deleted
-  }
-}

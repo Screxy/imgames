@@ -1,8 +1,0 @@
-mutation ($code: String!) {
-  connectRoom(code: $code) {
-    success
-    errors
-    created
-    __typename
-  }
-}

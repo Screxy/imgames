@@ -1,6 +1,0 @@
-mutation confirmRegistration ($token: String!) {
-  confirmRegistration (token: $token) {
-    success
-    errors
-  }
-}

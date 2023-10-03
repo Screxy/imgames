@@ -1,6 +1,0 @@
-query ($subdomain: String!) {
-  roomsInOrganization(subdomain: $subdomain) {
-    id
-    code
-  }
-}
