@@ -1,0 +1,6 @@
+mutation ($email: String!, $firstName: String!, $lastName: String!) {
+  editProfile (email: $email, firstName: $firstName, lastName: $lastName) {
+    success
+    errors
+  }
+}

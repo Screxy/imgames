@@ -1,0 +1,12 @@
+query ($code: String!) {
+  roomByCode(code: $code) {
+    id
+    code
+    numberOfTurns
+    moneyPerMonth
+    currentRoundId
+    roomOwnerId
+    flowId
+    __typename
+  }
+}

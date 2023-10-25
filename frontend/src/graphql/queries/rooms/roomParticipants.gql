@@ -1,0 +1,13 @@
+query ($code: String!) {
+  roomParticipants(code: $code) {
+    id
+    isTurnMade
+    user {
+      id
+      lastName
+      firstName
+      __typename
+    }
+    __typename
+  }
+}

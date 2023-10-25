@@ -1,0 +1,140 @@
+{
+  "message": "Hello, i18n!",
+  "buttons": {
+    "create": "Create",
+    "logOut": "Log out",
+    "toMainPage": "To the main",
+    "connect": "Join",
+    "techSupport": "Technical support"
+  },
+  "organization": {
+    "organization": "Organization",
+    "prefix": "Prefix",
+    "subdomain": "Subdomain",
+    "name": "Name"
+  },
+  "room": {
+    "createNewRoom": "Create new room",
+    "moneyPerMonth": "Money per month",
+    "numberOfTurns": "Number of months",
+    "monthOfPeriod": "month of the period",
+    "periodIs": "period is",
+    "numberOfMonths": "months",
+    "month": "Month",
+    "monthNumber": {
+      "1": "FIRST month of the period",
+      "2": "SECOND month of the period",
+      "3": "THIRD month of the period",
+      "4": "FORTH month of the period",
+      "5": "FIFTH month of the period",
+      "6": "SIXTH month of the period",
+      "7": "SEVENTH month of the periond",
+      "8": "EIGHTH month of the periond",
+      "9": "NINTH month of the periond",
+      "10": "TENTH month of the periond"
+    },
+    "of": "of",
+    "ofMonths": "Months",
+    "waitingForRound": "Waiting for the start of the round",
+    "roundEnded": "End of the round",
+    "roomsList": "Rooms list",
+    "room": "Room",
+    "goToRoom": "Jump into the room",
+    "round": "Round",
+    "scores": "Total scores: ",
+    "player": {
+      "playersList": "Players",
+      "player": "Player",
+      "roomOwner": "Room owner",
+      "effectsList": "Effects",
+      "chat": "Chat",
+      "you": "You",
+      "application": "Qty"
+    },
+    "gameBoard": {
+      "gameBoard": "Game board",
+      "channelsTitle": "Channels",
+      "trafficTitle": "Traffic",
+      "total": "Total",
+      "stageConversion": "Conversion of stage"
+    },
+    "mechanics": "Flow",
+    "card": {
+      "moneyLeft": "Remaining budget",
+      "waitingForOthers": "Waiting for other players...",
+      "cardsList": "List of cards",
+      "chooseCard": "Select",
+      "selectedCard": "Selected card",
+      "deselectCard": "Deselect",
+      "send": "Send",
+      "notEnoughMoney": "Not enough menoy!"
+    },
+    "waitingHeader": "Waiting for players to join...",
+    "waitingTextForOwner": "When all invited players enter the room, you can start the game",
+    "startRoundButton": "Start round",
+    "roundFinishedHeader": "Round {round} completed",
+    "reStartRoundButton": "Start a new round {nextRound}",
+    "navigation": {
+      "players": "Members",
+      "effects": "effects",
+      "chat": "Chat",
+      "cards": "Cards"
+    },
+    "flow": "Game mechanics",
+    "connectRoom": "Join the room",
+    "roomCode": "Room code",
+    "result": "Result",
+    "step": "Step",
+    "passStep": "Skip a turn",
+    "firstPlace": "1st place",
+    "secondPlace": "2nd place",
+    "thirdPlace": "III place",
+    "yourResult": "Your score",
+    "notPrizePlace": "Not a prize",
+    "place": "Place"
+  },
+  "headers": {
+    "main": "Main",
+    "newOrganization": "Create new organization",
+    "organizationList": "Your organizations",
+    "newOrganizationBtn": "Create a new organization"
+  },
+  "version": "Version",
+  "auth": {
+    "authHeader": "Authorization",
+    "enterButton": "Log in",
+    "emailLabel": "Email",
+    "passwordLabel": "Password",
+    "passwordRepeatLabel": "Enter password again",
+    "setPasswordHeader": "Enter new password",
+    "signUpText": "Don't have an account yet?",
+    "signUpButton": "Sign Up",
+    "signUpHeader": "Sign Up",
+    "enterText": "Already have an account?",
+    "resetPasswordHeader": "Please enter your email",
+    "wrongCredentialsText": "Incorrect email or password",
+    "resetPasswordButton": "Forgot your password?",
+    "resetPasswordSendButton": "Reset password",
+    "setNewPasswordSendButton": "Commit new password",
+    "firstNameLabel": "First name",
+    "lastNameLabel": "Last name",
+    "signUpSuccessText": "A confirmation email has been sent to your email address.",
+    "signUpSuccessHeader": "You have successfully registered!",
+    "signUpConfirmText": "Sign in to your account to start playing.",
+    "signUpConfirmHeader": "You account has been activated!",
+    "signUpConfirmErrorHeader": "Something went wrong!"
+  },
+  "textInput": {
+    "requiredError": "Obligatory field!"
+  },
+  "profile": {
+    "title": "Profile",
+    "email": "Email",
+    "firstName": "First Name",
+    "lastName": "Last Name",
+    "edit": "Edit profile",
+    "editHeader": "Edit your profile",
+    "save": "Save changes",
+    "discard": "Cancel"
+  }
+}
