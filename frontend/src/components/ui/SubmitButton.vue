@@ -1,6 +1,5 @@
 <template>
   <button
-    @click="sendClick"
     :disabled="disabled"
     :class="{
       'dark-text': type == 'dark-text',

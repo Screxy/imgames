@@ -1,16 +1,14 @@
-import { createApp, provide, h } from 'vue';
-import { DefaultApolloClient } from '@vue/apollo-composable';
-import { createPinia } from 'pinia';
-import {apolloClient} from '@/apollo';
-// import Vue from 'vue';
-import App from '@/App.vue';
-import router from '@/router/router';
-import Pusher from 'pusher-js';
-import FlagIcon from 'vue-flag-icon';
-import * as Sentry from '@sentry/vue';
-import './plugins/registerServiceWorker';
-import i18n from '@/plugins/i18n';
-
+import { createApp, provide, h } from 'vue'
+import { DefaultApolloClient } from '@vue/apollo-composable'
+import { createPinia } from 'pinia'
+import { apolloClient } from '@/apollo'
+import App from '@/App.vue'
+import router from '@/router/router'
+import Pusher from 'pusher-js'
+import FlagIcon from 'vue-flag-icon'
+import * as Sentry from '@sentry/vue'
+import './plugins/registerServiceWorker'
+import i18n from '@/plugins/i18n'
 
 // window.pusher = new Pusher(process.env.VUE_APP_PUSHER_KEY as string, {
 //   cluster: process.env.VUE_APP_PUSHER_CLUSTER as string,
@@ -31,11 +29,11 @@ import i18n from '@/plugins/i18n';
 // });
 const app = createApp({
   setup() {
-    provide(DefaultApolloClient, apolloClient);
+    provide(DefaultApolloClient, apolloClient)
   },
 
   render: () => h(App),
-});
+})
 // Sentry для логирования ошибок фронтенда
 // Sentry.init({
 //   app,
@@ -62,10 +60,10 @@ const app = createApp({
 //   replaysSessionSampleRate: 0.1,
 //   replaysOnErrorSampleRate: 1.0,
 // });
-const pinia = createPinia();
-app.use(pinia);
-app.use(i18n);
+const pinia = createPinia()
+app.use(pinia)
+app.use(i18n)
 
-app.use(FlagIcon);
-app.use(router);
-app.mount('#app');
+app.use(FlagIcon)
+app.use(router)
+app.mount('#app')

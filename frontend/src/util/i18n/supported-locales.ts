@@ -11,6 +11,6 @@ export function getSupportedLocales() {
   return annotatedLocales;
 }
 
-export function supportedLocalesInclude(locale) {
+export function supportedLocalesInclude(locale: string) {
   return Object.keys(supportedLocales).includes(locale);
 }

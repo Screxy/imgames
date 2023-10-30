@@ -10,9 +10,7 @@
       :placeholder="placeholder"
       :autocomplete="autocomplete"
       :disabled="disabled"
-      v-model="inputModel"
-      @input="sendInput"
-      @keyup.enter="sendEnter"
+      v-model="value"
       :class="{ 'error-input': isAnyError }"
     />
     <div class="errors">
@@ -23,75 +21,66 @@
   </div>
 </template>
 
-<script lang="ts">
-export default {
+<script lang="ts" setup>
+import { computed } from 'vue';
+
+defineOptions({
   name: 'TextInput',
-  data() {
-    return {
-      inputModel: this.value || '',
-    };
+});
+const props = defineProps({
+  modelValue: String,
+  placeholder: {
+    type: String,
+    required: true,
   },
-  props: {
-    placeholder: {
-      type: String,
-      required: true,
-    },
-    value: {
-      type: String,
-      required: false,
-    },
-    autocomplete: {
-      type: String,
-      default: 'false',
-    },
-    type: {
-      type: String,
-      default: 'text',
-    },
-    disabled: {
-      type: Boolean,
-      default: false,
-    },
-    predefined: {
-      type: undefined,
-      default: '',
-    },
-    label: {
-      type: String,
-    },
-    name: {
-      type: String,
-    },
-    // isRequired: {
-    //   type: Boolean,
-    //   default: false,
-    // },
-    isAnyError: {
-      type: Boolean,
-      default: false,
-    },
-    isRequiredError: {
-      type: Boolean,
-      default: false,
-    },
+  value: {
+    type: String,
+    required: false,
   },
-  watch: {
-    predefined(newValue) {
-      this.inputModel = newValue;
-      this.sendInput();
-    },
+  autocomplete: {
+    type: String,
+    default: 'false',
   },
-  methods: {
-    sendInput() {
-      this.$emit('input', this.inputModel);
-      if (this.$v != undefined) this.$v.inputModel.$touch();
-    },
-    sendEnter() {
-      this.$emit('enter');
-    },
+  type: {
+    type: String,
+    default: 'text',
   },
-  computed: {},
-};
+  disabled: {
+    type: Boolean,
+    default: false,
+  },
+  predefined: {
+    type: undefined,
+    default: '',
+  },
+  label: {
+    type: String,
+  },
+  name: {
+    type: String,
+  },
+  // isRequired: {
+  //   type: Boolean,
+  //   default: false,
+  // },
+  isAnyError: {
+    type: Boolean,
+    default: false,
+  },
+  isRequiredError: {
+    type: Boolean,
+    default: false,
+  },
+});
+const emit = defineEmits(['update:modelValue']);
+const value = computed({
+  get() {
+    return props.modelValue;
+  },
+  set(value) {
+    emit('update:modelValue', value);
+  },
+});
 </script>
 
 <style lang="scss" scoped>
